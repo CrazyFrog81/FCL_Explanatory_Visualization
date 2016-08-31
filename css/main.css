@@ -1,0 +1,505 @@
+.page_footer{
+    position:absolute;
+    opacity: 1;
+    font-family: Arial;
+    font-size: 11px;
+    background-color: whitesmoke;
+    right:20px;
+    bottom:0px;
+    display:inline;
+}
+
+#welcome_mask{
+
+    width: 100%;
+    height:100%;
+    background-color:white;
+    z-index:10;
+    opacity:1;
+
+    position:absolute;
+
+    -webkit-transition: opacity 4s ease-in-out;
+    -moz-transition: opacity 4s ease-in-out;
+    -ms-transition: opacity 4s ease-in-out;
+    -o-transition: opacity 4s ease-in-out;
+}
+div.welcome_msg{
+    position: absolute;
+    height: 60px;
+    background-color: #fff;
+    width: 50%;
+    top: 40%;
+    left: 37%;
+    text-align: center;
+    border-radius: 20px;
+
+}
+
+
+.content_holder {
+    overflow:hidden;
+}
+
+*{
+    padding:0;
+    margin:0;
+}
+
+nav{
+    font-family: Arial;
+    line-height: 1.5;
+    opacity: 0.85;
+    position: absolute;
+    z-index: 4;
+    top:0px;
+    right: 40px;
+    width: 220px;
+    text-align: center;
+
+}
+
+.menu-item {
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+}
+
+.holder{
+    background-color:#404040;
+    box-shadow: -2px 0px 2px rgba(0, 0, 0, 0.3);
+}
+
+hr {
+    border:1px solid black;
+    display: block;
+    opacity:0.35;
+    background-color: #000000;
+    height:0.1px;
+    color: #000;
+    stroke-opacity: 1;
+    fill:black;
+    margin-left: 5%;
+    width: 90%;
+}
+
+/*Menu Header Styles*/
+.menu-item h4 {
+
+    color: #fff;
+    font-size: 10px;
+    font-weight: 500;
+    text-align: left;
+
+}
+
+.menu-item h4 img{
+    opacity:1;
+    width: 20px;
+    height:15px; /*width=15 height=15 style="float:left;padding-left: 14px;padding-top:7px;"*/
+    padding-top: 2px;
+    padding-left: 10px;
+    float:left;
+}
+
+.menu-item h4 a {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-left:40px ;
+    color: white;
+    display: block;
+    text-decoration: none;
+    width: 180px;
+
+}
+
+.menu-item h4:hover{
+    background-color: #717171;
+}
+
+
+/*ul Styles*/
+.menu-item ul {
+    font-size: 0px;
+    line-height: 0px;
+    list-style-type: none;
+    overflow: hidden;
+    padding: 0;
+    /*height: 0 !important; /!*Collapses the menu*!/*/
+    /*Animation*/
+    /*-webkit-transition: height 0.2s ease;*/
+    /*-moz-transition: height 0.2s ease;*/
+    /*-o-transition: height 0.2s ease;*/
+    /*-ms-transition: height 0.2s ease;*/
+    /*transition: height 0.2s ease;*/
+}
+
+.menu-item ul a {
+    margin-left: 20px;
+    text-decoration: none;
+    display: block;
+    width: 200px;
+}
+
+/*li Styles
+.menu-item li {
+    border-bottom: 1px solid #010101;
+}
+*/
+
+#map_container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width : 100%;
+    height: 100%;
+    overflow: hidden;
+
+}
+
+legend {
+    z-index: 3;
+    font-size: 12px;
+
+}
+
+
+
+.play_stopBtn {
+
+    width:20px;
+    height: 20px;
+    bottom:5%;
+    right: 4%;
+    z-index: 1;
+    position:absolute;
+    border:2px;
+    border-color: transparent;
+
+}
+
+.replay_Btn {
+    width:30px;
+    height: 30px;
+    bottom:4.5%;
+    right: 1%;
+    z-index: 1;
+    position:absolute;
+    border:2px;
+    border-color: lightseagreen;
+    overflow: visible;
+
+}
+
+
+.hidden {
+     display: none;
+ }
+
+
+.graticule {
+    fill: none;
+    stroke: #bbb;
+    stroke-width: .5px;
+    stroke-opacity: .5;
+}
+
+.equator {
+    stroke: #ccc;
+    stroke-width: 1px;
+}
+
+.legend-bg {
+    fill: #fff;
+    fill-opacity: 0.8;
+}
+
+.legend-bar {
+    stroke: #333;
+    stroke-width: 1px;
+}
+
+
+
+.menu_bar_css {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;
+    right: 0px;
+}
+
+.line_break{
+    fill-opacity: 0;
+    background-color: transparent;
+    box-shadow: 1px 1px 5px transparent;
+    width: 200px;
+    height:5px;
+    display: block;
+}
+
+
+#fclHolder {
+    box-shadow: none;
+    border:none;
+    width: 220px;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    opacity: 1;
+
+
+}
+
+#fclHolder button{
+    width:95px;
+    height:30px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #010101;
+    margin:0 auto;
+    background-color: #FEFF8A;
+
+    border:0px;
+}
+
+#fclHolder button:hover{
+    color: #d0d0d0;
+
+}
+
+
+#fclHolder button:active {
+    color: #ffffff;
+    outline:0;
+    background: #1f2933;
+}
+
+#fclHolder button:focus {
+    color: #ffffff;
+    outline:0;
+    background: #1f2933;
+}
+
+/*style the fcl rationale*/
+.rationale {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 4; /* Sit on top */
+    left: 0;
+    top: 0;
+    padding-left: 20%;
+    padding-top:4%;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color:#1f2933;
+    background-color: rgba(0, 0, 0, 0.51); /* Black w/ opacity */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: relative;
+    width:30px;
+    height:30px;
+    background-image: url("../img/close_button.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/*the modal content*/
+
+/* Modal Body */
+.modal-body {
+    padding: 20px 16px;}
+
+/* Modal Footer */
+.rationale-footer {
+    padding: 2px 20px;
+    padding-bottom: 00px;
+   /* margin-right: 40px;*/
+    background-color: #ffffff;
+    color: #1f2933;
+    display: inline;
+}
+
+/* Modal Content */
+.rationale-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding-left: 12px;
+    padding-right:10px;
+    position: fixed;
+
+    border: 1px solid #1f2933;
+    width: 60%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatebottom;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatebottom {
+    from { opacity: 0}
+    to { opacity: 1}
+}
+
+@keyframes animatebottom {
+    from { opacity: 0}
+    to { opacity: 1}
+}
+
+#fcl_logo{
+    padding-top: 15px;
+    pointer-events: none;
+    margin-right:0px;
+
+
+}
+
+.country-label{
+    fill: #777;
+    fill-opacity: 0.4;
+    font-size: 8px;
+    font-weight: 300;
+    text-anchor: middle;
+}
+
+#svg2{
+    transform-origin: 0 0;
+transform: scale(2);
+}
+
+/*the social media icons*/
+
+.data_src{
+    position: relative;
+    bottom: -12px;
+
+}
+
+.fcl-button{
+    float:left;
+    width: 30px;
+    height: 0;
+    margin-left: 10px;
+    /*border-radius: 75px;
+    border: 2px solid #f5f5f5;*/
+    margin-bottom: 5px;
+    padding-bottom: 30px;
+    overflow: hidden;
+}
+
+.fcl-button img {
+    display: block;
+    width: 30px;
+    padding: 0px;  //width/
+    height: auto;
+}
+
+.round-button {
+    float:right;
+    width: 30px;
+    height: 0;
+    margin-left: 10px;
+    /*margin-right: 10px;*/
+    /*border-radius: 75px;
+    border: 2px solid #f5f5f5;*/
+    margin-bottom: 5px;
+    padding-bottom: 30px;
+    overflow: hidden;
+    /*background: #464646;*/
+    /*box-shadow: 0 0 3px gray;*/
+}
+.round-button:hover {
+    background: #262626;
+}
+.round-button img {
+    display: block;
+    width: 30px;
+    padding: 0px;  //width/
+    height: auto;
+}
+
+/*zoom in and out button*/
+.zoom_ctl{
+    position:absolute;
+    z-index: 3;
+    bottom:20px;
+    right: 13px;
+    background-color: #ffffff;
+    box-shadow: 1px 1px 1px #b6b6b6;
+    opacity:0.85;
+    width:28px;
+    display: inline-block;
+}
+
+.zoom_ctl hr{
+    margin-left: 15%;
+    width: 70%;
+    background-color: #c0c0c0;
+    height:1px;
+    border: hidden;
+    stroke-opacity: 1;
+
+
+}
+
+.zoom_Btn{
+    background-color: #ffffff;
+    width:28px;
+    height:28px;
+    color: #686868;
+    font-size: 20px;
+    font-weight: 700;
+    padding-bottom: 6px;
+    margin-top: 0px;
+    border: hidden;
+    outline: none;
+}
+
+.zoom_Btn:hover{
+    color: #000;
+}
+
+.zoom_Btn:active {
+    transform: translateY(-4px);
+}
+
+/*refresh button*/
+.reset_Btn
+{
+    z-index: 4;
+    padding: 5px;
+    padding-left:15px;
+    padding-right:15px;
+    position:absolute;
+    background-color:#404040;
+    opacity: 0.85;
+    border:hidden;
+    outline:none;
+    color: #ffffff;
+    left:0px;
+    top:42px;
+}
+
+.reset_Btn:active {
+    background-color: #868686;
+}
+

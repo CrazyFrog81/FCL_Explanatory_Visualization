@@ -1,0 +1,51 @@
+.node {
+    cursor: pointer;
+}
+
+.node:hover {
+    stroke: #000;
+    stroke-width: 0.5px;
+}
+
+.node--leaf {
+    fill: #4345ff;
+    opacity: 0.4;
+}
+
+.label {
+    font: 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-anchor: middle;
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+}
+
+.project_legend {
+    position:absolute;
+    left:10px;
+    bottom: 20px;
+
+}
+
+/*
+.label,
+.node--root{
+    pointer-events: none;
+}
+
+#zoomable_circles{
+    position:absolute;;
+    bottom: 15%;
+    right: 5%;
+    width:100%;
+    height:100%;
+    border: 1px solid #d0d0d0;
+}
+
+.point:hover {
+    stroke: #000;
+    stroke-width: 0.5px;
+}
+
+.cluster:hover {
+    stroke: #000;
+    stroke-width: 0.5px;
+}*/

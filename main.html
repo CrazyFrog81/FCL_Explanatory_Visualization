@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>FCL Explanatory Visualization</title>
+
+    <link rel="stylesheet" href="css/main.css"/>
+    <link rel="stylesheet" href="css/slider.css"/>
+    <link rel="stylesheet" href="css/zoomable_circles.css"/>
+    <link rel="stylesheet" href="css/tooltip.css"/>
+    <link rel="stylesheet" href="css/sliding_menuBar.css"/>
+    <link rel="stylesheet" href="css/google_map.css"/>
+
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="js/lib/topojson.v1.min.js"></script>
+
+</head>
+
+<body>
+
+<script>
+    var pop_layer = false;
+    var co2_layer = false;
+    var gdp_layer = false;
+
+    var project_layer = false;
+    var network_layer = false;
+    var staff_layer = false;
+
+    var map_width, map_height;
+    map_width = screen.width;//document.getElementById("content_holder").offsetWidth;//
+    map_height = screen.height;//window.innerHeight;//
+
+    var point_layer_count = 0;
+
+    var ul_height = 73;
+
+    function newInput() {
+        //tooltip.style("visibility","hidden");
+        //d3.selectAll(".navg_button").classed("selectedBtn",false);
+
+        if (this.id) {
+            var holder = this.parentNode.id;
+            var the_ul = d3.select("#" + holder).selectAll("ul");
+            this.classList.toggle("selectedBtn");
+            var res = d3.select(this).classed("selectedBtn");
+
+            switch (this.id) {
+                case 'pop_densityBtn':
+                    chart_refresh = true;
+                    the_ul.style("height", ul_height+"px");
+
+                    if (res) {
+                        SC.layer_count++;
+                        SC.layer_stack[0] = SC.layer_count;
+                        pop_layer = true;
+
+                        document.getElementById("pop_densityBtn_img").src = "img/eye_white.png";
+                        the_ul.style("height", ul_height+"px");
+                        load_DData("pop_layer");
+                    } else {
+                        SC.layer_count--;
+                        SC.layer_stack[0] = 0;
+                        pop_layer = false;
+                        document.getElementById("pop_densityBtn_img").src = "img/eye_black.png";
+                        the_ul.style("height", "0");
+                        remove_layer('.pop_layer');
+                        if (!(pop_layer | co2_layer | gdp_layer)) {
+                            redraw_worldmap();
+                            //d3.select("#label_slider").remove();
+                        }
+                    }
+                    break;
+                case 'co2_emissionBtn':
+                    chart_refresh = true;
+
+                    if (res) {
+                        SC.layer_count++;
+                        SC.layer_stack[1] = SC.layer_count;
+                        co2_layer = true;
+                        document.getElementById("co2_emissionBtn_img").src = "img/eye_white.png";
+                        the_ul.style("height", ul_height+"px");
+                        load_DData("co2_layer");
+                    } else {
+                        SC.layer_count--;
+                        SC.layer_stack[1] = 0;
+                        co2_layer = false;
+                        document.getElementById("co2_emissionBtn_img").src = "img/eye_black.png";
+                        the_ul.style("height", "0");
+                        remove_layer('.co2_layer');
+                        if (!(pop_layer | co2_layer | gdp_layer)) {
+                            redraw_worldmap();
+                        }
+                    }
+                    break;
+
+                case 'gdp_Btn':
+                    chart_refresh = true;
+
+                    if (res) {
+                        SC.layer_count++;
+                        SC.layer_stack[2] = SC.layer_count;
+                        gdp_layer = true;
+                        document.getElementById("gdp_Btn_img").src = "img/eye_white.png";
+                        the_ul.style("height", ul_height+"px");
+                        load_DData("gdp_layer");
+                    } else {
+                        SC.layer_count--;
+                        SC.layer_stack[2] = 0;
+                        gdp_layer = false;
+                        document.getElementById("gdp_Btn_img").src = "img/eye_black.png";
+                        the_ul.style("height", "0");
+                        remove_layer('.gdp_layer');
+                        if (!(pop_layer | co2_layer | gdp_layer)) {
+                            redraw_worldmap();
+                        }
+                    }
+                    break;
+
+                case  'fcl_projectsBtn':
+                    if (res) {
+                        project_layer = true;
+                        document.getElementById("fcl_projectsBtn_img").src = "img/yellow.png";
+
+                        load_DData("project_layer");
+                        point_layer_count++;
+                    } else {
+                        project_layer = false;
+                        document.getElementById("fcl_projectsBtn_img").src = "img/grey_out.png";
+                        remove_layer('.project_layer');
+                        // clear_allProject_Poly(); //clear polygon
+                        clear_allProject_Circles();
+                        point_layer_count--;
+                    }
+                    break;
+
+                case 'global_networkBtn':
+                    if (res) {
+                        network_layer = true;
+                        document.getElementById("global_networkBtn_img").src = "img/blue.png";
+                        load_DData("network_layer");
+                        point_layer_count++;
+                    } else {
+                        network_layer = false;
+                        document.getElementById("global_networkBtn_img").src = "img/grey_out.png";
+                        remove_layer('.network_layer');
+                        clear_allNetwork();
+                        point_layer_count--;
+                    }
+                    break;
+
+                case 'academic_staffBtn':
+                    if (res) {
+                        staff_layer = true;
+                        document.getElementById("academic_staffBtn_img").src = "img/pink.png";
+                        load_DData("staff_layer");
+                        point_layer_count++;
+                    } else {
+                        staff_layer = false;
+                        document.getElementById("academic_staffBtn_img").src = "img/grey_out.png";
+                        remove_layer('.staff_layer');
+                        clear_allStaff();
+                        point_layer_count--;
+                    }
+                    break;
+
+
+                default:
+                    break;
+            }
+
+//            d3.select(this).classed("selectedBtn",true);
+        } else {
+            d3.select("#pop_densityBtn").classed("selectedBtn", true);
+        }
+
+    }
+
+    /* Set the width of the side navigation to 250px */
+    var sideBar_open = false;
+    function openNav() {
+        // document.getElementById("fclSidenav").classList.toggle("show_side_bar");
+        var sidebar = d3.select("#fclSidenav");
+        if (sideBar_open) {//clse the side_bar
+            sideBar_open = false;
+            d3.select("#fcl_projects").style("background-color", "#FEFF8A").style("color", "#000000");
+            sidebar.attr("style", "height:0px");
+        }
+        else {//open the side bar
+            sideBar_open = true;
+            d3.select("#fcl_projects").style("background-color", "#1f2933").style("color", "#ffffff");
+            sidebar.attr("style", "height:90px");
+
+        }
+    }
+
+
+    var mydragg = function () {
+        return {
+            move: function (divid, xpos, ypos) {
+                document.getElementById(divid).style.right = xpos + 'px';
+                document.getElementById(divid).style.top = ypos + 'px';
+            },
+            startMoving: function (divid, container, evt) {
+                evt = evt || window.event;
+                var posX = evt.clientX,
+                        posY = evt.clientY,
+                        divTop = document.getElementById(divid).offsetTop,
+                        divLeft = document.getElementById(divid).offsetLeft,
+                        eWi = parseInt(document.getElementById(divid).offsetWidth),
+                        eHe = parseInt(document.getElementById(divid).offsetHeight),
+                        cWi = parseInt(document.getElementById(container).offsetWidth),
+                        cHe = parseInt(document.getElementById(container).offsetHeight);
+                // document.getElementById(container).style.cursor='move';
+                //divTop = divTop.replace('px','');
+                //divLeft = divLeft.replace('px','');
+                var diffX = (divLeft + eWi) - posX,
+                        diffY = posY - divTop;
+                document.onmousemove = function (evt) {
+                    evt = evt || window.event;
+                    var posX = evt.clientX,
+                            posY = evt.clientY,
+                            aX = cWi - (posX + diffX),  //right
+                            aY = posY - diffY;
+                    if (aX < 0) aX = 0;
+                    if (aY < 0) aY = 0;
+                    if (aX + eWi > cWi) aX = cWi - eWi;
+                    if (aY + eHe > cHe) aY = cHe - eHe;
+                    mydragg.move(divid, aX, aY);
+                }
+
+            },
+            stopMoving: function (container) {
+                var a = document.createElement('script');
+                document.getElementById(container).style.cursor = 'default';
+                document.onmousemove = function () {
+                }
+            },
+        }
+    }();
+
+    var mydragg_L = function () {
+        return {
+            move: function (divid, xpos, ypos) {
+
+                document.getElementById(divid).style.left = xpos + 'px';
+                document.getElementById(divid).style.top = ypos + 'px';
+            },
+            startMoving: function (divid, container, evt) {
+                evt = evt || window.event;
+                var posX = evt.clientX,
+                        posY = evt.clientY,
+                        divTop = document.getElementById(divid).offsetTop,
+                        divLeft = document.getElementById(divid).offsetLeft,
+                        eWi = parseInt(document.getElementById(divid).offsetWidth),
+                        eHe = parseInt(document.getElementById(divid).offsetHeight),
+                        cWi = parseInt(document.getElementById(container).offsetWidth),
+                        cHe = parseInt(document.getElementById(container).offsetHeight);
+                // document.getElementById(container).style.cursor='move';
+                //divTop = divTop.replace('px','');
+                //divLeft = divLeft.replace('px','');
+                var diffX = posX - divLeft,
+                        diffY = posY - divTop;
+                document.onmousemove = function (evt) {
+                    evt = evt || window.event;
+                    var posX = evt.clientX,
+                            posY = evt.clientY,
+                            aX = posX - diffX,  //LEFT
+                            aY = posY - diffY;
+                    if (aX < 0) aX = 0;
+                    if (aY < 0) aY = 0;
+                    if (aX + eWi > cWi) aX = cWi - eWi;
+                    if (aY + eHe > cHe) aY = cHe - eHe;
+                    mydragg_L.move(divid, aX, aY);
+                }
+            },
+            stopMoving: function (container) {
+                var a = document.createElement('script');
+                document.getElementById(container).style.cursor = 'default';
+                document.onmousemove = function () {
+                }
+            },
+        }
+    }();
+
+
+    /*javascript for the modal*/
+    // When the user clicks on the button, open the modal
+    function modal_open() {
+        var modal = document.getElementById('rationale_modal');
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    function close_modal() {
+        var modal = document.getElementById('rationale_modal');
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        var modal = document.getElementById('rationale_modal');
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // resize d3 map and google map when browser is resized
+    window.onresize = function(){
+        map_width = window.innerWidth;
+        map_height = window.innerHeight;
+
+        document.getElementById("content_holder").style.height = map_height+"px";
+        document.getElementById("content_holder").style.width = map_width+"px";
+
+        document.getElementById("googlem_holder").style.width = map_width+"px";
+        document.getElementById("googlem_holder").style.height = map_height+"px";
+
+        console.log(map_width +" "+map_height);
+    }
+</script>
+
+<div id="welcome_mask" style="background-color: yellow;opacity: 0.85">
+    <div class="welcome_msg" style="background-color: yellow">
+        <p style="background-color: yellow;width:400px;"><img src='img/project_img/0_fcl_vis.jpg'></p>
+    </div>
+</div>
+
+<div id="content_holder" class="content_holder">
+    <!--style="height: " +map_height+"px;width:"+map_width+"px;">-->
+
+    <nav id="menu_bar" class="menu_bar_css">
+        <div class="holder">
+            <div class="menu-item" style="padding: 0px; border-top: 0"
+                 onmousedown='mydragg.startMoving("menu_bar","content_holder",event);'
+                 onmouseup='mydragg.stopMoving("content_holder");'>
+                <img id="fcl_logo" src="img/Logo_FCLwhite.png" alt="fcl_logo" width="199.5px" height="48.87px">
+            </div>
+            <hr>
+            <div class="menu-item navg_button" id="pop_densityHolder">
+                <h4 id="pop_densityBtn"><img id="pop_densityBtn_img" src="img/eye_white.png"><a>POPULATION DENSITY</a></h4>
+                <ul>
+                    <li></li>
+                </ul>
+            </div>
+            <hr>
+            <div class="menu-item navg_button" id="co2_emissionHolder">
+                <h4 id="co2_emissionBtn"><img id="co2_emissionBtn_img" src="img/eye_black.png"><a>CO2 EMISSION PER
+                    CAPITA</a></h4>
+                <ul>
+                    <li></li>
+                </ul>
+            </div>
+            <hr>
+            <div class="menu-item navg_button" id="gdpHolder">
+                <h4 id="gdp_Btn"><img id="gdp_Btn_img" src="img/eye_black.png"><a>GDP PER CAPITA</a></h4>
+                <ul>
+                    <li></li>
+                </ul>
+            </div>
+            <hr>
+            <div class="menu-item" id="label_slider">
+
+            </div>
+        </div>
+        <div class="line_break"></div>
+        <div id="fclHolder">
+            <div style="background-color: #FEFF8A;    -webkit-box-shadow: -2px 2px 2px rgba(0,0,0,0.2);-moz-box-shadow: -2px 2px 2px rgba(0,0,0,0.2);">
+                <button id="fcl_modal" onclick="modal_open()">RATIONALE</button>
+                |
+                <button id="fcl_projects" onclick="openNav()">About FCL</button>
+            </div>
+            <!-- side bar-->
+            <div id="fclSidenav" class="menu_bar_css">
+                <a href="#" id="fcl_projectsBtn"><img src="img/grey_out.png" id="fcl_projectsBtn_img">FCL Projects</a>
+                <a href="#" id="global_networkBtn"> <img src="img/grey_out.png" id="global_networkBtn_img">Global
+                    Network</a>
+                <a href="#" id="academic_staffBtn"><img src="img/grey_out.png" id="academic_staffBtn_img">Academic Staff</a>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="zoom_ctl menu_bar_css">
+        <button class="zoom_Btn zoom_in" onclick="handle_zoom(this)">+</button>
+        <hr>
+        <button class="zoom_Btn" onclick="handle_zoom(this)">-</button>
+    </div>
+    <!--the modal-->
+    <div id="rationale_modal" class="rationale">
+        <!-- rationale content -->
+        <div class="rationale-content" style="font-family:arial, sans-serif">
+            <div class="modal-body">
+                <b style="font-size:30px;">Future Cities Laboratory (FCL)</b> <span class="close" onclick="close_modal()"></span>
+                <br><br>
+
+                <p style="font-size: 18px;">The guiding vision of the Future Cities Laboratory is to shape sustainable
+                    future cities:<br>
+                    THROUGH SCIENCE | BY DESIGN | IN PLACE</p><br>
+
+                <p style="font-size: 14px">
+                    <b style="font-size: 12px;">THROUGH SCIENCE</b><br>
+                    To achieve sustainability, science is essential. Science provides the basis for understanding how cities
+                    develop and interact with the environment at different scales. Cities are composed of physical stocks,
+                    resource ows, social institutions and cultural catalysts whose interactions generate a quanti able
+                    ‘metabolism’. The scienti c focus of our research is to quantify such metabolisms, and understand how
+                    they might be best structured for the bene t of sustainable cities.
+                    <br><br>
+                    <b style="font-size: 12px;">BY DESIGN</b>
+                    <br>A sustainable city must also be liveable. To achieve liveability, design is essential. Design is
+                    a collaborative process that combines analytical techniques, imaginative strategies and
+                    transdisciplinary knowledge to generate new ideas and bring them to fruition. Design skills
+                    bring, often con icting, technical, economic, social and cultural demands (such as environmental
+                    sustainability, pro t, comfort, convenience, identity, security, satisfaction and desire) into
+                    innovative and harmonious relationships.
+                    <br><br>
+                    <b style="font-size: 12px;">IN PLACE</b>
+                    <br>Science and design are effective only if they serve places and the lives that are lived in them.
+                    Places result from common processes (growth and decline; competition and co-operation; ebb and ow of
+                    capital, people, goods and ideas; climate change) and differentiating factors (geography, culture,
+                    language, history). Our research addresses diverse lived places, from compact cities with high-density
+                    populations to extended cities with a mosaic of urban and rural land-uses.
+                    <br><br>
+                </p>
+
+            </div>
+            <div class="rationale-footer">
+                <!--<h5><a href="http://www.fcl.ethz.ch/" target="_blank" style="text-decoration:underline;color:dodgerblue;">www.fcl.ethz.ch</a>-->
+                <!--</h5>-->
+
+            <span class="fcl-button">
+             <a href="http://www.fcl.ethz.ch/" target="_blank" target="_blank">
+                 <img src="img/icon_fcl.png" alt="fcl"/>
+             </a>
+            </span>
+
+        <span class="round-button">
+             <a href="https://www.zotero.org/groups/future_cities_laboratory" target="_blank">
+                 <img src="img/icon_zotero.png" alt="zotero"/>
+             </a>
+        </span>
+
+        <span class="round-button">
+             <a href="https://vimeo.com/futurecitieslaboratory" target="_blank">
+                 <img src="img/icon_vimeo.png" alt="vimeo"/>
+             </a>
+        </span>
+
+        <span class="round-button">
+             <a href="https://www.flickr.com/photos/futurecitieslaboratory/" target="_blank">
+                 <img src="img/icon_flickr.png" alt="fliker"/>
+             </a>
+        </span>
+
+        <span class="round-button">
+             <a href="https://twitter.com/_FCL" target="_blank">
+                 <img src="img/icon_twitter.png" alt="Twitter"/>
+             </a>
+        </span>
+
+        <span class="round-button">
+             <a href="https://www.facebook.com/futurecitieslaboratory" target="_blank">
+                 <img src="img/icon_facebook.png" alt="Facabook"/>
+             </a>
+        </span>
+
+            </div>
+        </div>
+    </div>
+    <button class="reset_Btn" onclick="reset()">RESET</button>
+
+
+    <div id="map_container">
+
+        <!--<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7830112895026!2d103.78620331459703!3d1.3052853620809883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da1a431841d5f1%3A0x160f705c61acdff3!2ssixty40!5e0!3m2!1sen!2ssg!4v1466989919758" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>-->
+    </div>
+
+    <span class="page_footer">Map Data © The World Bank &emsp;
+    </span>
+
+</div>
+<!--end of content holder div-->
+
+<script>
+    document.getElementById("content_holder").style.height = window.innerHeight + 'px';
+    document.getElementById('pop_densityBtn').addEventListener("click", newInput);
+    document.getElementById('co2_emissionBtn').addEventListener("click", newInput);
+    document.getElementById('gdp_Btn').addEventListener("click", newInput);
+    document.getElementById('fcl_projectsBtn').addEventListener("click", newInput);
+    document.getElementById('global_networkBtn').addEventListener("click", newInput);
+    document.getElementById('academic_staffBtn').addEventListener("click", newInput);
+</script>
+
+<script src="js/map/world_map.js"></script>
+<script src="js/map/population_density_display.js"></script>
+<script src="js/slider/timer_slider.js"></script>
+<script src="js/slider/color_slider.js"></script>
+<script src="js/map/zoomable_circles.js"></script>
+<script src="js/google_map/google_map.js"></script>
+
+<script>
+    // enable multi-touch support in Google Chrome
+    // ref: http://stackoverflow.com/questions/28661844/touch-events-not-working-with-google-maps-in-angular/31023464
+    navigator = navigator || {};
+    navigator.msMaxTouchPoints = navigator.msMaxTouchPoints || 2;
+    navigator.msPointerEnabled = true;
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBU5cWlAqYt_SPwMSEi1NZjbjB2JDD1PIA&callback=initMap"></script>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+/* The side navigation menu */
+#fclSidenav {
+    float:right;
+    min-width: 150px;
+    height:0px;
+    /*position: fixed; bottom: 80px;
+    right: 0px;/* Stay in place */
+    z-index: 3; /* Stay on top */
+    transition: 0.2s; /* 0.5 second transition effect to slide in the sidenav */
+    -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: #1f2933;
+    overflow-x: hidden; /* Disable horizontal scroll */
+}
+/*
+.show_side_bar{
+    border:2px solid red;
+    height:20px;
+}
+*/
+
+#fclSidenav a img{
+    width:15px;
+    height:15px;
+    padding-top: 2.5%;/*width=15 height=15 style="float:left;padding-left: 14px;padding-top:7px;"*/
+    padding-left: 10px;
+    float:left;
+}
+    /* The navigation menu links */
+#fclSidenav a {
+    padding: 3% ;
+    text-decoration:none;
+    font-size: 13px;
+    color: white;
+    border-bottom: 2px solid #010101;
+    transition: 0.1s;
+    height:21%;
+    display: block;
+}
+
+/* When you mouse over the navigation links, change their color */
+#fclSidenav a:hover, .offcanvas a:focus{
+    background-color: #818181;
+}
+
+/* Position and style the close button (top right corner) */
+.closebtn {
+   /* position: absolute;
+    top: 0;
+    right: 5px;*/
+    float: right;
+    margin-top: -30px;
+    font-size: 25px !important;
+    width: 25px;
+    height:25px;
+
+
+}
+
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}

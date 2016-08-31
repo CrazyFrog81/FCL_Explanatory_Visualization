@@ -1,0 +1,112 @@
+
+#googlem_holder{
+
+    /*background-color: #1F2933;*/
+    position:absolute;
+    top:0;
+    left:0;
+    z-index: 3;
+    overflow: scroll;
+
+    /* something other than visible */
+    /*
+    overflow: scroll;
+    width:750px;
+    height:300px;
+    position: absolute;
+    box-shadow: 1px 1px 5px #606060;*/
+
+}
+
+
+/* toggle switch
+==========================*/
+#toggle_GM{
+ width: 145px;
+    height:40px;
+    padding-top: 2px;
+    background-color:#404040;
+    opacity: 0.85;
+    position: absolute;
+    left:0;
+    top:0;
+    z-index: 4;
+}
+
+.text_box{
+    font-family: Arial;
+    font-size: 10px;
+    font-weight: 500;
+    position:fixed;
+    margin-left: 1%;
+    height:16px;
+    padding-top: 15px;
+    text-align: center;
+    color:white;
+}
+
+/* The switch - the box around the slider */
+.toggle_switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 15px;
+    left:90px;
+    top:13px;
+
+}
+
+/* Hide default HTML checkbox */
+.toggle_switch input {
+    display:none;}
+
+/* The slider */
+.toggle_slider {
+    position: absolute;
+    cursor: pointer;
+    -moz-box-shadow:    inset 0 0 1.5px #000000;
+    -webkit-box-shadow: inset 0 0 1.5px #000000;
+    box-shadow:         inset 0 0 1.5px #000000;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #848484;
+}
+
+.toggle_slider:before {
+    position: absolute;
+    content: "";
+    height: 13px;
+    width: 19px;
+    left: 1px;
+    bottom: 1px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .toggle_slider {
+    background-color: #4b93ff;
+}
+
+input:focus + .toggle_slider {
+    box-shadow: 0 0 1px #d0d0d0;
+}
+
+input:checked + .toggle_slider:before {
+    -webkit-transform: translateX(20px);
+    -ms-transform: translateX(20px);
+    transform: translateX(20px);
+}
+
+/* Rounded sliders
+.toggle_slider.round {
+    border-radius: 30px;
+}
+
+.toggle_slider.round:before {
+    border-radius: 50%;
+}
+*/
+

@@ -1,0 +1,56 @@
+No,FCL_Project,Case_study,Latitude,Longitude,Title,Description,Image_Credit
+1,1.1,King's Cross,51.531,-0.124,Grand Projet,,
+2,1.1,Zuidas,52.338,4.873,Grand Projet,,
+3,1.1,Hafencity,53.541,9.999,Grand Projet,,
+4,1.1,Bjorvika area,59.907,10.758,Grand Projet,,
+5,1.1,Postdamer Platz,52.509,13.375,Grand Projet,,
+6,1.1,Moscow International Business Centre,55.746,37.536,Grand Projet,,
+7,1.1,Dawangjing CBD,39.998,116.49,Grand Projet,,
+8,1.1,Pudong Luijiazui,31.236,121.504,Grand Projet,,
+9,1.1,Marunouchi,35.681,139.764,Grand Projet,,
+10,1.1,Roppogi Hills,35.659,139.729,Grand Projet,,
+11,1.1,Canary Wharf,51.505,-0.026,Grand Projet,,
+12,1.1,Battery Park,40.712,-74.015,Grand Projet,,
+13,1.1,Inner Harbour,39.286,-76.61,Grand Projet,,
+14,1.1,Euralille,50.637,3.074,Grand Projet,,
+15,1.1,Kowloon Station,22.304,114.161,Grand Projet,,
+16,1.1,Bonifacio Global City,14.55,121.051,Grand Projet,,
+17,1.1,Kuala Lumpur City Centre,3.157,101.711,Grand Projet,,
+18,1.1,La Defense,48.891,2.238,The Grand Projet: Towards Adaptable and Liveable Urban Megaprojects,,
+19,1.1,Europaviertel,50.109,8.651,The Grand Projet: Towards Adaptable and Liveable Urban Megaprojects,,
+20,1.1,BMW FIZ,48.193,11.571,The Grand Projet: Towards Adaptable and Liveable Urban Megaprojects,,
+21,1.1,Porto Maravilha,-22.894,-43.188,The Grand Projet: Towards Adaptable and Liveable Urban Megaprojects,,
+22,1.1,Sandton CBD,-26.107,28.052,The Grand Projet: Towards Adaptable and Liveable Urban Megaprojects,,
+23,1.1,Waterfall City,-26.02,28.091,The Grand Projet: Towards Adaptable and Liveable Urban Megaprojects,,
+24,1.1,Burj Khalifa,25.197,55.274,The Grand Projet: Towards Adaptable and Liveable Urban Megaprojects,,
+25,1.1,Marina Centre,1.292,103.857,The Grand Projet: Towards Adaptable and Liveable Urban Megaprojects,,
+26,1.1,Barangaroo,-33.864,151.202,The Grand Projet: Towards Adaptable and Liveable Urban Megaprojects,,
+27,1.2,Singapore,1.3,103.8,Ecosystem services in urban lanscapes,,
+28,1.2,Jakarta,-6.1745,106.8227,Ecosystem services in urban lanscapes,,
+29,1.3,Singapore,1.3,103.8,Multi-Scale Energy Systems for Low Carbon Cities,,
+30,1.4,Singapore,1.3,103.8,Dense and Green Building Typologies,,
+31,2.1,Singapore,1.3,103.8,Big Data-Informed Urban Design,,
+32,2.2,Singapore,1.3,103.8,Cyber Civil Infrastructure,,
+33,2.3,Singapore,1.3,103.8,Engaging Mobility,,
+34,2.4,Singapore,1.3,103.8,"Cognition, Perception, and Behaviour in Urban Environments",,
+35,3.1,Johor Bahru,1.4833,103.7333,SIJORI: Territories of Extended Urbanisation,,
+36,3.1,Singapore,1.3,103.8,SIJORI: Territories of Extended Urbanisation,,
+37,3.1,Batam,1.0833,104.0333,SIJORI: Territories of Extended Urbanisation,,
+38,3.1,Kota,25.18,75.83,SIJORI: Territories of Extended Urbanisation,,
+39,3.1,Bintan,1.0767,104.5003,SIJORI: Territories of Extended Urbanisation,,
+40,3.1,Karimun,-5.8192,110.459,SIJORI: Territories of Extended Urbanisation,,
+41,3.2,Batam,1.0833,104.0333,Riau project/ only till 2015,"The aim of the project is develop Visualisation Data Platform to support decision-making in urban planning contexts. It does so by drawing together diverse data on a delimited set of urban and regional areas, and allowing stakeholders for a given project interact with that data in intuitive and engaging ways.","Sharan Sudhindra, 14 December 2015"
+42,3.2,Karimun,-5.8192,110.459,Riau project/ only till 2015,"The aim of the project is develop Visualisation Data Platform to support decision-making in urban planning contexts. It does so by drawing together diverse data on a delimited set of urban and regional areas, and allowing stakeholders for a given project interact with that data in intuitive and engaging ways.","Danny Williamson, 24 December 2012"
+43,3.2,Jakarta,-6.1745,106.8227,Urban-Rural Systems research,"This research is focused on the complex patterns of settlement emerging in the hinterlands of many large cities in Southeast Asia, India and China. All cities have their hinterlands of one kind or another.This study is specifically interested in the hinterlands of cities surrounded by tropical, wet-rice agriculture. It has this interest in part because many cities in Asia are surrounded by this kind of agriculture.",Nitin Bathla
+44,3.2,Surakarta,-7.612514,110.836511,Urban-Rural Systems research,"This research is focused on the complex patterns of settlement emerging in the hinterlands of many large cities in Southeast Asia, India and China. All cities have their hinterlands of one kind or another.This study is specifically interested in the hinterlands of cities surrounded by tropical, wet-rice agriculture. It has this interest in part because many cities in Asia are surrounded by this kind of agriculture.",Lincoln Lewis
+45,3.2,Kolkata Metropolitan Region (KMR),22.601967,88.372674,Urban-Rural Systems research,"This research is focused on the complex patterns of settlement emerging in the hinterlands of many large cities in Southeast Asia, India and China. All cities have their hinterlands of one kind or another.This study is specifically interested in the hinterlands of cities surrounded by tropical, wet-rice agriculture. It has this interest in part because many cities in Asia are surrounded by this kind of agriculture.","Biswarup Ganguly, Wiki Commons"
+46,3.2,Dhaka Metropolitan Area (DMA),23.789417,90.393575,Urban-Rural Systems research,"This research is focused on the complex patterns of settlement emerging in the hinterlands of many large cities in Southeast Asia, India and China. All cities have their hinterlands of one kind or another.This study is specifically interested in the hinterlands of cities surrounded by tropical, wet-rice agriculture. It has this interest in part because many cities in Asia are surrounded by this kind of agriculture.","www.biffl.org.bd/, 27 January 2012"
+47,3.2,Shanghai-Yangtze River Delta Metropolitan Region (YRD),31.17801,121.494693,Urban-Rural Systems research,"This research is focused on the complex patterns of settlement emerging in the hinterlands of many large cities in Southeast Asia, India and China. All cities have their hinterlands of one kind or another.This study is specifically interested in the hinterlands of cities surrounded by tropical, wet-rice agriculture. It has this interest in part because many cities in Asia are surrounded by this kind of agriculture.",Ting Chen
+48,3.2,Ho Chi Minh City (Ho Chi Minh Metropolitan Area),10.74404,106.683341,Urban-Rural Systems research,"This research is focused on the complex patterns of settlement emerging in the hinterlands of many large cities in Southeast Asia, India and China. All cities have their hinterlands of one kind or another.This study is specifically interested in the hinterlands of cities surrounded by tropical, wet-rice agriculture. It has this interest in part because many cities in Asia are surrounded by this kind of agriculture.","Alan Turkus, 29 March 2006 � Wiki Commons"
+49,3.2,Bangkok Metropolitan Region (Krung Thep Mahanakhon Lae Parimonthon,13.744571,100.581604,Urban-Rural Systems research,"This research is focused on the complex patterns of settlement emerging in the hinterlands of many large cities in Southeast Asia, India and China. All cities have their hinterlands of one kind or another.This study is specifically interested in the hinterlands of cities surrounded by tropical, wet-rice agriculture. It has this interest in part because many cities in Asia are surrounded by this kind of agriculture.",Lincoln Lewis
+50,3.2,Makassar Metropolitan Area (Mamminasata),-5.128228,119.434145,Urban-Rural Systems research,"This research is focused on the complex patterns of settlement emerging in the hinterlands of many large cities in Southeast Asia, India and China. All cities have their hinterlands of one kind or another.This study is specifically interested in the hinterlands of cities surrounded by tropical, wet-rice agriculture. It has this interest in part because many cities in Asia are surrounded by this kind of agriculture.",by Jacobus van der Schley - English Wikipedia. Map of Celebes. Licensed under Public Domain via Wikimedia Commons - https://commons.wikimedia.org/wiki/File:AMH-8027-KB_Map_of_Celebes.jpg
+51,3.2,Palembang Raya (Greater Palembang),-2.964567,104.766739,Urban-Rural Systems research,"This research is focused on the complex patterns of settlement emerging in the hinterlands of many large cities in Southeast Asia, India and China. All cities have their hinterlands of one kind or another.This study is specifically interested in the hinterlands of cities surrounded by tropical, wet-rice agriculture. It has this interest in part because many cities in Asia are surrounded by this kind of agriculture.","by Gunawan Kartapranata - English Wikipedia. Licensed under Public Domain via Wikimedia Commons - https://commons.wikimedia.org/wiki/File:Ampera_Bridge_at_Noon,_Palembang.jpg#filelinks"
+52,3.2,Gresik-Bangkalan-Mojokerto-Surabaya-Sidoarjo- Lamongan (Gerbangkertosusila),-7.162877,112.65474,Urban-Rural Systems research,"This research is focused on the complex patterns of settlement emerging in the hinterlands of many large cities in Southeast Asia, India and China. All cities have their hinterlands of one kind or another.This study is specifically interested in the hinterlands of cities surrounded by tropical, wet-rice agriculture. It has this interest in part because many cities in Asia are surrounded by this kind of agriculture.",Peta soerabaja 1897. Licensed under Public Domain via Wikimedia Commons - https://commons.wikimedia.org/wiki/File:Peta_soerabaja_1897.jpg#/media/File:Peta_soerabaja_1897.jpg
+53,3.2,Manila Metropolitan Region (Kalakhang Maynila),14.61468,120.985659,Urban-Rural Systems research,"This research is focused on the complex patterns of settlement emerging in the hinterlands of many large cities in Southeast Asia, India and China. All cities have their hinterlands of one kind or another.This study is specifically interested in the hinterlands of cities surrounded by tropical, wet-rice agriculture. It has this interest in part because many cities in Asia are surrounded by this kind of agriculture.","Daniel H. Burnham and Edward H. Bennett, Wiki Commons"
+54,3.3,Singapore,1.3,103.8,Alternative construction materials,,
+55,3.4,Singapore,1.3,103.8,Tourism and Cultural Heritage,,
