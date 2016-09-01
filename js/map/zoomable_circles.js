@@ -12,7 +12,6 @@
 
 /*calculate distance between any two project locations*/
 function draw_projectLayer(){
-    
         var tier1_scale = 2;
         var tier2_scale = 2.5;
         var tier3_scale = 3;
@@ -27,39 +26,33 @@ function draw_projectLayer(){
             tier_range = 3;
             scale = tier4_scale;
         }else if(s>=tier3_scale){
-
             tier_range=5;
             scale = tier3_scale;
-
         }else if(s>=tier2_scale){
             tier_range = 25;
             scale = tier2_scale;
-
         }else if(s>=tier1_scale){
-
             tier_range = 50 ;
             scale = tier1_scale;
-
         }else{
-
             tier_range = 100 ;
             scale = 1;
         }
         find_last_tier(tier_range,scale,'project_layer'); // draw tier1
 
         d3.selectAll(".point")
+            .attr("id", "fcl_project_point")
             .style("stroke-width", 0.5/s+'px')
             .attr("r", function (d) {
                 return Math.sqrt(area_unit*d["area"]/Math.PI)/s;
             });
 
         d3.selectAll(".cluster")
+            .attr("id", "fcl_project_cluster")
             .style("stroke-width", 0.5/s+'px')
             .attr("r", function (d) {
                 return Math.sqrt(area_unit*d["area"]/Math.PI)/s;
             });
-
-    
 }
 
 function generate_allDistMatrix(){
@@ -200,7 +193,6 @@ function generate_allDistMatrix(){
 
 /*calculate distance between any two partner locations*/
 function draw_networkLayer(){
-
         var tier1_scale = 2;
         var tier2_scale = 2.5;
         var tier3_scale = 3;
@@ -245,14 +237,12 @@ function draw_networkLayer(){
             .attr("r", function (d) {
                 return Math.sqrt(area_unit*d["area"]/Math.PI)/s;
             });
-    
 }
 
 
 /*calculate distance between any two staff country
 Nationality,Based,Latitude,Longitude*/
 function draw_staffLayer(){
-    
         var tier1_scale = 2;
         var tier2_scale = 2.5;
         var tier3_scale = 3;
@@ -280,7 +270,6 @@ function draw_staffLayer(){
             scale = tier1_scale;
 
         }else{
-
             tier_range = 100 ;
             scale = 1;
         }
@@ -297,7 +286,6 @@ function draw_staffLayer(){
             .attr("r", function (d) {
                 return Math.sqrt(area_unit*d["area"]/Math.PI)/s;
             });
-
 }
 
 
@@ -305,13 +293,11 @@ var fcl_tooltip_list = [];
 var area_unit =200;
 //function to add points and text to the map (used in plotting capitals)
 function addpoint(color, lat, lon, title,text, area, imgNo,scale,className) {
-
-
     if(area == undefined) area = 1;
     if(imgNo == undefined) imgNo = 0;
 
 
-    var gpoint = g.append("g").attr("class","items "+className);
+    var gpoint = g.append("g").attr("class","items_"+className);
     var x = projection([lon,lat])[0];
     var y = projection([lon, lat])[1];
 
@@ -431,14 +417,11 @@ function addpoint(color, lat, lon, title,text, area, imgNo,scale,className) {
 
 //function to add clusters of projects
 function add_zoomable_cluster(color, lat, lon, title,text, area,scale,clusterObj,className) {
-
     if(area == undefined) area = 2;
-
 
     var gpoint = g.append("g").attr("class","items "+className);
     var x = projection([lon,lat])[0];
     var y = projection([lon, lat])[1];
-
 
     gpoint.selectAll("circle")
         .data([clusterObj])
@@ -956,7 +939,6 @@ function zoomTo(v) {
 }
 
 function draw_project_legend(className){
-
    // d3.selectAll(".legend").remove();
     var color;
     switch(className){
@@ -982,7 +964,6 @@ function draw_project_legend(className){
         hBox = 702/hFactor;//map_height / hFactor;
 
     var svg = project_legend
-        .attr("z-index", 5)
         .append("svg")
         .attr("width", wBox)
         .attr("height", hBox)

@@ -10,7 +10,6 @@
 }
 
 #welcome_mask{
-
     width: 100%;
     height:100%;
     background-color:white;
@@ -56,7 +55,6 @@ nav{
     right: 40px;
     width: 220px;
     text-align: center;
-
 }
 
 .menu-item {
@@ -86,12 +84,10 @@ hr {
 
 /*Menu Header Styles*/
 .menu-item h4 {
-
     color: #fff;
     font-size: 10px;
     font-weight: 500;
     text-align: left;
-
 }
 
 .menu-item h4 img{
@@ -111,7 +107,6 @@ hr {
     display: block;
     text-decoration: none;
     width: 180px;
-
 }
 
 .menu-item h4:hover{
@@ -155,19 +150,14 @@ hr {
     width : 100%;
     height: 100%;
     overflow: hidden;
-
 }
 
 legend {
     z-index: 3;
     font-size: 12px;
-
 }
 
-
-
 .play_stopBtn {
-
     width:20px;
     height: 20px;
     bottom:5%;
@@ -176,7 +166,6 @@ legend {
     position:absolute;
     border:2px;
     border-color: transparent;
-
 }
 
 .replay_Btn {
@@ -189,14 +178,12 @@ legend {
     border:2px;
     border-color: lightseagreen;
     overflow: visible;
-
 }
 
 
 .hidden {
      display: none;
  }
-
 
 .graticule {
     fill: none;
@@ -219,8 +206,6 @@ legend {
     stroke: #333;
     stroke-width: 1px;
 }
-
-
 
 .menu_bar_css {
     -webkit-touch-callout: none; /* iOS Safari */
@@ -369,8 +354,6 @@ legend {
     padding-top: 15px;
     pointer-events: none;
     margin-right:0px;
-
-
 }
 
 .country-label{

@@ -72,7 +72,7 @@ function read_gdpData(){
 }
 
 function read_co2Data(){
-    d3.csv("data/fitted/en.atm.co2e.kt_Indicator_en_csv_v2(edited).csv", function (error, co2_data) {
+    d3.csv("data/fitted/CO2.csv", function (error, co2_data) {
         d3.csv("data/fitted/co2_per_capita.csv",function (error, co2_density_data) {
             country_co2_emission = co2_data;
             co2_density = co2_density_data;
@@ -220,11 +220,11 @@ function draw_worldmap() {
 
 /* to draw a different layer of country shapes*/
 function draw_pop_country() {
-    
     var country = g.append("g").attr("id","pop_countries")
                     .attr("class","pop_layer").selectAll(".country").data(this.world_topo);
 
     country.enter().insert("path").attr("class", "country")
+        .attr("z-index", 4)
         .attr("d", path)
         .attr("fill", worldmap_background)
         .style("opacity",function(){
@@ -235,23 +235,16 @@ function draw_pop_country() {
 }
 
 function draw_co2_country() {
-
     var country = g.append("g").attr("id","co2_countries")
         .attr("class","co2_layer").selectAll(".country").data(this.world_topo);
 
     country.enter().insert("path").attr("class", "country")
-        .attr("d", path)
-        /*.attr("id", function (d, i) {
-         return d.id;
-         })
-         .attr("title", function (d, i) {
-         return d.properties.name;
-         })*/.attr("fill", worldmap_background)
+        .attr("z-index", 4)
+        .attr("d", path).attr("fill", worldmap_background)
         .style("opacity",function(){
             var res = 0.8-0.2*SC.layer_count;
             return res;
         });
-
 }
 
 function draw_gdp_country() {
@@ -259,13 +252,13 @@ function draw_gdp_country() {
         .attr("class","gdp_layer").selectAll(".country").data(this.world_topo);
 
     country.enter().insert("path").attr("class", "country")
+        .attr("z-index", 4)
         .attr("d", path)
         .attr("fill", worldmap_background)
         .style("opacity",function(){
             var res = 0.8-0.2*SC.layer_count;
             return res;
         });
-
 }
 
 /* to redraw world map upon close of all three color layer*/
@@ -529,7 +522,6 @@ function reset(){
 
     if(gdp_layer){
         document.getElementById('gdp_Btn').click();
-
     }
     if(co2_layer){
         document.getElementById('co2_emissionBtn').click();

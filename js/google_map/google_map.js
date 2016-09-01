@@ -269,6 +269,7 @@ function initMap() {
 // This function takes in a COLOR, and then creates a new marker
 // icon of that color. The icon will be 21 px wide by 34 high, have an origin
 // of 0, 0 and be anchored at 10, 34).
+// TODO: The icon should be on top of circles
 function makeMarkerIcon(markerColor) {
     var markerImage = new google.maps.MarkerImage(
         'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
@@ -279,7 +280,6 @@ function makeMarkerIcon(markerColor) {
         new google.maps.Size(21,34));
     return markerImage;
 }
-
 
 var project_polygons =[];
 var project_markers = [];
@@ -614,6 +614,8 @@ function load_google_map() {
 
 
 function close_GoogleMap() {
+    if(!pop_layer && ! co2_layer && !gdp_layer)
+        document.getElementById('pop_densityBtn').click();
 
     var center = gmap.getCenter();
     var zoom = gmap.getZoom()-2;
@@ -637,9 +639,14 @@ function close_GoogleMap() {
 }
 
 function open_GoogleMap() {
+    if(pop_layer)
+        document.getElementById('pop_densityBtn').click();
 
-    //document.getElementById("googlem_holder").style.width = innerWidth+"px";
-    //document.getElementById("googlem_holder").style.height = innerHeight+"px";
+    if(co2_layer)
+        document.getElementById('co2_emissionBtn').click();
+
+    if(gdp_layer)
+        document.getElementById('gdp_Btn').click();
 
     d3.select("#googlem_holder").style("visibility","visible");
 
