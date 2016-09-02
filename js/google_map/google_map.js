@@ -387,7 +387,7 @@ function draw_polygon(triangleCoords,markerPos,fillcolor,info){
 
 function draw_zoomin_singapore_marker(markerPos){
     var mouseover_String = " <div><div class='pic_holder Centerer'>" +
-        "<div class='tooltip_text'><b style='font-size:17px;'>" + "Zoom to Singapore" + "</b>";
+        "<div class='tooltip_text'><b style='font-size:17px;'>" + "View Projects in Singapore" + "</b>";
 
     var infowindow_mouseover = new google.maps.InfoWindow({
         maxWidth: 300,
