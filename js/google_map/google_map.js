@@ -473,10 +473,13 @@ function draw_project_description(fillcolor,info){
     //create text for click div
     var click_String = " <div class='project'><div class='project_text'>"+
         "<br><br> <b>Name:</b> <br>"+info.name+
-        "<br><br> <b>Project:</b> <br>"+info.project+
-        "<br><br> <b>Contact:</b> <br>"+info.contact+
+        "<br><br> <b>Project:</b> <br>"+info.project.replace("\">", "\" target=\"_blank\">")+
+        "<br><br> <b>Contact:</b> <br>"+info.contact.replace("\">", "\" target=\"_blank\">")+
         "<br><br> <b>Description :</b> <br>"+ info.description +
         "</div>";
+
+    // console.log(info.project);
+    // console.log("replacement: "+ info.project.replace("\">", "\" target=\"_blank\">"));
 
     //create images for click div
     var img_array = info.files.split(",");
