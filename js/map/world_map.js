@@ -89,6 +89,7 @@ var offsetL=10,offsetT=10 ;
 var projection, path, svg, g;
 //var graticule;
 var tooltip, one_tooltip, country_info_tooltip, fcl_tooltip,country_chart_tooltip;
+var wolrdmap_fcl_tooltip_1, wolrdmap_fcl_tooltip_2, wolrdmap_fcl_tooltip_1_line;
 // var singapore_anchor;
 
 var zoom = d3.behavior.zoom().scaleExtent([1, 100])
@@ -110,6 +111,8 @@ function setup() {
 
     fcl_tooltip = tooltip.append("div").attr("style","fill: none").attr("z-index",2);
     one_tooltip = tooltip.append("div").attr("class","tooltip").attr("style","visibility:hidden").attr("z-index",4);
+    wolrdmap_fcl_tooltip_1 = tooltip.append("div").attr("class","worldmap_fcl_tooltip").attr("style","visibility:hidden").attr("z-index",4);
+    wolrdmap_fcl_tooltip_2 = tooltip.append("div").attr("class","worldmap_fcl_tooltip").attr("style","visibility:hidden").attr("z-index",4);
 
     country_chart_tooltip = tooltip.append("div").attr("class","tooltip")
         .attr("id","chart_tooltip")
@@ -155,6 +158,16 @@ function setup() {
         .on("click", click)
         .append("g")
         .attr("id","map_container_g");
+
+    wolrdmap_fcl_tooltip_1_line = svg
+        .append("line")
+        .style("stroke", "#000000")
+        .attr("id", "wolrdmap_fcl_tooltip_1_line")
+        .attr("x1", -100)     // x position of the first end of the line
+        .attr("y1", -100)      // y position of the first end of the line
+        .attr("x2", -200)     // x position of the second end of the line
+        .attr("y2", -200)
+        .style("zIndex","99");
 
     g = svg.append("g").attr("id","country_holder");
    

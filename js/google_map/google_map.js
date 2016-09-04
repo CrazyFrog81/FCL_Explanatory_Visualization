@@ -1005,7 +1005,7 @@ function project(latLng) {
 
 //function to add clusters of projects
 //color,item["latitude"],item["longitude"],item["name"],item["text"],1,itemIndex+1,scale,className
-function add_point_googleMap(color, lat, lon,name,text,index,className) {
+function add_point_googleMap(color, lat, lon,name,text,index,className,country) {
 
     var area = 1;
     //var radius_unit = 100000;
@@ -1033,21 +1033,29 @@ function add_point_googleMap(color, lat, lon,name,text,index,className) {
 
     var img_src;
 
+    var country_str = country.replace(/ /g,'');//remove all blank spaces
+    var country_filename = country_str.toLowerCase();
     switch (className){
         case 'pop_layer': img_src = "img/project_img/" + index + "_fcl_vis.jpg";
             break;
         case 'network_layer': img_src = "img/network_img/"+index+"_network.png"  ;
             break;
-        default: img_src = "img/project_img/0_fcl_vis.jpg";
+        default:
+            // img_src = "img/project_img/0_fcl_vis.jpg";
+            img_src = "img/national_flag/"+country_filename+".png";
             break;
     }
     //add in picture for the project
     var item_img = new Image();
     item_img.src = img_src;
 
-    var mouseover_String = " <div><div class='pic_holder Centerer'>" +
-        "<img class='tooltip_pic' src='"+item_img.src+"'></div>" +
-        "<div class='tooltip_text'><b style='font-size:17px;'>" + name+ "</b>";
+    // var mouseover_String = " <div><div class='pic_holder Centerer'>" +
+    //     "<img class='tooltip_pic' src='"+item_img.src+"'></div>" +
+    //     "<div class='tooltip_text'><b style='font-size:17px;'>" + name+ "</b>";
+
+    var mouseover_String = "<div class='tooltip_holder' id='wolrdmap_fcl_tooltip_1' ><div class='tooltip_text'>" + country + "</div>"+
+        "<div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+item_img.src+"' onerror='imgErr(this)'> </div>" +
+        "</div>";
 
     var click_String = "<div class='tooltip_holder'><div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+item_img.src+"'></div>" +
         "<div class='tooltip_text'><b>" + name + "</b><p>" + text + "</div></div>";
@@ -1055,7 +1063,7 @@ function add_point_googleMap(color, lat, lon,name,text,index,className) {
 
     var infowindow_mouseover = new google.maps.InfoWindow({
         content: mouseover_String,
-        maxWidth: 300
+        maxWidth: 300,
         // position:latLng
     });
 

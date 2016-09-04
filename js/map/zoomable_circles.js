@@ -11,6 +11,7 @@
 
 
 /*calculate distance between any two project locations*/
+
 function draw_projectLayer(){
         var tier1_scale = 2;
         var tier2_scale = 2.5;
@@ -84,11 +85,24 @@ function generate_allDistMatrix(){
             projectObj["name"] = pointA.Index + " " + pointA.Name;
             lat_unit = Number(pointA.Latitude) >= 0 ? Math.abs(pointA.Latitude) + '°N' : Math.abs(pointA.Latitude) + '°S';
             lon_unit = Number(pointA.Longitude) >= 0 ? Math.abs(pointA.Longitude) + '°E' : Math.abs(pointA.Longitude) + '°W';
-            projectObj["text"] = "<br>" + pointA.Title + "<br>" + lat_unit + " , " + lon_unit + "<br>" + pointA.City + " , " + pointA.Country + long;
+            // projectObj["text"] = "<br>" + pointA.Title + "<br>" + lat_unit + " , " + lon_unit + "<br>" + pointA.City + " , " + pointA.Country + long;
+            projectObj["text"] = pointA.Country;
             projectObj["latitude"] = pointA.Latitude;
             projectObj["longitude"] = pointA.Longitude;
             projectObj["city"] = pointA.City;
             projectObj["country"] = pointA.Country;
+
+            //---added by UnixC begin, counting project number for one country---//
+            var pointA_Country = pointA.Country;
+            var projectNo_count = 1;
+            projects.forEach(function (pointB) {
+                if(pointA_Country == pointB.Country) {
+                    projectNo_count = projectNo_count + 1;
+                }
+            });
+            projectObj["Number"] = projectNo_count;
+            //---added by UnixC end---//
+
             SC.projects.push(projectObj);
             projectObj = {};
 
@@ -98,7 +112,7 @@ function generate_allDistMatrix(){
 
                 distance = d3.geo.distance(positionA, positionB) * distance_Multiplier;
                 matrix[pointA.No - 1].push(distance);
-            })
+            });
         });
 
         SC.project_matrix = matrix;
@@ -292,11 +306,13 @@ function draw_staffLayer(){
 var fcl_tooltip_list = [];
 var area_unit =200;
 //function to add points and text to the map (used in plotting capitals)
-function addpoint(color, lat, lon, title,text, area, imgNo,scale,className) {
+function addpoint(color, lat, lon, title,text, area, imgNo,scale,className,country, project_number) {
     if(area == undefined) area = 1;
     if(imgNo == undefined) imgNo = 0;
 
 
+    var country_str = country.replace(/ /g,'');//remove all blank spaces
+    var country_filename = country_str.toLowerCase();
     var gpoint = g.append("g").attr("class","items_"+className);
     var x = projection([lon,lat])[0];
     var y = projection([lon, lat])[1];
@@ -309,7 +325,9 @@ function addpoint(color, lat, lon, title,text, area, imgNo,scale,className) {
         case 'network_layer': img_src = "img/network_img/"+imgNo+"_network.png" +
             "";
             break;
-        default: img_src = "img/project_img/"+imgNo+"_fcl_vis.jpg";
+        default:
+            // img_src = "img/project_img/"+imgNo+"_fcl_vis.jpg";
+            img_src = "img/national_flag/"+country_filename+".png";
             break;
     }
     //add in picture for the project
@@ -340,83 +358,118 @@ function addpoint(color, lat, lon, title,text, area, imgNo,scale,className) {
             var project_img = new Image();
             project_img.src = "img/project_img/"+imgNo+"_fcl_vis.jpg";*/
 
-            return one_tooltip.attr("style", "right:" + (innerWidth-x*sc-left)+ "px;bottom:" +(innerHeight-y*sc-top)+ "px;visibility: visible")
-                .html("<div class='tooltip_holder' ><div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+project_img.src+"' onerror='imgErr(this)'> </div>" +
-                    "<div class='tooltip_text'><b>" + title + "</b></div></div>");
+            wolrdmap_fcl_tooltip_1.attr("style", "left:" + (x*sc+left)+ "px;bottom:" +(innerHeight-y*sc-top+80)+ "px;visibility: visible;")
+                .html("<div class='tooltip_holder' id='wolrdmap_fcl_tooltip_1' ><div class='tooltip_text'>" + country + "</div>"+
+                    "<div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+project_img.src+"' onerror='imgErr(this)'> </div>" +
+                    "</div>"+""
+                );
+
+            d3.select("#wolrdmap_fcl_tooltip_1_line").remove();
+            wolrdmap_fcl_tooltip_1_line = d3.select("#svg1").append("line")
+                .style("stroke", "#000000")
+                .attr("id", "wolrdmap_fcl_tooltip_1_line")
+                .style("stroke-width", "2px")
+                .style("zIndex","99")
+                .attr("x1", x*sc+left+1)
+                .attr("y1", y*sc+top)
+                .attr("x2", x*sc+left+1)
+                .attr("y2", y*sc+top-80);
+
+            var width_1 =document.getElementById("wolrdmap_fcl_tooltip_1").offsetWidth;
+            var tooltip_2_x = (x*sc+left)+width_1+50;
+            console.log(tooltip_2_x);
+            wolrdmap_fcl_tooltip_2.attr("style", "left:" + tooltip_2_x + "px;bottom:" +(innerHeight-y*sc-top+80)+ "px;visibility: visible;")
+                .html("<div class='tooltip_holder' ><div class='tooltip_text'>Project Number:</div>"+
+                    "<div class='pic_holder Centerer'><img class='tooltip_pic_logo Centered' src='"+"img/national_flag/project.png"+"' onerror='imgErr(this)'>"+"         "+project_number+
+                    "</div>" +
+                    "</div>"
+                );
 
 
 
         })
        .on("mouseout", function () {
-           return one_tooltip.attr("style","visibility: hidden");
+           // return one_tooltip.attr("style","visibility: hidden");
         })
         .on("click",function () {
+            var left = zoom.translate()[0];
+            var top= zoom.translate()[1];
+            var sc = zoom.scale();
+
+            /*add in picture for the project
+             var project_img = new Image();
+             project_img.src = "img/project_img/"+imgNo+"_fcl_vis.jpg";*/
+
+            // return one_tooltip.attr("style", "right:" + (innerWidth-x*sc-left)+ "px;bottom:" +(innerHeight-y*sc-top)+ "px;visibility: visible;backgroundColor:#666666;color:#ffffff;overflow:hidden;")
+            //     .html("<div class='tooltip_holder' ><div class='tooltip_text'><b>" + country + "</b></div>"+
+            //         "<div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+project_img.src+"' onerror='imgErr(this)'> </div>" +
+            //         "</div>");
 
             //one_tooltip.style("visibility","hidden");
-            var shift_x =   innerWidth/2 - projection([lon,lat])[0] *scale ;
-            var shift_y = innerHeight/2 - projection([lon,lat])[1] *scale;
-            var t = [shift_x,shift_y];
-            move(t,scale);
+            // var shift_x =   innerWidth/2 - projection([lon,lat])[0] *scale ;
+            // var shift_y = innerHeight/2 - projection([lon,lat])[1] *scale;
+            // var t = [shift_x,shift_y];
+            // move(t,scale);
+            //
+            // var name = className+imgNo;
+            //
+            //  var filtered = fcl_tooltip_list.filter(function(f){
+            //     return f == name;
+            //  });
+            //
+            //  if(filtered.length<=0){
+            //      /*var positionObj = {};
+            //      positionObj["type"] ='singleton';
+            //      positionObj["x"] = x;
+            //      positionObj["y"] = y;    */
+            //
+            //      fcl_tooltip_list.push(name);
+            //
+            //      var left = zoom.translate()[0];
+            //     var top= zoom.translate()[1];
+            //
+            //
+            //     var the = fcl_tooltip
+            //             /*.selectAll("div")
+            //             .data([positionObj])
+            //             .enter()         */
+            //             .append("div")
+            //             .attr("class","tooltip "+className)
+            //             .attr("style", "right:" + (innerWidth-x*scale-left)+ "px;bottom:" +(innerHeight - y*scale-top)+ "px;visibility: visible")
+            //             .html("<div class='tooltip_holder'><div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+project_img.src+"' onerror='imgErr(this)'></div>" +
+            //                      "<div class='tooltip_text'><b>" + title + "</b><p>" + text + "</div></div>")
+            //             .on("click",function () {
+            //                 this.remove();
+            //                 var index = fcl_tooltip_list.indexOf(name);
+            //
+            //
+            //                 if(index != -1) {
+            //                     fcl_tooltip_list.splice(index, 1);
+            //                  }
+            //              });//<a href="javascript:void(0)" class="closebtn" onclick="close('+country_name+')" style="border-bottom:0px solid red;">&times;</a>
+            //
+            //
+            //         var width =the.node().getBoundingClientRect().width;
+            //         var height =the.node().getBoundingClientRect().height;
+            //         var area = width *height;
+            //
+            //         if(width>300){
+            //             height = area/300;
+            //             if(height>300){
+            //             the.attr("style", "right:" + (innerWidth-x*scale-left)+ "px;bottom:" +(innerHeight-y*scale-top)+ "px;visibility: visible;width:300px;height:300px")
+            //          }else{
+            //              the.attr("style", "right:" + (innerWidth-x*scale-left)+ "px;bottom:" +(innerHeight-y*scale-top)+ "px;visibility: visible;width:300px");
+            //         }
+            //         }
+            //  }
 
-            var name = className+imgNo;
-
-             var filtered = fcl_tooltip_list.filter(function(f){
-                return f == name;
-             });
-
-             if(filtered.length<=0){
-                 /*var positionObj = {};
-                 positionObj["type"] ='singleton';
-                 positionObj["x"] = x;
-                 positionObj["y"] = y;    */
-
-                 fcl_tooltip_list.push(name);
-
-                 var left = zoom.translate()[0];
-                var top= zoom.translate()[1];
-
-
-                var the = fcl_tooltip
-                        /*.selectAll("div")
-                        .data([positionObj])
-                        .enter()         */
-                        .append("div")
-                        .attr("class","tooltip "+className)
-                        .attr("style", "right:" + (innerWidth-x*scale-left)+ "px;bottom:" +(innerHeight - y*scale-top)+ "px;visibility: visible")
-                        .html("<div class='tooltip_holder'><div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+project_img.src+"' onerror='imgErr(this)'></div>" +
-                                 "<div class='tooltip_text'><b>" + title + "</b><p>" + text + "</div></div>")
-                        .on("click",function () {
-                            this.remove();
-                            var index = fcl_tooltip_list.indexOf(name);
-
-
-                            if(index != -1) {
-                                fcl_tooltip_list.splice(index, 1);
-                             }
-                         });//<a href="javascript:void(0)" class="closebtn" onclick="close('+country_name+')" style="border-bottom:0px solid red;">&times;</a>
-
-
-                    var width =the.node().getBoundingClientRect().width;
-                    var height =the.node().getBoundingClientRect().height;
-                    var area = width *height;
-
-                    if(width>300){
-                        height = area/300;
-                        if(height>300){
-                        the.attr("style", "right:" + (innerWidth-x*scale-left)+ "px;bottom:" +(innerHeight-y*scale-top)+ "px;visibility: visible;width:300px;height:300px")
-                     }else{
-                         the.attr("style", "right:" + (innerWidth-x*scale-left)+ "px;bottom:" +(innerHeight-y*scale-top)+ "px;visibility: visible;width:300px");
-                    }
-                    }
-             }
-
-    });
+        });
 
 }
 
 
 //function to add clusters of projects
-function add_zoomable_cluster(color, lat, lon, title,text, area,scale,clusterObj,className) {
+function add_zoomable_cluster(color, lat, lon, title,text, area,scale,clusterObj,className,country) {
     if(area == undefined) area = 2;
 
     var gpoint = g.append("g").attr("class","items "+className);
@@ -675,9 +728,13 @@ function find_last_tier(tier_range, scale, className){
         var name1 = item["name"];
         var text1 = item["text"];
         var index1 = itemIndex+1;
+        var country = item["country"];
+        var project_number = item["Number"];
 
-        addpoint(color,lat1,lon1,name1,text1,1,index1,scale,className);
-        add_point_googleMap(color, lat1, lon1,name1,text1,index1,className);
+        // addpoint(color,lat1,lon1,name1,text1,1,index1,scale,className);
+        // add_point_googleMap(color, lat1, lon1,name1,text1,index1,className);
+        addpoint(color,lat1,lon1,name1,text1,1,index1,scale,className, country, project_number);
+        add_point_googleMap(color, lat1, lon1,name1,text1,index1,className, country);
     }
 
 
