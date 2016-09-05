@@ -158,6 +158,19 @@ function generate_allDistMatrix() {
                 distance = d3.geo.distance(positionA, positionB) * distance_Multiplier;
                 matrix[pointA.No - 1].push(distance);
             })
+
+            //---added by UnixC begin, counting project number for one country---//
+            var pointA_Country = pointA.Country;
+
+            // ZW: count starts from 0
+            var collaborator_no_count = 0;
+            items.forEach(function (pointB) {
+                if (pointA_Country == pointB.Country) {
+                    collaborator_no_count = collaborator_no_count + 1;
+                }
+            });
+            Obj["Number"] = collaborator_no_count;
+            //---added by UnixC end---//
         });
 
         SC.network_matrix = matrix;
@@ -199,6 +212,19 @@ function generate_allDistMatrix() {
                 distance = d3.geo.distance(positionA, positionB) * distance_Multiplier;
                 matrix[pointA.No - 1].push(distance);
             })
+
+            //---added by UnixC begin, counting project number for one country---//
+            var pointA_Country = pointA.Country;
+
+            // ZW: count starts from 0
+            var staff_no_count = 0;
+            items.forEach(function (pointB) {
+                if (pointA_Country == pointB.Country) {
+                    staff_no_count = staff_no_count + 1;
+                }
+            });
+            Obj["Number"] = staff_no_count;
+            //---added by UnixC end---//
         });
 
         SC.staff_matrix = matrix;
@@ -310,26 +336,27 @@ function draw_staffLayer() {
 var fcl_tooltip_list = [];
 var area_unit = 200;
 //function to add points and text to the map (used in plotting capitals)
-function add_point(color, lat, lon, title, text, area, imgNo, scale, className, country, project_number) {
+function add_point(color, lat, lon, title, text, area, imgNo, scale, layer_name, country, project_number) {
     if (area == undefined) area = 1;
     if (imgNo == undefined) imgNo = 0;
 
     var country_str = country.replace(/ /g, '');//remove all blank spaces
     var country_filename = country_str.toLowerCase();
-    var gpoint = g.append("g").attr("class", "items " + className);
+    var gpoint = g.append("g").attr("class", "items " + layer_name);
     var point = projection([lon, lat]);
     var point_x = point[0];
     var point_y = point[1];
 
     var img_src = [];
 
-    switch (className) {
-        case 'pop_layer':
-            img_src = "img/project_img/" + imgNo + "_fcl_vis.jpg";
+    switch (layer_name) {
+        case 'project_layer':
+        case 'staff_layer':
+            img_src = "img/national_flag/" + country_filename + ".png";
+            // img_src = "img/project_img/" + imgNo + "_fcl_vis.jpg";
             break;
         case 'network_layer':
-            img_src = "img/network_img/" + imgNo + "_network.png" +
-                "";
+            img_src = "img/network_img/" + imgNo + "_network.png";
             break;
         default:
             // img_src = "img/project_img/"+imgNo+"_fcl_vis.jpg";
@@ -337,8 +364,8 @@ function add_point(color, lat, lon, title, text, area, imgNo, scale, className, 
             break;
     }
     //add in picture for the project
-    var project_img = new Image();
-    project_img.src = img_src;
+    var country_or_network_logo_img = new Image();
+    country_or_network_logo_img.src = img_src;
 
     gpoint.selectAll("circle")
         .data([{"area": area}])
@@ -363,7 +390,7 @@ function add_point(color, lat, lon, title, text, area, imgNo, scale, className, 
              var project_img = new Image();
              project_img.src = "img/project_img/"+imgNo+"_fcl_vis.jpg";*/
 
-            showFCLInfoTooltip(point_x, point_y, left, top, scale, country, project_img, project_number);
+            showFCLInfoTooltip(layer_name, point_x, point_y, left, top, scale, country, country_or_network_logo_img, project_number);
         })
         .on("mouseout", function () {
             // return cluster_tooltip.attr("style","visibility: hidden");
@@ -373,7 +400,7 @@ function add_point(color, lat, lon, title, text, area, imgNo, scale, className, 
             var top = zoom.translate()[1];
             var scale = zoom.scale();
 
-            showFCLInfoTooltip(point_x, point_y, left, top, scale, country, project_img, project_number);
+            showFCLInfoTooltip(layer_name, point_x, point_y, left, top, scale, country, country_or_network_logo_img, project_number);
         });
 }
 
@@ -384,14 +411,14 @@ function add_zoomable_cluster(color, lat, lon, title, text, area, scale, cluster
 
     var gpoint = g.append("g").attr("class", "items " + className);
     var point_x = projection([lon, lat])[0];
-    var mouse_y = projection([lon, lat])[1];
+    var point_y = projection([lon, lat])[1];
 
     gpoint.selectAll("circle")
         .data([clusterObj])
         .enter()
         .append("svg:circle")
         .attr("cx", point_x)
-        .attr("cy", mouse_y)
+        .attr("cy", point_y)
         .attr("class", "cluster")
         .style("stroke", "#000")
         .style("stroke-width", '0.5px')
@@ -410,6 +437,8 @@ function add_zoomable_cluster(color, lat, lon, title, text, area, scale, cluster
             // cluster_tooltip.attr("style", "right:" + (innerWidth - x * sc - left) + "px;bottom:" + (innerHeight - y * sc - top) + "px;visibility: visible")
             //     .html("<div id='tooltip_holder'>" +
             //         "<div id='tooltip_text'>" + text + "</div></div>");
+
+            // showFCLInfoTooltip(point_x, point_y, left, top, scale, country, project_img, project_number);
         })
         .on("mouseout", function () {
             return cluster_tooltip.attr("style", "visibility: hidden");
@@ -423,7 +452,7 @@ function add_zoomable_cluster(color, lat, lon, title, text, area, scale, cluster
             var top = zoom.translate()[1];
             var scale = zoom.scale();
 
-            showFCLInfoTooltip(point_x, mouse_y, left, top, scale, country, project_img, project_number);
+            // showFCLInfoTooltip(point_x, point_y, left, top, scale, country, project_img, project_number);
 
             // ZW: no zoomable circles
 
@@ -666,7 +695,23 @@ function setup_circles(className) {
         .attr("class", className);
 }
 
-function showFCLInfoTooltip(point_x, point_y, left, top, scale, country, country_image, number) {
+function showFCLInfoTooltip(layer_name, point_x, point_y, left, top, scale, country, country_image, number) {
+    var description;
+
+    switch (layer_name) {
+        case 'project_layer':
+            description = "Number of Projects:";
+            break;
+
+        case 'network_layer':
+            description = "Number of Collaborators:";
+            break;
+
+        case 'staff_layer':
+            description = "Number of Researchers:";
+            break;
+    }
+
     about_fcl_tooltip_country
         .attr("style", "left:" + (point_x * scale + left) + "px;bottom:" + (innerHeight - point_y * scale - top + 80) + "px;visibility: visible;")
         .attr("id", "about_fcl_tooltip_country")
@@ -692,9 +737,9 @@ function showFCLInfoTooltip(point_x, point_y, left, top, scale, country, country
 
     about_fcl_tooltip_info.attr("style", "left:" + tooltip_2_x + "px;bottom:" + (innerHeight - point_y * scale - top + 80) + "px;visibility: visible;")
         .attr("id", "about_fcl_tooltip_info")
-        .html("<div class='tooltip_holder'><div class='tooltip_text'>Project Number:</div>" +
-            "<div class='pic_holder Centerer'><img class='tooltip_pic_logo Centered' src='" + "img/national_flag/project.png" + "' onerror='imgErr(this)'>" + "         " + number +
-            "</div>" +
+        .html("<div class='tooltip_holder'>" +
+            "<div class='tooltip_text'>" + description + "</div>" +
+            "<div class='pic_holder Centerer'><img class='tooltip_pic_logo Centered' src='" + "img/national_flag/project.png" + "' onerror='imgErr(this)'>" + "         " + number + "</div>" +
             "</div>"
         );
 }
