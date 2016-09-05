@@ -1053,7 +1053,7 @@ function add_point_googleMap(color, lat, lon,name,text,index,className,country) 
     //     "<img class='tooltip_pic' src='"+item_img.src+"'></div>" +
     //     "<div class='tooltip_text'><b style='font-size:17px;'>" + name+ "</b>";
 
-    var mouseover_String = "<div class='tooltip_holder' id='wolrdmap_fcl_tooltip_1' ><div class='tooltip_text'>" + country + "</div>"+
+    var mouseover_String = "<div class='tooltip_holder' id='about_fcl_tooltip_country' ><div class='tooltip_text'>" + country + "</div>"+
         "<div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+item_img.src+"' onerror='imgErr(this)'> </div>" +
         "</div>";
 

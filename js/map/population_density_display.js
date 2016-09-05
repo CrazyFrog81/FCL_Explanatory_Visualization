@@ -1034,9 +1034,7 @@ function draw_charts(xy_pop_data, xy_co2_data, xy_gdp_data, country_name, left, 
 
                 return colors1[1];
             }
-        })
-            .on("mouseover", function (v) {
-
+        }).on("mouseover", function (v) {
                 var th = d3.select(this);
                 th.style("border", "2px solid red");
 
@@ -1295,6 +1293,96 @@ function draw_charts(xy_pop_data, xy_co2_data, xy_gdp_data, country_name, left, 
         .style("height", (title_height + total_height * count));
 
     return [total_width, total_height * count];
+}
+
+
+function draw_project_legend(className) {
+    // d3.selectAll(".legend").remove();
+    var color;
+    switch (className) {
+        case 'project_layer':
+            color = 'yellow';
+            break;
+        case 'network_layer':
+            color = 'blue';
+            break;
+        case 'staff_layer':
+            color = 'pink';
+            break;
+        default:
+            break;
+    }
+
+    var body = d3.select("#content_holder");
+
+    var project_legend = body.append("div")
+        .attr('class', 'legend project_legend ' + className);
+
+    var wFactor = 10,
+        hFactor = 2;
+
+    var wBox = 1280 / wFactor,//map_width / wFactor,
+        hBox = 702 / hFactor;//map_height / hFactor;
+
+    var svg = project_legend
+        .append("svg")
+        .attr("width", wBox)
+        .attr("height", hBox)
+        .append("g")
+        .attr("transform", "translate(10,100)");
+
+    var legend = svg
+        .append('g')
+        .attr('width', wBox)
+        .attr('height', hBox);
+
+    var wRect = wBox / (wFactor * 0.75);
+    var offsetText = wRect / 2;
+    var tr = 'translate(' + offsetText + ',' + offsetText * 3 + ')';
+    var sg = legend.append('g')
+        .attr('transform', tr);
+
+    var area = [5, 10, 20];
+
+    sg.selectAll('circle').data(area).enter().append('circle')
+        .attr('cx', -20)//wBox/2)
+        .style("stroke", "#000")
+        .style("stroke-width", "0.5px")
+        .attr('cy', function (d, i) {
+            switch (i) {
+                case 0:
+                    return 4;
+                case 1:
+                    return 60;
+                case 2:
+                    return 130;
+            }
+        }).attr('fill', 'none'//function (d, i) {return '#C0C0C0';}
+    ).attr('r', function (d, i) {
+        //var s = zoom.scale();
+        return Math.sqrt(d * area_unit / (Math.PI));
+    }).attr("opacity", 0.5);
+
+    sg.selectAll('text').data(area).enter().append("text")
+        .attr("dx", function (d) {
+
+            return -18;
+        })
+        .attr("dy", function (d, i) {
+            //var res;
+            switch (i) {
+                case 0:
+                    return 10;
+                case 1:
+                    return 65;
+                case 2:
+                    return 135;
+            }
+        })
+        // return (hBox/6 *i+d+4);})
+        .text(function (d) {
+            return d
+        });
 }
 
 

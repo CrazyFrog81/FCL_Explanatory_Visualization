@@ -55,7 +55,7 @@
                         pop_layer = true;
 
                         document.getElementById("pop_densityBtn_img").src = "img/eye_white.png";
-                        the_ul.style("height", ul_height+"px");
+                        the_ul.style("height", ul_height + "px");
                         load_DData("pop_layer");
                     } else {
                         SC.layer_count--;
@@ -78,7 +78,7 @@
                         SC.layer_stack[1] = SC.layer_count;
                         co2_layer = true;
                         document.getElementById("co2_emissionBtn_img").src = "img/eye_white.png";
-                        the_ul.style("height", ul_height+"px");
+                        the_ul.style("height", ul_height + "px");
                         load_DData("co2_layer");
                     } else {
                         SC.layer_count--;
@@ -101,7 +101,7 @@
                         SC.layer_stack[2] = SC.layer_count;
                         gdp_layer = true;
                         document.getElementById("gdp_Btn_img").src = "img/eye_white.png";
-                        the_ul.style("height", ul_height+"px");
+                        the_ul.style("height", ul_height + "px");
                         load_DData("gdp_layer");
                     } else {
                         SC.layer_count--;
@@ -305,17 +305,17 @@
     }
 
     // resize d3 map and google map when browser is resized
-    window.onresize = function(){
+    window.onresize = function () {
         map_width = window.innerWidth;
         map_height = window.innerHeight;
 
-        document.getElementById("content_holder").style.height = map_height+"px";
-        document.getElementById("content_holder").style.width = map_width+"px";
+        document.getElementById("content_holder").style.height = map_height + "px";
+        document.getElementById("content_holder").style.width = map_width + "px";
 
-        document.getElementById("googlem_holder").style.width = map_width+"px";
-        document.getElementById("googlem_holder").style.height = map_height+"px";
+        document.getElementById("googlem_holder").style.width = map_width + "px";
+        document.getElementById("googlem_holder").style.height = map_height + "px";
 
-        console.log(map_width +" "+map_height);
+        console.log(map_width + " " + map_height);
     }
 </script>
 
@@ -337,7 +337,8 @@
             </div>
             <hr>
             <div class="menu-item navg_button" id="pop_densityHolder">
-                <h4 id="pop_densityBtn"><img id="pop_densityBtn_img" src="img/eye_white.png"><a>POPULATION DENSITY</a></h4>
+                <h4 id="pop_densityBtn"><img id="pop_densityBtn_img" src="img/eye_white.png"><a>POPULATION DENSITY</a>
+                </h4>
                 <ul>
                     <li></li>
                 </ul>
@@ -390,7 +391,8 @@
         <!-- rationale content -->
         <div class="rationale-content" style="font-family:arial, sans-serif">
             <div class="modal-body">
-                <b style="font-size:30px;">Future Cities Laboratory (FCL)</b> <span class="close" onclick="close_modal()"></span>
+                <b style="font-size:30px;">Future Cities Laboratory (FCL)</b> <span class="close"
+                                                                                    onclick="close_modal()"></span>
                 <br><br>
 
                 <p style="font-size: 18px;">The guiding vision of the Future Cities Laboratory is to shape sustainable
@@ -399,10 +401,13 @@
 
                 <p style="font-size: 14px">
                     <b style="font-size: 12px;">THROUGH SCIENCE</b><br>
-                    To achieve sustainability, science is essential. Science provides the basis for understanding how cities
-                    develop and interact with the environment at different scales. Cities are composed of physical stocks,
+                    To achieve sustainability, science is essential. Science provides the basis for understanding how
+                    cities
+                    develop and interact with the environment at different scales. Cities are composed of physical
+                    stocks,
                     resource ows, social institutions and cultural catalysts whose interactions generate a quanti able
-                    ‘metabolism’. The scienti c focus of our research is to quantify such metabolisms, and understand how
+                    ‘metabolism’. The scienti c focus of our research is to quantify such metabolisms, and understand
+                    how
                     they might be best structured for the bene t of sustainable cities.
                     <br><br>
                     <b style="font-size: 12px;">BY DESIGN</b>
@@ -417,7 +422,8 @@
                     <br>Science and design are effective only if they serve places and the lives that are lived in them.
                     Places result from common processes (growth and decline; competition and co-operation; ebb and ow of
                     capital, people, goods and ideas; climate change) and differentiating factors (geography, culture,
-                    language, history). Our research addresses diverse lived places, from compact cities with high-density
+                    language, history). Our research addresses diverse lived places, from compact cities with
+                    high-density
                     populations to extended cities with a mosaic of urban and rural land-uses.
                     <br><br>
                 </p>
@@ -427,37 +433,37 @@
                 <!--<h5><a href="http://www.fcl.ethz.ch/" target="_blank" style="text-decoration:underline;color:dodgerblue;">www.fcl.ethz.ch</a>-->
                 <!--</h5>-->
 
-            <span class="fcl-button">
+                <span class="fcl-button">
              <a href="http://www.fcl.ethz.ch/" target="_blank" target="_blank">
                  <img src="img/icon_fcl.png" alt="fcl"/>
              </a>
             </span>
 
-        <span class="round-button">
+                <span class="round-button">
              <a href="https://www.zotero.org/groups/future_cities_laboratory" target="_blank">
                  <img src="img/icon_zotero.png" alt="zotero"/>
              </a>
         </span>
 
-        <span class="round-button">
+                <span class="round-button">
              <a href="https://vimeo.com/futurecitieslaboratory" target="_blank">
                  <img src="img/icon_vimeo.png" alt="vimeo"/>
              </a>
         </span>
 
-        <span class="round-button">
+                <span class="round-button">
              <a href="https://www.flickr.com/photos/futurecitieslaboratory/" target="_blank">
                  <img src="img/icon_flickr.png" alt="fliker"/>
              </a>
         </span>
 
-        <span class="round-button">
+                <span class="round-button">
              <a href="https://twitter.com/_FCL" target="_blank">
                  <img src="img/icon_twitter.png" alt="Twitter"/>
              </a>
         </span>
 
-        <span class="round-button">
+                <span class="round-button">
              <a href="https://www.facebook.com/futurecitieslaboratory" target="_blank">
                  <img src="img/icon_facebook.png" alt="Facabook"/>
              </a>
@@ -506,6 +512,62 @@
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBU5cWlAqYt_SPwMSEi1NZjbjB2JDD1PIA&callback=initMap"></script>
+
+<script>
+    //reset to the beginning
+    function reset() {
+        //clear all color layers
+        if (!pop_layer) {
+            document.getElementById('pop_densityBtn').click();
+        } else {
+            document.getElementById('pop_densityBtn').click();
+            document.getElementById('pop_densityBtn').click();
+        }
+
+        if (gdp_layer) {
+            document.getElementById('gdp_Btn').click();
+        }
+        if (co2_layer) {
+            document.getElementById('co2_emissionBtn').click();
+        }
+        if (project_layer) {
+            document.getElementById('fcl_projectsBtn').click();
+
+        }
+        if (network_layer) {
+            document.getElementById('global_networkBtn').click();
+        }
+        if (staff_layer) {
+            document.getElementById('academic_staffBtn').click();
+        }
+
+        //close google map
+        close_GoogleMap();
+        document.getElementById("googlem_switch").checked = false;
+
+        move([0, 0], 1);
+
+        //fcl side bar, close modal and close FCL information
+        close_modal();
+        if (sideBar_open)openNav();
+
+        //reset time slider
+        cur_year = 1964;
+        brushed();
+
+        //reset nav location
+        document.getElementById('menu_bar').style.right = 0 + 'px';
+        document.getElementById('menu_bar').style.top = 0 + 'px';
+
+        //clear all charts
+        country_chart_tooltip.style("visibility", "hidden");
+        d3.select("#map_container").selectAll(".tooltip").style("visibility", "hidden");
+
+        d3.select("#about_fcl_tooltip_country").remove();
+        d3.select("#about_fcl_tooltip_connect_line").remove();
+        d3.select("#about_fcl_tooltip_info").remove();
+    }
+</script>
 
 </body>
 </html>

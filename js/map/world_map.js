@@ -23,14 +23,12 @@ SC.layer_stack = [0,0,0]; // index 0 for pop_layer, index 1 for co2, index 2 for
 
 var worldmap_background = "#E2E3E8";
 
-
 var world_topo;
 
 var country_pop, country_area;
 var country_co2_emission;
 var country_gdp;
 var pop_density,co2_density,gdp_density;
-
 
 d3.json("data/topo/world-topo.json", function (error, world) {
     world_topo = topojson.feature(world, world.objects.countries).features;
@@ -88,8 +86,7 @@ var offsetL=10,offsetT=10 ;
 
 var projection, path, svg, g;
 //var graticule;
-var tooltip, one_tooltip, country_info_tooltip, fcl_tooltip,country_chart_tooltip;
-var wolrdmap_fcl_tooltip_1, wolrdmap_fcl_tooltip_2, wolrdmap_fcl_tooltip_1_line;
+var tooltip, country_info_tooltip, fcl_tooltip,country_chart_tooltip;
 // var singapore_anchor;
 
 var zoom = d3.behavior.zoom().scaleExtent([1, 100])
@@ -110,9 +107,9 @@ function setup() {
     //     .on("click", zoomin_singapore);
 
     fcl_tooltip = tooltip.append("div").attr("style","fill: none").attr("z-index",2);
-    one_tooltip = tooltip.append("div").attr("class","tooltip").attr("style","visibility:hidden").attr("z-index",4);
-    wolrdmap_fcl_tooltip_1 = tooltip.append("div").attr("class","worldmap_fcl_tooltip").attr("style","visibility:hidden").attr("z-index",4);
-    wolrdmap_fcl_tooltip_2 = tooltip.append("div").attr("class","worldmap_fcl_tooltip").attr("style","visibility:hidden").attr("z-index",4);
+    cluster_tooltip = tooltip.append("div").attr("class","tooltip").attr("style","visibility:hidden").attr("z-index",4);
+    about_fcl_tooltip_country = tooltip.append("div").attr("class","worldmap_fcl_tooltip").attr("style","visibility:hidden").attr("z-index",4);
+    about_fcl_tooltip_info = tooltip.append("div").attr("class","worldmap_fcl_tooltip").attr("style","visibility:hidden").attr("z-index",4);
 
     country_chart_tooltip = tooltip.append("div").attr("class","tooltip")
         .attr("id","chart_tooltip")
@@ -159,10 +156,10 @@ function setup() {
         .append("g")
         .attr("id","map_container_g");
 
-    wolrdmap_fcl_tooltip_1_line = svg
+    about_fcl_tooltip_connect_line = svg
         .append("line")
         .style("stroke", "#000000")
-        .attr("id", "wolrdmap_fcl_tooltip_1_line")
+        .attr("id", "about_fcl_tooltip_connect_line")
         .attr("x1", -100)     // x position of the first end of the line
         .attr("y1", -100)      // y position of the first end of the line
         .attr("x2", -200)     // x position of the second end of the line
@@ -421,7 +418,7 @@ function move(t,s) {
 
     fcl_tooltip_list =[];
 
-    one_tooltip.attr("style","visibility: hidden");
+    cluster_tooltip.attr("style","visibility: hidden");
     fcl_tooltip.selectAll(".tooltip").attr("style","visibility: hidden");
 
 
@@ -521,54 +518,4 @@ function handle_zoom(th){
     var new_t1 = map_height/2-scale_factor*(map_height/2-cur_t[1]);
 
     move([new_t0,new_t1],new_scale);
-}
-
-//reset to the beginning
-function reset(){
-    //clear all color layers
-    if(!pop_layer){
-        document.getElementById('pop_densityBtn').click();
-    }else{
-        document.getElementById('pop_densityBtn').click();
-        document.getElementById('pop_densityBtn').click();
-    }
-
-    if(gdp_layer){
-        document.getElementById('gdp_Btn').click();
-    }
-    if(co2_layer){
-        document.getElementById('co2_emissionBtn').click();
-    }
-    if(project_layer){
-        document.getElementById('fcl_projectsBtn').click();
-
-    }
-    if(network_layer){
-        document.getElementById('global_networkBtn').click();
-    }
-    if(staff_layer){
-        document.getElementById('academic_staffBtn').click();
-    }
-
-    //close google map
-    close_GoogleMap();
-    document.getElementById("googlem_switch").checked = false;
-
-    move([0,0],1);
-
-    //fcl side bar, close modal and close FCL information
-    close_modal();
-    if(sideBar_open)openNav();
-
-    //reset time slider
-    cur_year=1964;
-    brushed();
-
-    //reset nav location
-    document.getElementById('menu_bar').style.right = 0+'px';
-    document.getElementById('menu_bar').style.top = 0+'px';
-
-    //clear all charts
-    country_chart_tooltip.style("visibility","hidden");
-    d3.select("#map_container").selectAll(".tooltip").style("visibility","hidden");
 }
