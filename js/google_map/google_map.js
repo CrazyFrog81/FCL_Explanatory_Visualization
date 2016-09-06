@@ -609,8 +609,6 @@ function load_google_map() {
     //document.getElementById("googlem_holder").appendChild(text);
     document.getElementById("content_holder").appendChild(toggle_switchHolder);
     //end of toggle switch
-
-
 }
 
 
@@ -701,7 +699,6 @@ var staff_infowindows = [];
 
 //function to add clusters of projects
 function add_cluster_googleMap(color, lat, lon,text, clusterObj,className) {
-
     var area = clusterObj["area"];
     if (area == undefined) area = 2;
     //var radius_unit = 100000;

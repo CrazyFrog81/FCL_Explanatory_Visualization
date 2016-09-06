@@ -469,6 +469,8 @@ transform: scale(2);
 .reset_Btn
 {
     z-index: 4;
+    font-family: Arial;
+    font-size: 12px;
     padding: 5px;
     padding-left:15px;
     padding-right:15px;

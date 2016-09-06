@@ -14,8 +14,15 @@
     <script src="//d3js.org/d3.v3.min.js"></script>
     <script src="js/lib/topojson.v1.min.js"></script>
 
-</head>
+    <!-- build:js modernizr.touch.js -->
+    <script src="js/floating_buttons/lib/modernizr.touch.js"></script>
+    <!-- endbuild -->
 
+    <!-- build:css mfb.css -->
+    <link href="js/floating_buttons/mfb.css" rel="stylesheet">
+    <!-- endbuild -->
+
+</head>
 <body>
 
 <script>
@@ -192,7 +199,6 @@
 
         }
     }
-
 
     var mydragg = function () {
         return {
@@ -450,7 +456,6 @@
                  <img src="img/icon_vimeo.png" alt="vimeo"/>
              </a>
         </span>
-
                 <span class="round-button">
              <a href="https://www.flickr.com/photos/futurecitieslaboratory/" target="_blank">
                  <img src="img/icon_flickr.png" alt="fliker"/>
@@ -472,7 +477,7 @@
             </div>
         </div>
     </div>
-    <button class="reset_Btn" onclick="reset()">RESET</button>
+    <button class="reset_Btn" onclick="close_window()">RESET</button>
 
 
     <div id="map_container">
@@ -567,7 +572,53 @@
         d3.select("#about_fcl_tooltip_connect_line").remove();
         d3.select("#about_fcl_tooltip_info").remove();
     }
+
+    function close_window() {
+        console.log("closing window");
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "http://localhost/FCL_Exhibition/end_fcl_map.php", true);
+        xmlhttp.send();
+    }
+
+    // @deprecated: cannot start GLFW program from Chrome/IE
+    function start_demo_polis() {
+        console.log("start demo polis");
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "http://localhost/FCL_Exhibition/start_demo_polis.php", true);
+        xmlhttp.send();
+    }
 </script>
 
+<ul id="menu" class="mfb-component--bl mfb-zoomin" data-mfb-toggle="hover">
+    <li class="mfb-component__wrap">
+        <a href="#" class="mfb-component__button--main">
+            <i href="#" onclick="close_window()" class="mfb-component__main-icon--resting ion-plus-round">
+                HOME
+            </i>
+        </a>
+
+        <a href="#" class="mfb-component__button--main">
+            <i class="mfb-component__main-icon--resting ion-plus-round">
+                CIVAL
+            </i>
+
+            <i class="mfb-component__main-icon--resting ion-plus-round">
+                CIVAL
+            </i>
+        </a>
+
+        <!--<a href="#" onclick="start_demo_polis()" class="mfb-component__button&#45;&#45;main">-->
+            <!--<i class="mfb-component__main-icon&#45;&#45;resting ion-plus-round">-->
+                <!--POLIS-->
+            <!--</i>-->
+        <!--</a>-->
+    </li>
+</ul>
+
+<!-- build:js mfb.js -->
+<script src="js/floating_buttons/mfb.js"></script>
+<!-- endbuild -->
 </body>
 </html>
