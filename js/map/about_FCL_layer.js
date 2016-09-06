@@ -19,7 +19,6 @@ function draw_projectLayer() {
     var tier2_scale = 2.5;
     var tier3_scale = 3;
     var tier4_scale = 3.5;
-    var google_map_scale = 4;
     var tier_range = 100;
     var scale = 2;
 
@@ -700,24 +699,27 @@ function showFCLInfoTooltip(layer_name, point_x, point_y, left, top, scale, coun
 
     switch (layer_name) {
         case 'project_layer':
-            description = "Number of Projects:";
+            description = "Num. of Projects:";
             break;
 
         case 'network_layer':
-            description = "Number of Collaborators:";
+            description = "Num. of Collaborators:";
             break;
 
         case 'staff_layer':
-            description = "Number of Researchers:";
+            description = "Num. of Researchers:";
             break;
     }
 
+    var y_displacement = 60;
     about_fcl_tooltip_country
-        .attr("style", "left:" + (point_x * scale + left) + "px;bottom:" + (innerHeight - point_y * scale - top + 80) + "px;visibility: visible;")
+        .attr("style", "left:" + (point_x * scale + left) + "px;bottom:" + (innerHeight - point_y * scale - top + y_displacement) + "px;visibility: visible;")
         .attr("id", "about_fcl_tooltip_country")
-        .html("<div class='tooltip_holder'><div class='tooltip_text'>" + country + "</div>" +
-            "<div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='" + country_image.src + "' onerror='imgErr(this)'> </div>" +
-            "</div>" + ""
+        .html(
+            "<div class='tooltip_holder'>" +
+            "<div class='tooltip_text'>" + country + "</div>" +
+            "<div class='pic_holder Centered'><img class='tooltip_pic Centered' src='" + country_image.src + "' onerror='imgErr(this)'> </div>"
+            +"</div>"
         );
 
     d3.select("#about_fcl_tooltip_connect_line").remove();
@@ -730,16 +732,16 @@ function showFCLInfoTooltip(layer_name, point_x, point_y, left, top, scale, coun
         .attr("x1", point_x * scale + left + 1)
         .attr("y1", point_y * scale + top)
         .attr("x2", point_x * scale + left + 1)
-        .attr("y2", point_y * scale + top - 80);
+        .attr("y2", point_y * scale + top - y_displacement);
 
     var about_fcl_tooltip_country_width = document.getElementById("about_fcl_tooltip_country").offsetWidth;
-    var tooltip_2_x = (point_x * scale + left) + about_fcl_tooltip_country_width + 50;
+    var tooltip_2_x = (point_x * scale + left) + about_fcl_tooltip_country_width + 10;
 
-    about_fcl_tooltip_info.attr("style", "left:" + tooltip_2_x + "px;bottom:" + (innerHeight - point_y * scale - top + 80) + "px;visibility: visible;")
+    about_fcl_tooltip_info.attr("style", "left:" + tooltip_2_x + "px;bottom:" + (innerHeight - point_y * scale - top + y_displacement) + "px;visibility: visible;")
         .attr("id", "about_fcl_tooltip_info")
         .html("<div class='tooltip_holder'>" +
             "<div class='tooltip_text'>" + description + "</div>" +
-            "<div class='pic_holder Centerer'><img class='tooltip_pic_logo Centered' src='" + "img/national_flag/project.png" + "' onerror='imgErr(this)'>" + "         " + number + "</div>" +
+            "<div class='pic_holder Centered'><img class='tooltip_pic_logo Centered' src='" + "img/national_flag/project.png" + "' onerror='imgErr(this)'>" + "         " + number + "</div>" +
             "</div>"
         );
 }
@@ -748,68 +750,68 @@ function showFCLInfoTooltip(layer_name, point_x, point_y, left, top, scale, coun
 function showFCLProjectImage() {
     // var project_img = new Image();
     // project_img.src = "img/project_img/"+imgNo+"_fcl_vis.jpg";
-//
-// return cluster_tooltip.attr("style", "right:" + (innerWidth-x*sc-left)+ "px;bottom:" +(innerHeight-y*sc-top)+ "px;visibility: visible;backgroundColor:#666666;color:#ffffff;overflow:hidden;")
-//     .html("<div class='tooltip_holder' ><div class='tooltip_text'><b>" + country + "</b></div>"+
-//         "<div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+project_img.src+"' onerror='imgErr(this)'> </div>" +
-//         "</div>");
-//
-//cluster_tooltip.style("visibility","hidden");
-// var shift_x =   innerWidth/2 - projection([lon,lat])[0] *scale ;
-// var shift_y = innerHeight/2 - projection([lon,lat])[1] *scale;
-// var t = [shift_x,shift_y];
-// move(t,scale);
-//
-// var name = className+imgNo;
-//
-//  var filtered = fcl_tooltip_list.filter(function(f){
-//     return f == name;
-//  });
-//
-//  if(filtered.length<=0){
-//      /*var positionObj = {};
-//      positionObj["type"] ='singleton';
-//      positionObj["x"] = x;
-//      positionObj["y"] = y;    */
-//
-//      fcl_tooltip_list.push(name);
-//
-//      var left = zoom.translate()[0];
-//     var top= zoom.translate()[1];
-//
-//
-//     var the = fcl_tooltip
-//             /*.selectAll("div")
-//             .data([positionObj])
-//             .enter()         */
-//             .append("div")
-//             .attr("class","tooltip "+className)
-//             .attr("style", "right:" + (innerWidth-x*scale-left)+ "px;bottom:" +(innerHeight - y*scale-top)+ "px;visibility: visible")
-//             .html("<div class='tooltip_holder'><div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+project_img.src+"' onerror='imgErr(this)'></div>" +
-//                      "<div class='tooltip_text'><b>" + title + "</b><p>" + text + "</div></div>")
-//             .on("click",function () {
-//                 this.remove();
-//                 var index = fcl_tooltip_list.indexOf(name);
-//
-//
-//                 if(index != -1) {
-//                     fcl_tooltip_list.splice(index, 1);
-//                  }
-//              });//<a href="javascript:void(0)" class="closebtn" onclick="close('+country_name+')" style="border-bottom:0px solid red;">&times;</a>
-//
-//
-//         var width =the.node().getBoundingClientRect().width;
-//         var height =the.node().getBoundingClientRect().height;
-//         var area = width *height;
-//
-//         if(width>300){
-//             height = area/300;
-//             if(height>300){
-//             the.attr("style", "right:" + (innerWidth-x*scale-left)+ "px;bottom:" +(innerHeight-y*scale-top)+ "px;visibility: visible;width:300px;height:300px")
-//          }else{
-//              the.attr("style", "right:" + (innerWidth-x*scale-left)+ "px;bottom:" +(innerHeight-y*scale-top)+ "px;visibility: visible;width:300px");
-//         }
-//         }
+    //
+    // return cluster_tooltip.attr("style", "right:" + (innerWidth-x*sc-left)+ "px;bottom:" +(innerHeight-y*sc-top)+ "px;visibility: visible;backgroundColor:#666666;color:#ffffff;overflow:hidden;")
+    //     .html("<div class='tooltip_holder' ><div class='tooltip_text'><b>" + country + "</b></div>"+
+    //         "<div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+project_img.src+"' onerror='imgErr(this)'> </div>" +
+    //         "</div>");
+    //
+    //cluster_tooltip.style("visibility","hidden");
+    // var shift_x =   innerWidth/2 - projection([lon,lat])[0] *scale ;
+    // var shift_y = innerHeight/2 - projection([lon,lat])[1] *scale;
+    // var t = [shift_x,shift_y];
+    // move(t,scale);
+    //
+    // var name = className+imgNo;
+    //
+    //  var filtered = fcl_tooltip_list.filter(function(f){
+    //     return f == name;
+    //  });
+    //
+    //  if(filtered.length<=0){
+    //      /*var positionObj = {};
+    //      positionObj["type"] ='singleton';
+    //      positionObj["x"] = x;
+    //      positionObj["y"] = y;    */
+    //
+    //      fcl_tooltip_list.push(name);
+    //
+    //      var left = zoom.translate()[0];
+    //     var top= zoom.translate()[1];
+    //
+    //
+    //     var the = fcl_tooltip
+    //             /*.selectAll("div")
+    //             .data([positionObj])
+    //             .enter()         */
+    //             .append("div")
+    //             .attr("class","tooltip "+className)
+    //             .attr("style", "right:" + (innerWidth-x*scale-left)+ "px;bottom:" +(innerHeight - y*scale-top)+ "px;visibility: visible")
+    //             .html("<div class='tooltip_holder'><div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+project_img.src+"' onerror='imgErr(this)'></div>" +
+    //                      "<div class='tooltip_text'><b>" + title + "</b><p>" + text + "</div></div>")
+    //             .on("click",function () {
+    //                 this.remove();
+    //                 var index = fcl_tooltip_list.indexOf(name);
+    //
+    //
+    //                 if(index != -1) {
+    //                     fcl_tooltip_list.splice(index, 1);
+    //                  }
+    //              });//<a href="javascript:void(0)" class="closebtn" onclick="close('+country_name+')" style="border-bottom:0px solid red;">&times;</a>
+    //
+    //
+    //         var width =the.node().getBoundingClientRect().width;
+    //         var height =the.node().getBoundingClientRect().height;
+    //         var area = width *height;
+    //
+    //         if(width>300){
+    //             height = area/300;
+    //             if(height>300){
+    //             the.attr("style", "right:" + (innerWidth-x*scale-left)+ "px;bottom:" +(innerHeight-y*scale-top)+ "px;visibility: visible;width:300px;height:300px")
+    //          }else{
+    //              the.attr("style", "right:" + (innerWidth-x*scale-left)+ "px;bottom:" +(innerHeight-y*scale-top)+ "px;visibility: visible;width:300px");
+    //         }
+    //         }
 }
 
 // @deprecated:
