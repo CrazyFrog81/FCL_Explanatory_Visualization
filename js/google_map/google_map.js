@@ -69,13 +69,11 @@ function initMap() {
 
     var g_map = document.getElementById('googlem_holder');
 
-
     gmap = new google.maps.Map(g_map, mapOptions);
 
     //Associate the styled map with the MapTypeId and set it to display.
     gmap.mapTypes.set('map_style', styledMap);
     gmap.setMapTypeId('map_style');
-
 
     google.maps.event.addListener(gmap, 'zoom_changed', function () {
         //if(network_layer|staff_layer){
@@ -92,9 +90,7 @@ function initMap() {
         var tier_range = 100;
         var scale =2;
 
-
         if(s>= tier4_scale) {
-
             /*if(project_layer&&callcount>0){
              callcount=0;
              d3.select("#google_map").remove();
@@ -107,7 +103,6 @@ function initMap() {
             if(staff_layer)find_last_tier(tier_range,scale,'staff_layer');
 
         }else if(s>=tier3_scale){
-
             tier_range=5;
             scale = tier3_scale;
             svg.selectAll(".items").remove();
@@ -122,18 +117,14 @@ function initMap() {
             if(project_layer)find_last_tier(tier_range,scale,'project_layer');
             if(network_layer)find_last_tier(tier_range,scale,'network_layer');
             if(staff_layer)find_last_tier(tier_range,scale,'staff_layer');
-
         }else if(s>=tier1_scale){
-
             tier_range = 50 ;
             scale = tier1_scale;
             svg.selectAll(".items").remove();
             if(project_layer)find_last_tier(tier_range,scale,'project_layer');
             if(network_layer)find_last_tier(tier_range,scale,'network_layer');
             if(staff_layer)find_last_tier(tier_range,scale,'staff_layer');
-
         }else{
-
             tier_range = 100 ;
             scale = 1;
             svg.selectAll(".items").remove();
@@ -661,7 +652,6 @@ function open_GoogleMap() {
     var map_center = projection.invert([center_x, center_y]);//
     var c = new google.maps.LatLng(map_center[1],map_center[0]);
 
-
     //google.maps.event.trigger(gmap, 'resize');
 
     gmap.panTo(c);
@@ -674,10 +664,8 @@ function handle_switch(){
     var res = input[0].checked;
 
     if(res){
-
         open_GoogleMap();
     }else{
-
         close_GoogleMap();
     }
 }
@@ -685,7 +673,6 @@ function handle_switch(){
 
 function formatNum(num) {
     var format = d3.format(',.02f');
-
 
     return format(num);
 }

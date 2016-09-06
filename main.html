@@ -42,6 +42,8 @@
 
     var ul_height = 73;
 
+    var click_x, click_y;
+
     function newInput() {
         //tooltip.style("visibility","hidden");
         //d3.selectAll(".navg_button").classed("selectedBtn",false);
@@ -170,7 +172,6 @@
                     }
                     break;
 
-
                 default:
                     break;
             }
@@ -208,8 +209,7 @@
             },
             startMoving: function (divid, container, evt) {
                 evt = evt || window.event;
-                var posX = evt.clientX,
-                        posY = evt.clientY,
+                var posX = evt.clientX, posY = evt.clientY,
                         divTop = document.getElementById(divid).offsetTop,
                         divLeft = document.getElementById(divid).offsetLeft,
                         eWi = parseInt(document.getElementById(divid).offsetWidth),
@@ -243,51 +243,6 @@
             },
         }
     }();
-
-    var mydragg_L = function () {
-        return {
-            move: function (divid, xpos, ypos) {
-
-                document.getElementById(divid).style.left = xpos + 'px';
-                document.getElementById(divid).style.top = ypos + 'px';
-            },
-            startMoving: function (divid, container, evt) {
-                evt = evt || window.event;
-                var posX = evt.clientX,
-                        posY = evt.clientY,
-                        divTop = document.getElementById(divid).offsetTop,
-                        divLeft = document.getElementById(divid).offsetLeft,
-                        eWi = parseInt(document.getElementById(divid).offsetWidth),
-                        eHe = parseInt(document.getElementById(divid).offsetHeight),
-                        cWi = parseInt(document.getElementById(container).offsetWidth),
-                        cHe = parseInt(document.getElementById(container).offsetHeight);
-                // document.getElementById(container).style.cursor='move';
-                //divTop = divTop.replace('px','');
-                //divLeft = divLeft.replace('px','');
-                var diffX = posX - divLeft,
-                        diffY = posY - divTop;
-                document.onmousemove = function (evt) {
-                    evt = evt || window.event;
-                    var posX = evt.clientX,
-                            posY = evt.clientY,
-                            aX = posX - diffX,  //LEFT
-                            aY = posY - diffY;
-                    if (aX < 0) aX = 0;
-                    if (aY < 0) aY = 0;
-                    if (aX + eWi > cWi) aX = cWi - eWi;
-                    if (aY + eHe > cHe) aY = cHe - eHe;
-                    mydragg_L.move(divid, aX, aY);
-                }
-            },
-            stopMoving: function (container) {
-                var a = document.createElement('script');
-                document.getElementById(container).style.cursor = 'default';
-                document.onmousemove = function () {
-                }
-            },
-        }
-    }();
-
 
     /*javascript for the modal*/
     // When the user clicks on the button, open the modal
@@ -337,7 +292,9 @@
     <nav id="menu_bar" class="menu_bar_css">
         <div class="holder">
             <div class="menu-item" style="padding: 0px; border-top: 0"
-                 onmousedown='mydragg.startMoving("menu_bar","content_holder",event);'
+                 onmousedown='
+                  mydragg.startMoving("menu_bar","content_holder",event);
+                  move_tooltips(event);'
                  onmouseup='mydragg.stopMoving("content_holder");'>
                 <img id="fcl_logo" src="img/Logo_FCLwhite.png" alt="fcl_logo" width="199.5px" height="48.87px">
             </div>
@@ -477,11 +434,10 @@
             </div>
         </div>
     </div>
-    <button class="reset_Btn" onclick="close_window()">RESET</button>
+    <button class="reset_Btn" onclick="reset()">RESET</button>
 
 
     <div id="map_container">
-
         <!--<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7830112895026!2d103.78620331459703!3d1.3052853620809883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da1a431841d5f1%3A0x160f705c61acdff3!2ssixty40!5e0!3m2!1sen!2ssg!4v1466989919758" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>-->
     </div>
 
@@ -565,8 +521,7 @@
         document.getElementById('menu_bar').style.top = 0 + 'px';
 
         //clear all charts
-        country_chart_tooltip.style("visibility", "hidden");
-        d3.select("#map_container").selectAll(".tooltip").style("visibility", "hidden");
+        d3.selectAll(".tooltip").style("visibility", "hidden");
 
         d3.select("#about_fcl_tooltip_country").remove();
         d3.select("#about_fcl_tooltip_connect_line").remove();
@@ -610,9 +565,9 @@
         </a>
 
         <!--<a href="#" onclick="start_demo_polis()" class="mfb-component__button&#45;&#45;main">-->
-            <!--<i class="mfb-component__main-icon&#45;&#45;resting ion-plus-round">-->
-                <!--POLIS-->
-            <!--</i>-->
+        <!--<i class="mfb-component__main-icon&#45;&#45;resting ion-plus-round">-->
+        <!--POLIS-->
+        <!--</i>-->
         <!--</a>-->
     </li>
 </ul>

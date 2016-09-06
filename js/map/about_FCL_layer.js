@@ -375,8 +375,8 @@ function add_point(color, lat, lon, title, text, area, imgNo, scale, layer_name,
         .attr("cx", point_x)
         .attr("cy", point_y)
         .attr("class", "point")
-        .style("fill", color//function () {return color_scheme[color_status];}
-        ).style("opacity", 0.60)
+        .style("fill", color)
+        .style("opacity", 0.60)
         .attr("r", function (d) {
             return Math.sqrt(d["area"] * area_unit / Math.PI) / scale;
         })
@@ -504,7 +504,6 @@ function find_last_tier(tier_range, scale, className) {
 
     //to create a neighbour matrix holding neighbours to each project
     for (var index = 0; index < max_No; index++) {
-
         neighbours.push([]);
         for (var i = 0; i < max_No; i++) {
             value = matrix[index][i];
@@ -719,7 +718,7 @@ function showFCLInfoTooltip(layer_name, point_x, point_y, left, top, scale, coun
             "<div class='tooltip_holder'>" +
             "<div class='tooltip_text'>" + country + "</div>" +
             "<div class='pic_holder Centered'><img class='tooltip_pic Centered' src='" + country_image.src + "' onerror='imgErr(this)'> </div>"
-            +"</div>"
+            + "</div>"
         );
 
     d3.select("#about_fcl_tooltip_connect_line").remove();
