@@ -85,9 +85,6 @@ function read_co2Data() {
 var offsetL = 10, offsetT = 10;
 
 var projection, path, svg, g;
-//var graticule;
-var tooltip, urbanisation_info_tooltip, fcl_tooltip;
-// var singapore_anchor;
 
 var zoom = d3.behavior.zoom().scaleExtent([1, 100]).on("zoom", move);
 
@@ -113,27 +110,6 @@ function setup() {
         .attr("id", "map_container_g");
 
     g = svg.append("g").attr("id", "country_holder");
-
-    // tooltip = d3.select("#map_container").append("div")//.attr("class", "tooltip")
-    //     .attr("style", "fill: none");
-
-    tooltip = g.append("g").attr("style", "fill: none");
-
-    urbanisation_info_tooltip = tooltip.append("div").attr("class", "tooltip").attr("style", "visibility:hidden").attr("z-index", 6);
-
-    fcl_tooltip = tooltip.append("div").attr("style", "fill: none").attr("z-index", 2);
-    cluster_tooltip = tooltip.append("div").attr("class", "tooltip").attr("style", "visibility:hidden").attr("z-index", 4);
-    about_fcl_tooltip_country = tooltip.append("div").attr("class", "worldmap_fcl_tooltip").attr("style", "visibility:hidden").attr("z-index", 4);
-    about_fcl_tooltip_info = tooltip.append("div").attr("class", "worldmap_fcl_tooltip").attr("style", "visibility:hidden").attr("z-index", 4);
-    about_fcl_tooltip_connect_line = svg
-        .append("line")
-        .style("stroke", "#000000")
-        .attr("id", "about_fcl_tooltip_connect_line")
-        .attr("x1", -100)     // x position of the first end of the line
-        .attr("y1", -100)      // y position of the first end of the line
-        .attr("x2", -200)     // x position of the second end of the line
-        .attr("y2", -200)
-        .style("zIndex", "99");
 }
 
 function draw_worldmap() {
@@ -244,8 +220,6 @@ function draw_pop_layer() {
     load_DData("pop_layer");
 }
 
-var pre_translate, pre_scale, pre_projection;
-
 //adjust shapes upon zoom and drag
 function move(t, s) {
     if (t == undefined || s == undefined) {
@@ -279,12 +253,14 @@ function move(t, s) {
     }
 
     svg.selectAll(".items").remove();
-    if (project_layer)
-        find_last_tier(tier_range, scale, 'project_layer');
-    if (network_layer)
-        find_last_tier(tier_range, scale, 'network_layer');
-    if (staff_layer)
-        find_last_tier(tier_range, scale, 'staff_layer');
+
+    if(project_layer)
+        find_last_tier(tier_range,scale,'project_layer');
+    if(network_layer)
+        find_last_tier(tier_range,scale,'network_layer');
+    if(staff_layer)
+        find_last_tier(tier_range,scale,'staff_layer');
+
     //code for restrict base map boundary
     /*  var h = map_height / 4;
 
@@ -323,18 +299,7 @@ function move(t, s) {
 
     fcl_tooltip_list = [];
 
-    cluster_tooltip.attr("style", "visibility: hidden");
-
     svg.attr("transform", "translate(" + t + ")scale(" + s + ")");
-
-    if(pre_translate == undefined)
-        pre_translate = t;
-
-    if(pre_scale == undefined)
-        pre_scale = s;
-
-    if(pre_projection == undefined)
-        pre_projection = projection;
 
     var tooltips = d3.selectAll(".tooltip").forEach(function(tips){
         tips.forEach(function(tip){
@@ -390,9 +355,6 @@ function move(t, s) {
 
     var center_x = (innerWidth / 2 - t[0]) / s;
     var center_y = (innerHeight / 2 - t[1]) / s;
-
-    pre_translate = t;
-    pre_projection = projection;
 }
 
 function click() {

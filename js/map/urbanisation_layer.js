@@ -260,7 +260,7 @@ function display_Density1(cur_year) {
         })
         .on("mouseout", function (d, i) {
             //looptime = 0;
-            return urbanisation_info_tooltip.attr("style", "visibility: hidden");
+            // return urbanisation_info_tooltip.attr("style", "visibility: hidden");
         })
         .on("click", function (d, i) {
             // var res =  draw_charts(xy_pop_data,xy_co2_data,xy_gdp_data,country_name);
@@ -479,13 +479,13 @@ function display_Density2(cur_year) {
                 top = top - 2 * offsetT - height;
             }
 
-            urbanisation_info_tooltip
-                .style("left", left + "px")
-                .style("top", top + "px");
+            // urbanisation_info_tooltip
+            //     .style("left", left + "px")
+            //     .style("top", top + "px");
             //return urbanisation_info_tooltip.attr("style", "visibility: hidden");
         }).on("mouseout", function (d, i) {
         //looptime = 0;
-        return urbanisation_info_tooltip.attr("style", "visibility: hidden");
+        // return urbanisation_info_tooltip.attr("style", "visibility: hidden");
     }).on("click", function (d, i) {
         // var res =  draw_charts(xy_pop_data,xy_co2_data,xy_gdp_data,country_name);
 
@@ -663,11 +663,11 @@ function display_Density3(cur_year) {
                 }
             }
 
-            urbanisation_info_tooltip
-                .html(tooltip_content);
+            // urbanisation_info_tooltip
+            //     .html(tooltip_content);
 
-            var left = d3.event.pageX + offsetL;
-            var top = d3.event.pageY + offsetT;
+            // var left = d3.event.pageX + offsetL;
+            // var top = d3.event.pageY + offsetT;
 
             // urbanisation_info_tooltip
             //     .style("visibility","visible")
@@ -689,14 +689,14 @@ function display_Density3(cur_year) {
             }
 
 
-            urbanisation_info_tooltip
-                .style("left", left + "px")
-                .style("top", top + "px");
+            // urbanisation_info_tooltip
+            //     .style("left", left + "px")
+            //     .style("top", top + "px");
 
 
         }).on("mouseout", function (d, i) {
         //looptime = 0;
-        return urbanisation_info_tooltip.attr("style", "visibility: hidden");
+        // return urbanisation_info_tooltip.attr("style", "visibility: hidden");
     }).on("click", function (d, i) {
         // var res =  draw_charts(xy_pop_data,xy_co2_data,xy_gdp_data,country_name);
 
@@ -862,7 +862,7 @@ function draw_charts(xy_pop_data, xy_co2_data, xy_gdp_data, country_name, left, 
         .attr("class", "close")
         .on("click", function () {
             //close
-            country_chart_tooltip_dynamic.style("visibility", "hidden");
+            country_chart_tooltip_dynamic.remove();
         });
 
     country_chart_tooltip_dynamic
@@ -1030,16 +1030,16 @@ function draw_charts(xy_pop_data, xy_co2_data, xy_gdp_data, country_name, left, 
 
             var format = d3.format(',.04f');
 
-            urbanisation_info_tooltip
-                .html("Population Density: " + format(v.value) + "<br>Year: " + v.year)
-                .style("left", (d3.event.pageX) + "px")
-                .style("top", (d3.event.pageY) + "px");
+            // urbanisation_info_tooltip
+            //     .html("Population Density: " + format(v.value) + "<br>Year: " + v.year)
+            //     .style("left", (d3.event.pageX) + "px")
+            //     .style("top", (d3.event.pageY) + "px");
 
             // urbanisation_info_tooltip.style("visibility","visible")
         })
             .on("mouseout", function (d) {
                 d3.select(this).style("border", "2px solid red");
-                urbanisation_info_tooltip.style("visibility", "hidden");
+                // urbanisation_info_tooltip.style("visibility", "hidden");
             });
 
 
@@ -1152,7 +1152,7 @@ function draw_charts(xy_pop_data, xy_co2_data, xy_gdp_data, country_name, left, 
                 //     .style("top", (d3.event.pageY) + "px");
             })
             .on("mouseout", function (d) {
-                urbanisation_info_tooltip.style("visibility", "hidden");
+                // urbanisation_info_tooltip.style("visibility", "hidden");
             });
 
         // Add the X Axis
@@ -1251,14 +1251,8 @@ function draw_charts(xy_pop_data, xy_co2_data, xy_gdp_data, country_name, left, 
                 }
             })
             .on("mouseover", function (v) {
-                var format = d3.format(',.02f');
-                //urbanisation_info_tooltip.style("visibility","visible")
-                //    .html("GDP per Capita (US$): "+ format(v.value) + "<br>Year: "+v.year)
-                //    .style("left", (d3.event.pageX) + "px")
-                //    .style("top", (d3.event.pageY) + "px");
             })
             .on("mouseout", function (d) {
-                urbanisation_info_tooltip.style("visibility", "hidden");
             });
 
 
