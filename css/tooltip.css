@@ -12,7 +12,7 @@ div.tooltip {
     vertical-align: middle;
 }
 
-div.worldmap_fcl_tooltip{
+div.about_fcl_tooltip{
     color: #ffffff;
     padding: 5px;
     background: #000000;
@@ -25,6 +25,14 @@ div.worldmap_fcl_tooltip{
     vertical-align: middle;
     width: 150px;
     height: 100px;
+}
+
+div.about_fcl_tooltip_line{
+    background: #000000;
+    width: 5px;
+    height: 60px;
+    opacity: 0.7;
+    position: absolute;
 }
 
 .pic_holder{

@@ -312,6 +312,34 @@ function move(t, s) {
        })
     });
 
+     var fcl_tooltips = d3.selectAll(".about_fcl_tooltip").forEach(function(tips){
+        tips.forEach(function(tip){
+            if(tip.id == undefined || tip.id == "")
+                return;
+
+            var new_pos = viewport_pos(tip.dataset.lng, tip.dataset.lat);
+
+            var x = new_pos[0];
+            if(tip.id.includes("info"))
+                x += 150;
+
+            d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1] + 60)  + "px");
+        })
+    });
+
+    var fcl_tooltips_lines = d3.selectAll(".about_fcl_tooltip_line").forEach(function(tips){
+        tips.forEach(function(tip){
+            if(tip.id == undefined || tip.id == "")
+                return;
+
+            var new_pos = viewport_pos(tip.dataset.lng, tip.dataset.lat);
+
+            var x = new_pos[0];
+
+            d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1])  + "px");
+        })
+    });
+
     d3.selectAll(".tooltip").attr("transform", "translate(" + t + ")scale(" + s + ")");
 
     /* SET NEW ZOOM POINT */

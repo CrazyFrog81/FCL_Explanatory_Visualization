@@ -230,8 +230,6 @@ function generate_allDistMatrix() {
 
         console.log("generate all distance matrix!");
     });
-
-
 }
 
 /*calculate distance between any two partner locations*/
@@ -381,28 +379,15 @@ function add_point(color, lat, lon, title, text, area, imgNo, scale, layer_name,
             return Math.sqrt(d["area"] * area_unit / Math.PI) / scale;
         })
         .on("mouseover", function () {
-            var left = zoom.translate()[0];
-            var top = zoom.translate()[1];
-            var scale = zoom.scale();
-
-            /*add in picture for the project
-             var project_img = new Image();
-             project_img.src = "img/project_img/"+imgNo+"_fcl_vis.jpg";*/
-
-            showFCLInfoTooltip(layer_name, point_x, point_y, left, top, scale, country, country_or_network_logo_img, project_number);
+            showFCLInfoTooltip(layer_name, lon, lat, country, country_or_network_logo_img, project_number);
         })
         .on("mouseout", function () {
             // return cluster_tooltip.attr("style","visibility: hidden");
         })
         .on("click", function () {
-            var left = zoom.translate()[0];
-            var top = zoom.translate()[1];
-            var scale = zoom.scale();
-
-            showFCLInfoTooltip(layer_name, point_x, point_y, left, top, scale, country, country_or_network_logo_img, project_number);
+            showFCLInfoTooltip(layer_name, lon, lat, country, country_or_network_logo_img, project_number);
         });
 }
-
 
 //function to add clusters of projects
 function add_zoomable_cluster(color, lat, lon, title, text, area, scale, clusterObj, className, country) {
@@ -440,7 +425,6 @@ function add_zoomable_cluster(color, lat, lon, title, text, area, scale, cluster
             // showFCLInfoTooltip(point_x, point_y, left, top, scale, country, project_img, project_number);
         })
         .on("mouseout", function () {
-            return cluster_tooltip.attr("style", "visibility: hidden");
         })
         .on("click", function () {
             var shift_x = innerWidth / 2 - projection([lon, lat])[0] * scale;
@@ -692,7 +676,10 @@ function setup_circles(className) {
         .attr("class", className);
 }
 
-function showFCLInfoTooltip(layer_name, point_x, point_y, left, top, scale, country, country_image, number) {
+// TODO: design better
+// TODO: the clusters should also have the tooltips
+
+function showFCLInfoTooltip(layer_name, long, lat, country, country_image, number) {
     var description;
 
     switch (layer_name) {
@@ -709,10 +696,26 @@ function showFCLInfoTooltip(layer_name, point_x, point_y, left, top, scale, coun
             break;
     }
 
+    var viewport_position = viewport_pos(long, lat);
+
+    // console.log(long+" "+lat+" "+viewport_position+" "+d3.event.pageX+" "+d3.event.pageY);
+
+    var about_fcl_tooltip_dynamic_id = "about_fcl_tooltip_" + layer_name+"_"+country;
+
+    var find_tooltip = document.getElementById(about_fcl_tooltip_dynamic_id);
+    d3.selectAll(about_fcl_tooltip_dynamic_id);
+    if(find_tooltip != null)
+        return;
+
+    var about_fcl_tooltip = d3.select("#map_container").append("div").attr("style", "fill: none").attr("id", about_fcl_tooltip_dynamic_id);
+
     var y_displacement = 60;
-    about_fcl_tooltip_country
-        .attr("style", "left:" + (point_x * scale + left) + "px;bottom:" + (innerHeight - point_y * scale - top + y_displacement) + "px;visibility: visible;")
-        .attr("id", "about_fcl_tooltip_country")
+    about_fcl_tooltip.append("div")
+        .attr("id", about_fcl_tooltip_dynamic_id+"_country")
+        .attr("class", "about_fcl_tooltip")
+        .attr("style", "left:" + (viewport_position[0]) + "px;bottom:" + (window.innerHeight - viewport_position[1] + y_displacement) + "px;visibility: visible;")
+        .attr("data-lng", long)
+        .attr("data-lat", lat)
         .html(
             "<div class='tooltip_holder'>" +
             "<div class='tooltip_text'>" + country + "</div>" +
@@ -720,26 +723,24 @@ function showFCLInfoTooltip(layer_name, point_x, point_y, left, top, scale, coun
             + "</div>"
         );
 
-    d3.select("#about_fcl_tooltip_connect_line").remove();
-
-    about_fcl_tooltip_connect_line = d3.select("#svg1").append("line")
-        .style("stroke", "#000000")
-        .attr("id", "about_fcl_tooltip_connect_line")
-        .style("stroke-width", "2px")
-        .style("zIndex", "99")
-        .attr("x1", point_x * scale + left + 1)
-        .attr("y1", point_y * scale + top)
-        .attr("x2", point_x * scale + left + 1)
-        .attr("y2", point_y * scale + top - y_displacement);
-
-    var about_fcl_tooltip_country_width = document.getElementById("about_fcl_tooltip_country").offsetWidth;
-    var tooltip_2_x = (point_x * scale + left) + about_fcl_tooltip_country_width + 10;
-
-    about_fcl_tooltip_info.attr("style", "left:" + tooltip_2_x + "px;bottom:" + (innerHeight - point_y * scale - top + y_displacement) + "px;visibility: visible;")
-        .attr("id", "about_fcl_tooltip_info")
+    var about_fcl_tooltip_country_width = 150;
+    var tooltip_2_x = viewport_position[0] + about_fcl_tooltip_country_width + 10;
+    about_fcl_tooltip.append("div")
+        .attr("id", about_fcl_tooltip_dynamic_id+"_info")
+        .attr("class", "about_fcl_tooltip")
+        .attr("style", "left:" + tooltip_2_x + "px;bottom:" + (window.innerHeight - viewport_position[1] + y_displacement) + "px;visibility: visible;")
+        .attr("data-lng", long)
+        .attr("data-lat", lat)
         .html("<div class='tooltip_holder'>" +
             "<div class='tooltip_text'>" + description + "</div>" +
             "<div class='pic_holder Centered'><img class='tooltip_pic_logo Centered' src='" + "img/national_flag/project.png" + "' onerror='imgErr(this)'>" + "         " + number + "</div>" +
             "</div>"
         );
+
+    about_fcl_tooltip.append("div")
+        .attr("id", about_fcl_tooltip_dynamic_id+"_line")
+        .attr("class", "about_fcl_tooltip_line")
+        .attr("style", "left:" + viewport_position[0] + "px;bottom:" + (window.innerHeight - viewport_position[1]) + "px;visibility: visible;")
+        .attr("data-lng", long)
+        .attr("data-lat", lat);
 }
