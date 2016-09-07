@@ -844,9 +844,20 @@ function draw_charts(xy_pop_data, xy_co2_data, xy_gdp_data, country_name, left, 
             d3.select(this).style("background-color", "#ffffff");
         });
 
-    var chart_tooltip_dynamic_id = "chart_tooltip_" + chart_tooltip_id_counting.toString();
+    var chart_tooltip_dynamic_id = "chart_tooltip_" + country_name;
 
     var lnglat = lnglat_pos(d3.event.pageX, d3.event.pageY);
+
+    var find_tooltip = document.getElementById(chart_tooltip_dynamic_id);
+    if(find_tooltip != null){
+        // reposition the tooltip if it already exists
+        d3.select(find_tooltip)
+            .attr("data-lng", lnglat[0])
+            .attr("data-lat", lnglat[1])
+            .style("left", left + "px")
+            .style("top", top + "px");
+        return;
+    }
 
     var country_chart_tooltip_dynamic = d3.select("#map_container").append("div").attr("class", "tooltip")
             .attr("id", chart_tooltip_dynamic_id)

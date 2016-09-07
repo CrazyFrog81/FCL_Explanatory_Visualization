@@ -678,7 +678,6 @@ function setup_circles(className) {
 
 // TODO: design better
 // TODO: the clusters should also have the tooltips
-
 function showFCLInfoTooltip(layer_name, long, lat, country, country_image, number) {
     var description;
 
@@ -703,11 +702,12 @@ function showFCLInfoTooltip(layer_name, long, lat, country, country_image, numbe
     var about_fcl_tooltip_dynamic_id = "about_fcl_tooltip_" + layer_name+"_"+country;
 
     var find_tooltip = document.getElementById(about_fcl_tooltip_dynamic_id);
-    d3.selectAll(about_fcl_tooltip_dynamic_id);
     if(find_tooltip != null)
         return;
 
-    var about_fcl_tooltip = d3.select("#map_container").append("div").attr("style", "fill: none").attr("id", about_fcl_tooltip_dynamic_id);
+    var about_fcl_tooltip = d3.select("#map_container").append("div")
+        .attr("class", "about_fcl_tooltip_container")
+        .attr("style", "fill: none").attr("id", about_fcl_tooltip_dynamic_id);
 
     var y_displacement = 60;
     about_fcl_tooltip.append("div")

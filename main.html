@@ -521,11 +521,8 @@
         document.getElementById('menu_bar').style.top = 0 + 'px';
 
         //clear all charts
-        d3.selectAll(".tooltip").style("visibility", "hidden");
-
-        d3.select("#about_fcl_tooltip_country").remove();
-        d3.select("#about_fcl_tooltip_connect_line").remove();
-        d3.select("#about_fcl_tooltip_info").remove();
+        d3.selectAll(".tooltip").remove();
+        d3.selectAll(".about_fcl_tooltip_container").remove();
     }
 
     function close_window() {
