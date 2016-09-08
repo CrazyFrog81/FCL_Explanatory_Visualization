@@ -41,8 +41,8 @@ div.about_fcl_tooltip_line{
     /*max-width: 300px;
     max-height:200px;
     padding-bottom:20px;*/
-    max-width: 120px;
-    max-height:76px;
+    width: 120px;
+    height:76px;
     padding:5px 10px 10px 10px;
 }
 
