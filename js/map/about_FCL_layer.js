@@ -702,8 +702,10 @@ function showFCLInfoTooltip(layer_name, long, lat, country, country_image, numbe
     var about_fcl_tooltip_dynamic_id = "about_fcl_tooltip_" + layer_name+"_"+country;
 
     var find_tooltip = document.getElementById(about_fcl_tooltip_dynamic_id);
-    if(find_tooltip != null)
+    if(find_tooltip != null) {
+        find_tooltip.remove();
         return;
+    }
 
     var about_fcl_tooltip = d3.select("#map_container").append("div")
         .attr("class", "about_fcl_tooltip_container")
