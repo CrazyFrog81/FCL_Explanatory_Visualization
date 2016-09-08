@@ -207,9 +207,10 @@ function color_brushed1(ext) {
     selection_bar1.attr("x",left)
         .style("width",width+'px');
 
-    range1 = [ticks1-L,ticks1-R];
-    display_Density1(cur_year);
-    
+    range1 = [ticks1-L, ticks1-R];
+
+    display_urbanization_layer("#pop_countries", cur_year, color_split1, colors1, country_pop, country_area, 1);
+    // display_Density1(cur_year);
 }
 
 function drag_handler1(){
@@ -451,8 +452,8 @@ function color_brushed2(ext) {
         .style("width",width+'px');
 
     range2 = [ticks2-L,ticks2-R];
-    display_Density2(cur_year);
 
+    display_urbanization_layer("#co2_countries", cur_year, color_split2, colors2, country_co2_emission, country_pop, 1000);
 }
 
 function drag_handler2(){
@@ -699,7 +700,8 @@ function color_brushed3(ext) {
         .style("width",width+'px');
 
     range3 = [ticks3-L,ticks3-R];
-    display_Density3(cur_year);
+
+    display_urbanization_layer("#gpd_countries", cur_year, color_split3, colors3, country_gdp, country_pop, 1);
 }
 
 function drag_handler3(){

@@ -46,7 +46,6 @@ function read_popData() {
     d3.csv("data/fitted/country_size.csv", function (error, country_size_data) {
         d3.csv("data/fitted/population.csv", function (error, pop_data) {
             d3.csv("data/fitted/population_density.csv", function (error, pop_density_data) {
-
                 country_pop = pop_data;
                 country_area = country_size_data;
                 pop_density = pop_density_data;
@@ -134,26 +133,6 @@ function draw_worldmap() {
         .attr("title", function (d, i) {
             return d.properties.name;
         }).attr("fill", worldmap_background);
-
-    /* g.selectAll(".country-label")
-     .data(this.world_topo)
-     .enter().append("text")
-     .attr("class", "country-label")
-     .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
-     .attr("dy", ".35em")
-     .text(function(d) { return d.properties.name; });*/
-
-    /* d3.select("#map_container").append("svg")
-     .attr("id","svg2")
-     .attr("width",map_width )
-     .attr("height",map_height)
-     .append("use")
-     //.attr("transform","translate("+map_width+",0)skewY(180)")
-     .attr("xlink:href","#svg1");
-     */
-    /*<svg width="100" height="100">
-     <use transform="scale(0.1)" xlink:href="#SVG1"/>
-     </svg>*/
 
     setup_slider(1964, 2014);
 
