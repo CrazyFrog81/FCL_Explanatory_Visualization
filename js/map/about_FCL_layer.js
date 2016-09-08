@@ -379,7 +379,7 @@ function add_point(color, lat, lon, title, text, area, imgNo, scale, layer_name,
             return Math.sqrt(d["area"] * area_unit / Math.PI) / scale;
         })
         .on("mouseover", function () {
-            showFCLInfoTooltip(layer_name, lon, lat, country, country_or_network_logo_img, project_number);
+            // showFCLInfoTooltip(layer_name, lon, lat, country, country_or_network_logo_img, project_number);
         })
         .on("mouseout", function () {
             // return cluster_tooltip.attr("style","visibility: hidden");
@@ -718,13 +718,13 @@ function showFCLInfoTooltip(layer_name, long, lat, country, country_image, numbe
         .attr("data-lat", lat)
         .html(
             "<div class='tooltip_holder'>" +
-            "<div class='tooltip_text'>" + country + "</div>" +
+            "<div class='tooltip_text'>" + country.toUpperCase() + "</div>" +
             "<div class='pic_holder Centered'><img class='tooltip_pic Centered' src='" + country_image.src + "' onerror='imgErr(this)'> </div>"
             + "</div>"
         );
 
-    var about_fcl_tooltip_country_width = 150;
-    var tooltip_2_x = viewport_position[0] + about_fcl_tooltip_country_width + 10;
+    var about_fcl_tooltip_country_width = document.getElementById(about_fcl_tooltip_dynamic_id+"_country").offsetWidth;
+    var tooltip_2_x = viewport_position[0] + about_fcl_tooltip_country_width + 8;
     about_fcl_tooltip.append("div")
         .attr("id", about_fcl_tooltip_dynamic_id+"_info")
         .attr("class", "about_fcl_tooltip")
@@ -732,7 +732,7 @@ function showFCLInfoTooltip(layer_name, long, lat, country, country_image, numbe
         .attr("data-lng", long)
         .attr("data-lat", lat)
         .html("<div class='tooltip_holder'>" +
-            "<div class='tooltip_text'>" + description + "</div>" +
+            "<div class='tooltip_text'>" + description.toUpperCase() + "</div>" +
             "<div class='pic_holder Centered'><img class='tooltip_pic_logo Centered' src='" + "img/national_flag/project.png" + "' onerror='imgErr(this)'>" + "         " + number + "</div>" +
             "</div>"
         );
@@ -740,7 +740,7 @@ function showFCLInfoTooltip(layer_name, long, lat, country, country_image, numbe
     about_fcl_tooltip.append("div")
         .attr("id", about_fcl_tooltip_dynamic_id+"_line")
         .attr("class", "about_fcl_tooltip_line")
-        .attr("style", "left:" + viewport_position[0] + "px;bottom:" + (window.innerHeight - viewport_position[1]) + "px;visibility: visible;")
+        .attr("style", "left:" + (viewport_position[0]-1) + "px;bottom:" + (window.innerHeight - viewport_position[1]) + "px;visibility: visible;")
         .attr("data-lng", long)
         .attr("data-lat", lat);
 }
