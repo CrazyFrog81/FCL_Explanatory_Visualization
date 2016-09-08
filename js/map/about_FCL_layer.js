@@ -711,6 +711,7 @@ function showFCLInfoTooltip(layer_name, long, lat, country, country_image, numbe
         .attr("class", "about_fcl_tooltip_container")
         .attr("style", "fill: none").attr("id", about_fcl_tooltip_dynamic_id);
 
+    //---national flag tooltip---//
     var y_displacement = 60;
     about_fcl_tooltip.append("div")
         .attr("id", about_fcl_tooltip_dynamic_id+"_country")
@@ -725,6 +726,7 @@ function showFCLInfoTooltip(layer_name, long, lat, country, country_image, numbe
             + "</div>"
         );
 
+    //---number tooltip---//
     var about_fcl_tooltip_country_width = document.getElementById(about_fcl_tooltip_dynamic_id+"_country").offsetWidth;
     var tooltip_2_x = viewport_position[0] + about_fcl_tooltip_country_width + 8;
     about_fcl_tooltip.append("div")
@@ -739,6 +741,7 @@ function showFCLInfoTooltip(layer_name, long, lat, country, country_image, numbe
             "</div>"
         );
 
+    //---flagpole---//
     about_fcl_tooltip.append("div")
         .attr("id", about_fcl_tooltip_dynamic_id+"_line")
         .attr("class", "about_fcl_tooltip_line")
