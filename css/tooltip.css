@@ -15,11 +15,11 @@ div.tooltip {
 div.about_fcl_tooltip{
     color: #ffffff;
     padding: 5px;
-    background: #000000;
+    background: #222222;
     box-shadow: 4px 4px 4px #999999;
-    opacity: 0.7;
+    opacity: 0.8;
     position: absolute;
-    z-index: 3;
+    z-index: 30;
     overflow: hidden;
     vertical-align: middle;
 }
@@ -30,6 +30,7 @@ div.about_fcl_tooltip_line{
     height: 187px;
     opacity: 1;
     position: absolute;
+    z-index: 30;
 }
 
 .pic_holder{

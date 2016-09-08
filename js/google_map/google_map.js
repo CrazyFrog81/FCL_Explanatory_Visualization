@@ -641,6 +641,7 @@ function open_GoogleMap() {
         document.getElementById('gdp_Btn').click();
 
     d3.select("#googlem_holder").style("visibility", "visible");
+    removeAll_fcl_tooltips();
 
     //adjust the map to be return
     var zoomlvl = zoom.scale();
@@ -1005,19 +1006,40 @@ function project(latLng) {
 
 //function to add clusters of projects
 //color,item["latitude"],item["longitude"],item["name"],item["text"],1,itemIndex+1,scale,className
-function add_point_googleMap(color, lat, lon, name, text, index, className, country) {
+// function add_point_googleMap(color, lat, lon, name, text, index, className, country) {
+function add_point_googleMap(color, lat, lon, name, text, area, imgNo, scale, layer_name, country, project_number){
+    if (area == undefined) area = 1;
+    if (imgNo == undefined) imgNo = 0;
 
-    var area = 1;
-    //var radius_unit = 100000;
-    //var radius = Math.sqrt(clusterObj["area"] / Math.PI) / scale;
+    var country_str = country.replace(/ /g, '');//remove all blank spaces
+    var country_filename = country_str.toLowerCase();
+    // var gpoint = g.append("g").attr("class", "items " + layer_name);
+    // var point = projection([lon, lat]);
+    // var point_x = point[0];
+    // var point_y = point[1];
 
-    var scale_unit = 15;
-    var scale = Math.sqrt(area / Math.PI) * scale_unit;
+    var img_src = [];
+
+    switch (layer_name) {
+        case 'project_layer':
+        case 'staff_layer':
+            img_src = "img/national_flag/" + country_filename + ".png";
+            // img_src = "img/project_img/" + imgNo + "_fcl_vis.jpg";
+            break;
+        case 'network_layer':
+            img_src = "img/network_img/" + imgNo + "_network.png";
+            break;
+        default:
+            // img_src = "img/project_img/"+imgNo+"_fcl_vis.jpg";
+            img_src = "img/national_flag/" + country_filename + ".png";
+            break;
+    }
+    //add in picture for the project
+    var country_or_network_logo_img = new Image();
+    country_or_network_logo_img.src = img_src;
 
     var latLng = new google.maps.LatLng(lat, lon);
-
     var marker = new google.maps.Marker({
-
         position: latLng,
         map: gmap,
         icon: {
@@ -1027,96 +1049,147 @@ function add_point_googleMap(color, lat, lon, name, text, index, className, coun
             strokeOpacity: 1.0,
             strokeColor: 'black',
             strokeWeight: 0.5,
-            scale: scale //pixels
+            scale: scale+4 //pixels
         }
     });
 
-    var img_src;
-
-    var country_str = country.replace(/ /g, '');//remove all blank spaces
-    var country_filename = country_str.toLowerCase();
-    switch (className) {
-        case 'pop_layer':
-            img_src = "img/project_img/" + index + "_fcl_vis.jpg";
-            break;
-        case 'network_layer':
-            img_src = "img/network_img/" + index + "_network.png";
-            break;
-        default:
-            // img_src = "img/project_img/0_fcl_vis.jpg";
-            img_src = "img/national_flag/" + country_filename + ".png";
-            break;
-    }
-    //add in picture for the project
-    var item_img = new Image();
-    item_img.src = img_src;
-
-    // var mouseover_String = " <div><div class='pic_holder Centerer'>" +
-    //     "<img class='tooltip_pic' src='"+item_img.src+"'></div>" +
-    //     "<div class='tooltip_text'><b style='font-size:17px;'>" + name+ "</b>";
-
-    var mouseover_String = "<div class='tooltip_holder' id='about_fcl_tooltip_country' ><div class='tooltip_text'>" + country + "</div>" +
-        "<div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='" + item_img.src + "' onerror='imgErr(this)'> </div>" +
-        "</div>";
-
-    var click_String = "<div class='tooltip_holder'><div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='" + item_img.src + "'></div>" +
-        "<div class='tooltip_text'><b>" + name + "</b><p>" + text + "</div></div>";
-
-
-    var infowindow_mouseover = new google.maps.InfoWindow({
-        content: mouseover_String,
-        maxWidth: 300,
-        // position:latLng
-    });
-
-    var infowindow_click = new google.maps.InfoWindow({
-        maxWidth: 300
-        // position:latLng
-    });
-
-    marker.myHtmlContent = click_String;
-    infowindow_click.setContent(marker.myHtmlContent);
-
-    marker.addListener('mouseover', function () {
-        this.set("strokeColor", 'red');
-        infowindow_mouseover.open(gmap, this);
-    });
-
     marker.addListener('click', function () {
-        // gmap.panTo(latLng);
-        infowindow_mouseover.setMap(null);
-        infowindow_click.open(gmap, this);
-        // draw_circles(clusterObj,className)
+        this.set("strokeColor", 'red');
+        showFCLInfoTooltip_on_googlemap(layer_name, lon, lat, country, country_or_network_logo_img, project_number);
+        console.log("add_point_googleMap: onclick!!!");
     });
 
-    marker.addListener('mouseout', function () {
-        this.set("strokeColor", 'black');
-        infowindow_mouseover.setMap(null);
-    });
-
-    switch (className) {
+    switch (layer_name) {
         case 'project_layer':
             project_circles.push(marker);
-            project_circles_infowindows.push(infowindow_mouseover);
-            project_circles_infowindows.push(infowindow_click);
             break;
         case 'network_layer':
             network_circles.push(marker);
-            network_infowindows.push(infowindow_mouseover);
-            network_infowindows.push(infowindow_click);
             break;
         case 'staff_layer':
             staff_circles.push(marker);
-            staff_infowindows.push(infowindow_mouseover);
-            staff_infowindows.push(infowindow_click);
             break;
 
         default:
             console.log("wrong layer in google map: " + className);
             break;
     }
+}
 
+function viewport_pos_googlemap(long, lat){
 
+    var center = gmap.getCenter();
+    var sw = gmap.getBounds().getSouthWest();
+
+    var center_proj = projection([center.lng(), center.lat()]);
+    var sw_proj = projection([sw.lng(), sw.lat()]);
+
+    var scale = window.innerWidth / 2 / (center_proj[0] - sw_proj[0]);
+
+    var translate_x = window.innerWidth / 2 - center_proj[0] * scale;
+    var translate_y = window.innerHeight / 2 - center_proj[1] * scale;
+
+    var t = [translate_x, translate_y];
+
+    var proj = projection([long, lat]);
+
+    var viewport_x = proj[0] * scale + t[0];
+    var viewport_y = proj[1] * scale + t[1];
+
+    return [viewport_x, viewport_y];
+}
+
+function removeAll_fcl_tooltips()
+{
+    var country = ["United Kingdom","Netherlands","Germany","Norway","Russian Federation","China","Japan","United States","France","Hong Kong","Philippines","Malaysia","Brazil","South Africa","United Arab Emirates","Singapore","Australia","Indonesia","India","Bangladesh","Viet Nam","Thailand"];
+    for(var i = 0; i < country.length; i ++){
+        var tooltip_project_id = "about_fcl_tooltip_project_layer_"+country[i];
+        var tooltip_network_id = "about_fcl_tooltip_network_layer_"+country[i];
+        var tooltip_staff_id = "about_fcl_tooltip_staff_layer_"+country[i];
+        var tooltip_project = document.getElementById(tooltip_project_id);
+        var tooltip_network = document.getElementById(tooltip_network_id);
+        var tooltip_staff =document.getElementById(tooltip_staff_id);
+        if(tooltip_project != null) {
+            tooltip_project.remove();
+        }
+        if(tooltip_network != null) {
+            tooltip_network.remove();
+        }
+        if(tooltip_staff != null) {
+            tooltip_staff.remove();
+        }
+    }
+}
+
+function showFCLInfoTooltip_on_googlemap(layer_name, long, lat, country, country_image, number) {
+    console.log(country);
+    var description;
+
+    switch (layer_name) {
+        case 'project_layer':
+            description = "Num. of Projects:";
+            break;
+
+        case 'network_layer':
+            description = "Num. of Collaborators:";
+            break;
+
+        case 'staff_layer':
+            description = "Num. of Researchers:";
+            break;
+    }
+
+    var viewport_position = viewport_pos_googlemap(long, lat);
+
+    var about_fcl_tooltip_dynamic_id = "about_fcl_tooltip_google_map_" + layer_name+"_"+country;
+
+    var find_tooltip = document.getElementById(about_fcl_tooltip_dynamic_id);
+    if(find_tooltip != null) {
+        find_tooltip.remove();
+        return;
+    }
+
+    var about_fcl_tooltip = d3.select("#map_container").append("div")
+        .attr("class", "about_fcl_tooltip_container")
+        .attr("style", "fill: none").attr("id", about_fcl_tooltip_dynamic_id);
+
+    //---national flag tooltip---//
+    var y_displacement = 60;
+    about_fcl_tooltip.append("div")
+        .attr("id", about_fcl_tooltip_dynamic_id+"_country")
+        .attr("class", "about_fcl_tooltip")
+        .attr("style", "left:" + (viewport_position[0]) + "px;bottom:" + (window.innerHeight - viewport_position[1] + y_displacement) + "px;visibility: visible;")
+        .attr("data-lng", long)
+        .attr("data-lat", lat)
+        .html(
+            "<div class='tooltip_holder'>" +
+            "<div class='tooltip_text'>" + country.toUpperCase() + "</div>" +
+            "<div class='pic_holder Centered'><img class='tooltip_pic Centered' src='" + country_image.src + "' onerror='imgErr(this)'> </div>"
+            + "</div>"
+        );
+
+    //---number tooltip---//
+    var about_fcl_tooltip_country_width = document.getElementById(about_fcl_tooltip_dynamic_id+"_country").offsetWidth;
+    var tooltip_2_x = viewport_position[0] + about_fcl_tooltip_country_width + 8;
+    about_fcl_tooltip.append("div")
+        .attr("id", about_fcl_tooltip_dynamic_id+"_info")
+        .attr("class", "about_fcl_tooltip")
+        .attr("style", "left:" + tooltip_2_x + "px;bottom:" + (window.innerHeight - viewport_position[1] + y_displacement) + "px;visibility: visible;")
+        .attr("data-lng", long)
+        .attr("data-lat", lat)
+        .html("<div class='tooltip_holder'>" +
+            "<div class='tooltip_text'>" + description.toUpperCase() + "</div>" +
+            "<div class='pic_holder Centered'><img class='tooltip_pic_logo Centered' src='" + "img/national_flag/project.png" + "' onerror='imgErr(this)'>" + "         " + number + "</div>" +
+            "</div>"
+        );
+
+    //---flagpole---//
+    about_fcl_tooltip.append("div")
+        .attr("id", about_fcl_tooltip_dynamic_id+"_line")
+        .attr("class", "about_fcl_tooltip_line")
+        .attr("style", "left:" + (viewport_position[0]-1) + "px;bottom:" + (window.innerHeight - viewport_position[1]) + "px;visibility: visible;")
+        .attr("data-lng", long)
+        .attr("data-lat", lat);
 }
 
 //destruct all project circles on google map

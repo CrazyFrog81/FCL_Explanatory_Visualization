@@ -659,7 +659,8 @@ function find_last_tier(tier_range, scale, className) {
 
         // function add_point(color, lat, lon, title, text, area, imgNo, scale, className, country, project_number) {
         add_point(color, lat1, lon1, name1, text1, 1, index1, scale, className, country, project_number);
-        add_point_googleMap(color, lat1, lon1, name1, text1, index1, className, country);
+        add_point_googleMap(color, lat1, lon1, name1, text1, 1, index1, scale, className, country, project_number);
+        // add_point_googleMap(color, lat1, lon1, name1, text1, index1, className, country);
     }
 }
 
@@ -679,6 +680,7 @@ function setup_circles(className) {
 // TODO: design better
 // TODO: the clusters should also have the tooltips
 function showFCLInfoTooltip(layer_name, long, lat, country, country_image, number) {
+    console.log("showFCLInfoTooltip");
     var description;
 
     switch (layer_name) {
