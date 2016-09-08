@@ -13,7 +13,6 @@ var range2;
 var range3;
 var chart_tooltip_id_counting = 0;
 
-
 /*load_countrySize_and_property */
 function load_DData(_category) {
     switch (_category) {
@@ -173,7 +172,6 @@ function convertToxy(country_name, layer) {
             break;
     }
 
-
     var property = data.filter(function (f) {
         return f.Country_Name == country_name;
     });
@@ -197,7 +195,6 @@ function convertToxy(country_name, layer) {
 
     return xyObjArr;
 }
-
 
 function transform2(d) {
     return "translate(" + d[0] + "," + d[1] + ")";

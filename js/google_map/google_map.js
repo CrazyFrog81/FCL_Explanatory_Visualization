@@ -16,34 +16,34 @@ function initMap() {
             featureType: "water",
             elementType: "geometry",
             stylers: [
-                { color: "#bcbcbc" },
-                { lightness: 40 }
+                {color: "#bcbcbc"},
+                {lightness: 40}
             ]
         },
         {
             featureType: "landscape",
             elementType: "geometry.fill",
             stylers: [
-                { "color": "#ffffff" },
-                { "lightness": 40}
+                {"color": "#ffffff"},
+                {"lightness": 40}
             ]
         },
         {
             featureType: "landscape.man_made",
             elementType: "geometry.stroke",
             stylers: [
-                { "color": "#000000" },
-                { "lightness": 40}
+                {"color": "#000000"},
+                {"lightness": 40}
             ]
         },
         {
             featureType: "road",
             elementType: "geometry",
             stylers: [
-                { lightness: 71 },
-                { saturation: -100 },
-                {color:"#B3B6B7"},
-                { visibility: "off" }//"simplified"
+                {lightness: 71},
+                {saturation: -100},
+                {color: "#B3B6B7"},
+                {visibility: "off"}//"simplified"
             ]
         }
     ];
@@ -53,15 +53,15 @@ function initMap() {
     var styledMap = new google.maps.StyledMapType(styles,
         {name: "Styled Map"});
 
-    center = new google.maps.LatLng(42.313,0);
+    center = new google.maps.LatLng(42.313, 0);
 
     // Create a map object, and include the MapTypeId to add
     // to the map type control.
     var mapOptions = {
         zoom: 12,
         center: center,//55.6468, 37.581
-        mapTypeControl:false,
-        streetViewControl:false,
+        mapTypeControl: false,
+        streetViewControl: false,
         /* mapTypeControlOptions: {
          mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
          }*/
@@ -79,18 +79,18 @@ function initMap() {
         //if(network_layer|staff_layer){
 
         clear_allCircles();
-        var s = gmap.getZoom()-1;
+        var s = gmap.getZoom() - 1;
         zoom.scale(s); //update the zoom level in base map
 
         var tier1_scale = 2;
         var tier2_scale = 2.5;
         var tier3_scale = 3;
-        var tier4_scale =3.5;
+        var tier4_scale = 3.5;
         var google_map_scale = 4;
         var tier_range = 100;
-        var scale =2;
+        var scale = 2;
 
-        if(s>= tier4_scale) {
+        if (s >= tier4_scale) {
             /*if(project_layer&&callcount>0){
              callcount=0;
              d3.select("#google_map").remove();
@@ -98,49 +98,49 @@ function initMap() {
             tier_range = 3;
             scale = tier4_scale;
             svg.selectAll(".items").remove();
-            if(project_layer)find_last_tier(tier_range,scale,'project_layer');
-            if(network_layer)find_last_tier(tier_range,scale,'network_layer');
-            if(staff_layer)find_last_tier(tier_range,scale,'staff_layer');
+            if (project_layer)find_last_tier(tier_range, scale, 'project_layer');
+            if (network_layer)find_last_tier(tier_range, scale, 'network_layer');
+            if (staff_layer)find_last_tier(tier_range, scale, 'staff_layer');
 
-        }else if(s>=tier3_scale){
-            tier_range=5;
+        } else if (s >= tier3_scale) {
+            tier_range = 5;
             scale = tier3_scale;
             svg.selectAll(".items").remove();
-            if(project_layer)find_last_tier(tier_range,scale,'project_layer');
-            if(network_layer)find_last_tier(tier_range,scale,'network_layer');
-            if(staff_layer)find_last_tier(tier_range,scale,'staff_layer');
+            if (project_layer)find_last_tier(tier_range, scale, 'project_layer');
+            if (network_layer)find_last_tier(tier_range, scale, 'network_layer');
+            if (staff_layer)find_last_tier(tier_range, scale, 'staff_layer');
 
-        }else if(s>=tier2_scale){
+        } else if (s >= tier2_scale) {
             tier_range = 25;
             scale = tier2_scale;
             svg.selectAll(".items").remove();
-            if(project_layer)find_last_tier(tier_range,scale,'project_layer');
-            if(network_layer)find_last_tier(tier_range,scale,'network_layer');
-            if(staff_layer)find_last_tier(tier_range,scale,'staff_layer');
-        }else if(s>=tier1_scale){
-            tier_range = 50 ;
+            if (project_layer)find_last_tier(tier_range, scale, 'project_layer');
+            if (network_layer)find_last_tier(tier_range, scale, 'network_layer');
+            if (staff_layer)find_last_tier(tier_range, scale, 'staff_layer');
+        } else if (s >= tier1_scale) {
+            tier_range = 50;
             scale = tier1_scale;
             svg.selectAll(".items").remove();
-            if(project_layer)find_last_tier(tier_range,scale,'project_layer');
-            if(network_layer)find_last_tier(tier_range,scale,'network_layer');
-            if(staff_layer)find_last_tier(tier_range,scale,'staff_layer');
-        }else{
-            tier_range = 100 ;
+            if (project_layer)find_last_tier(tier_range, scale, 'project_layer');
+            if (network_layer)find_last_tier(tier_range, scale, 'network_layer');
+            if (staff_layer)find_last_tier(tier_range, scale, 'staff_layer');
+        } else {
+            tier_range = 100;
             scale = 1;
             svg.selectAll(".items").remove();
-            if(project_layer)find_last_tier(tier_range,scale,'project_layer');
-            if(network_layer)find_last_tier(tier_range,scale,'network_layer');
-            if(staff_layer)find_last_tier(tier_range,scale,'staff_layer');
+            if (project_layer)find_last_tier(tier_range, scale, 'project_layer');
+            if (network_layer)find_last_tier(tier_range, scale, 'network_layer');
+            if (staff_layer)find_last_tier(tier_range, scale, 'staff_layer');
         }
 
     });
 
     // restrict the appropriate region for users
     var initial_center = gmap.getCenter();
-    console.log(initial_center.lng()+"  "+initial_center.lat());
+    console.log(initial_center.lng() + "  " + initial_center.lat());
     var lastValidCenter = initial_center;
 
-    gmap.setOptions({minZoom:2},{maxZoom:17});
+    gmap.setOptions({minZoom: 2}, {maxZoom: 17});
     /* var allowedBounds = new google.maps.LatLngBounds(
      new google.maps.LatLng(-82, 150),//bottom left corner
      new google.maps.LatLng(87, -139)
@@ -162,18 +162,22 @@ function initMap() {
      });*/
 
     var cur_bounds;
-    google.maps.event.addListener(gmap, 'bounds_changed', function() {
+    google.maps.event.addListener(gmap, 'bounds_changed', function () {
+        // console.log("real bound "+gmap.getBounds() +" center "+gmap.getCenter()+ " zoom "+gmap.getZoom() +" viewport "+window.innerWidth +" "+window.innerHeight);
+        //
+        // console.log("center "+viewport_pos(gmap.getCenter().lng(), gmap.getCenter().lat()));
+
         cur_bounds = gmap.getBounds();
-        var cur_scale =  gmap.getZoom();
+        var cur_scale = gmap.getZoom();
 
         var top_right_corner = cur_bounds.getNorthEast();
         var bottom_left_corner = cur_bounds.getSouthWest();
 
-        var bounds_world = new google.maps.LatLngBounds(bottom_left_corner,top_right_corner) ;
+        var bounds_world = new google.maps.LatLngBounds(bottom_left_corner, top_right_corner);
         // gmap.fitBounds(bounds_world);
 
 
-        if(cur_scale<=2){
+        if (cur_scale <= 2) {
             gmap.panTo(initial_center);
             return;
         }
@@ -240,16 +244,16 @@ function initMap() {
          {lat: 1.352083, lng: 103.819836}*/
     ];
 
-    var info =['John','View Projects in Singapore'];
+    var info = ['John', 'View Projects in Singapore'];
     var info_json;
     var markerPos = triangleCoords[0];
     //---draw a marker for zoom into Singapore---//
 
-    d3.json("data/fcl/ProjectInformation.json",function(error, info_json_in){
+    d3.json("data/fcl/ProjectInformation.json", function (error, info_json_in) {
 
         info_json = info_json_in;//topojson.feature(info_json_in, );
         //console.log(info_json[0].contact);
-        for(var i = 0; i < info_json.length; i ++) {
+        for (var i = 0; i < info_json.length; i++) {
             draw_project_description('#1E90FF', info_json[i]);
         }
     });
@@ -263,19 +267,19 @@ function initMap() {
 // TODO: The icon should be on top of circles
 function makeMarkerIcon(markerColor) {
     var markerImage = new google.maps.MarkerImage(
-        'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+        'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' + markerColor +
         '|40|_|%E2%80%A2',
         new google.maps.Size(21, 34),
         new google.maps.Point(0, 0),
         new google.maps.Point(10, 34),
-        new google.maps.Size(21,34));
+        new google.maps.Size(21, 34));
     return markerImage;
 }
 
-var project_polygons =[];
+var project_polygons = [];
 var project_markers = [];
 var project_infowindows = [];
-function draw_polygon(triangleCoords,markerPos,fillcolor,info){
+function draw_polygon(triangleCoords, markerPos, fillcolor, info) {
 
     // Construct the polygon.
     var bermudaTriangle = new google.maps.Polygon({
@@ -294,14 +298,14 @@ function draw_polygon(triangleCoords,markerPos,fillcolor,info){
     project_img.src = "img/project_img/" + 1 + "_fcl_vis.jpg";
 
     var mouseover_String = " <div><div class='pic_holder Centerer'>" +
-        "<img class='tooltip_pic' src='"+project_img.src+"'></div>" +
+        "<img class='tooltip_pic' src='" + project_img.src + "'></div>" +
         "<div class='tooltip_text'><b style='font-size:17px;'>" + "The Singapore Project" + "</b>";
 
     var contentString = " <div><div class='pic_holder Centerer'>" +
-        "<img class='tooltip_pic' src='"+project_img.src+"'></div>" +
+        "<img class='tooltip_pic' src='" + project_img.src + "'></div>" +
         "<div class='tooltip_text'><b style='font-size:17px;'>" + "The Singapore Project" + "</b>" +
-        "<br><br> <b>Contact:</b> "+info[0]+
-        "<br><br> <b>Description:</b> "+info[1]+"</div></div>";
+        "<br><br> <b>Contact:</b> " + info[0] +
+        "<br><br> <b>Description:</b> " + info[1] + "</div></div>";
 
     var infowindow_mouseover = new google.maps.InfoWindow({
         maxWidth: 300,
@@ -326,43 +330,43 @@ function draw_polygon(triangleCoords,markerPos,fillcolor,info){
     marker.myHtmlContent = contentString;
     infowindow_click.setContent(marker.myHtmlContent);
 
-    marker.addListener('click', function() {
+    marker.addListener('click', function () {
         infowindow_mouseover.setMap(null);
         infowindow_click.open(gmap, marker);
     });
 
-    marker.addListener('mouseover', function() {
+    marker.addListener('mouseover', function () {
         this.setIcon(highlightedIcon);
-        bermudaTriangle.set("strokeColor",'red');
-        bermudaTriangle.set("fillColor",'red');
+        bermudaTriangle.set("strokeColor", 'red');
+        bermudaTriangle.set("fillColor", 'red');
         infowindow_mouseover.open(gmap, marker);
     });
 
 
-    marker.addListener('mouseout', function() {
+    marker.addListener('mouseout', function () {
         this.setIcon(defaultIcon);
-        bermudaTriangle.set("strokeColor",fillcolor);
-        bermudaTriangle.set("fillColor",fillcolor);
+        bermudaTriangle.set("strokeColor", fillcolor);
+        bermudaTriangle.set("fillColor", fillcolor);
         infowindow_mouseover.setMap(null);
 
     });
 
-    bermudaTriangle.addListener('click', function() {
+    bermudaTriangle.addListener('click', function () {
         infowindow_mouseover.setMap(null);
         infowindow_click.open(gmap, marker);
     });
 
-    bermudaTriangle.addListener('mouseover', function() {
+    bermudaTriangle.addListener('mouseover', function () {
         marker.setIcon(highlightedIcon);
-        this.set("strokeColor",'red');
-        this.set("fillColor",'red');
+        this.set("strokeColor", 'red');
+        this.set("fillColor", 'red');
         infowindow_mouseover.open(gmap, marker);
     });
 
-    bermudaTriangle.addListener('mouseout', function() {
+    bermudaTriangle.addListener('mouseout', function () {
         marker.setIcon(defaultIcon);
-        this.set("strokeColor",fillcolor);
-        this.set("fillColor",fillcolor);
+        this.set("strokeColor", fillcolor);
+        this.set("fillColor", fillcolor);
         infowindow_mouseover.setMap(null);
     });
 
@@ -376,7 +380,7 @@ function draw_polygon(triangleCoords,markerPos,fillcolor,info){
 
 }
 
-function draw_zoomin_singapore_marker(markerPos){
+function draw_zoomin_singapore_marker(markerPos) {
     var mouseover_String = " <div><div class='pic_holder Centerer'>" +
         "<div class='tooltip_text'><b style='font-size:17px;'>" + "View Projects in Singapore" + "</b>";
 
@@ -397,7 +401,7 @@ function draw_zoomin_singapore_marker(markerPos){
         //title: 'The Info Window'
     });
 
-    marker.addListener('click', function() {
+    marker.addListener('click', function () {
         console.log("gmap.setZoom(10);");
         gmap.setCenter({lat: 1.3521, lng: 103.8198});
         gmap.setZoom(12);
@@ -411,13 +415,13 @@ function draw_zoomin_singapore_marker(markerPos){
     // Dispatch/Trigger/Fire the event
     // document.dispatchEvent(event);
 
-    marker.addListener('mouseover', function() {
+    marker.addListener('mouseover', function () {
         this.setIcon(highlightedIcon);
         infowindow_mouseover.open(gmap, marker);
     });
 
 
-    marker.addListener('mouseout', function() {
+    marker.addListener('mouseout', function () {
         this.setIcon(defaultIcon);
         infowindow_mouseover.setMap(null);
 
@@ -427,25 +431,25 @@ function draw_zoomin_singapore_marker(markerPos){
     project_infowindows.push(infowindow_mouseover);
 
 }
-function getTriangleCoords(polyinfo){
+function getTriangleCoords(polyinfo) {
     var polygon_array = polyinfo.split(",");
     var polygon_number = parseInt(polygon_array[0]);
     var polygon_point_number = parseInt(polygon_array[1]);
     var triangleCoords = [];
-    for(var i = 0; i < polygon_point_number; i ++){
+    for (var i = 0; i < polygon_point_number; i++) {
         var latlng = {
             lat: 0,
             lng: 0
         };
-        latlng['lat'] = parseFloat(polygon_array[2+i*2]);
-        latlng['lng'] = parseFloat(polygon_array[2+i*2+1]);
+        latlng['lat'] = parseFloat(polygon_array[2 + i * 2]);
+        latlng['lng'] = parseFloat(polygon_array[2 + i * 2 + 1]);
         triangleCoords.push(latlng);
     }
     return triangleCoords;
 }
-function draw_project_description(fillcolor,info){
+function draw_project_description(fillcolor, info) {
     // get polygon coords.
-    triangleCoords =  getTriangleCoords(info.polyinfo);
+    triangleCoords = getTriangleCoords(info.polyinfo);
 
     // get marker position
     markerPos = triangleCoords[0];
@@ -462,11 +466,11 @@ function draw_project_description(fillcolor,info){
     bermudaTriangle.setMap(gmap);
 
     //create text for click div
-    var click_String = " <div class='project'><div class='project_text'>"+
-        "<br><br> <b>Name:</b> <br>"+info.name+
-        "<br><br> <b>Project:</b> <br>"+info.project.replace("\">", "\" target=\"_blank\">")+
-        "<br><br> <b>Contact:</b> <br>"+info.contact.replace("\">", "\" target=\"_blank\">")+
-        "<br><br> <b>Description :</b> <br>"+ info.description +
+    var click_String = " <div class='project'><div class='project_text'>" +
+        "<br><br> <b>Name:</b> <br>" + info.name +
+        "<br><br> <b>Project:</b> <br>" + info.project.replace("\">", "\" target=\"_blank\">") +
+        "<br><br> <b>Contact:</b> <br>" + info.contact.replace("\">", "\" target=\"_blank\">") +
+        "<br><br> <b>Description :</b> <br>" + info.description +
         "</div>";
 
     // console.log(info.project);
@@ -474,16 +478,16 @@ function draw_project_description(fillcolor,info){
 
     //create images for click div
     var img_array = info.files.split(",");
-    if(info.files==undefined || info.files==''){
+    if (info.files == undefined || info.files == '') {
         click_String = click_String + "</div>";
-    }else{
+    } else {
         click_String = click_String + "<div class='project_img'>";
-        for(var i = 0; i < img_array.length; i ++){
-            var class_string = 'project_img' + String(i+1);
+        for (var i = 0; i < img_array.length; i++) {
+            var class_string = 'project_img' + String(i + 1);
             // removed "/" at the end of image. Not working on sever
             click_String = click_String +
-                    // "<div><img class='"+class_string+"' src="+img_array[i]+"></div>";
-                "<img class='"+class_string+"' src="+img_array[i]+">";
+                // "<div><img class='"+class_string+"' src="+img_array[i]+"></div>";
+                "<img class='" + class_string + "' src=" + img_array[i] + ">";
             // "<img class='project_img1' src="+img_array[i]+"/>";
         }
         click_String = click_String +
@@ -518,30 +522,30 @@ function draw_project_description(fillcolor,info){
     // marker.myHtmlContent = contentString;
     // infowindow_click.setContent(marker.myHtmlContent);
 
-    marker.addListener('click', function() {
+    marker.addListener('click', function () {
         // infowindow_mouseover.setMap(null);
         infowindow_click.open(gmap, marker);
     });
 
-    bermudaTriangle.addListener('click', function() {
+    bermudaTriangle.addListener('click', function () {
         infowindow_mouseover.setMap(null);
         infowindow_click.open(gmap, marker);
     });
 
-    bermudaTriangle.addListener('mouseover', function() {
+    bermudaTriangle.addListener('mouseover', function () {
         marker.setIcon(highlightedIcon);
-        this.set("strokeColor",'red');
-        this.set("fillColor",'red');
+        this.set("strokeColor", 'red');
+        this.set("fillColor", 'red');
         infowindow_mouseover.open(gmap, marker);
     });
-    bermudaTriangle.addListener('mouseout', function() {
+    bermudaTriangle.addListener('mouseout', function () {
         marker.setIcon(defaultIcon);
-        this.set("strokeColor",fillcolor);
-        this.set("fillColor",fillcolor);
+        this.set("strokeColor", fillcolor);
+        this.set("fillColor", fillcolor);
         infowindow_mouseover.setMap(null);
     });
-    bermudaTriangle.bindTo('strokeColor',marker,'strokeColor');
-    bermudaTriangle.setOptions({clickable:false});
+    bermudaTriangle.bindTo('strokeColor', marker, 'strokeColor');
+    bermudaTriangle.setOptions({clickable: false});
 
     project_polygons.push(bermudaTriangle);
     project_markers.push(marker);
@@ -549,7 +553,7 @@ function draw_project_description(fillcolor,info){
 }
 
 //destruct all polygons
-function clear_allProject_Poly(){
+function clear_allProject_Poly() {
 
     console.log("clear all!");
     project_polygons.forEach(function (m) {
@@ -567,10 +571,10 @@ function clear_allProject_Poly(){
 
 
 function load_google_map() {
-    d3.select("#content_holder").append("div").attr("id","googlem_holder")
-        .style("visibility","hidden");
-    document.getElementById("googlem_holder").style.width = innerWidth+"px";
-    document.getElementById("googlem_holder").style.height = innerHeight+"px";
+    d3.select("#content_holder").append("div").attr("id", "googlem_holder")
+        .style("visibility", "hidden");
+    document.getElementById("googlem_holder").style.width = innerWidth + "px";
+    document.getElementById("googlem_holder").style.height = innerHeight + "px";
 
     var toggle_switchHolder = document.createElement('div');
     toggle_switchHolder.id = "toggle_GM";
@@ -583,13 +587,15 @@ function load_google_map() {
     input.id = 'googlem_switch';
     input.type = 'checkbox';
     input.className = 'switch-input';
-    input.onchange = function() {handle_switch()};
+    input.onchange = function () {
+        handle_switch()
+    };
 
-    var toggle_slider= document.createElement('div');
+    var toggle_slider = document.createElement('div');
     toggle_slider.className = 'toggle_slider';
 
 
-    var label =  document.createElement('label');
+    var label = document.createElement('label');
     label.className = 'toggle_switch';
 
     label.appendChild(input);
@@ -602,74 +608,76 @@ function load_google_map() {
     //end of toggle switch
 }
 
-
-
-
 function close_GoogleMap() {
-    if(!pop_layer && ! co2_layer && !gdp_layer)
+    if (!pop_layer && !co2_layer && !gdp_layer)
         document.getElementById('pop_densityBtn').click();
 
-    var center = gmap.getCenter();
-    var zoom = gmap.getZoom()-2;
+    var center = gmap.getCenter(); // map to (window.innerWidth / 2, window.innnerHeight / 2);
+    var sw = gmap.getBounds().getSouthWest(); // map to (0, window.innerHeight)
 
-    if(zoom>=4)zoom=4;
+    var center_proj = projection([center.lng(), center.lat()]);
+    var sw_proj = projection([sw.lng(), sw.lat()]);
 
-    var new_map_center = projection([center.lng(),center.lat()]);
-    var shift_x =   innerWidth/2 - new_map_center[0] * zoom;
-    var shift_y = innerHeight/2 - new_map_center[1] *zoom;
+    var scale = window.innerWidth / 2 / (center_proj[0] - sw_proj[0]);
+    var scale_veri = window.innerHeight / 2 / (sw_proj[1] - center_proj[1]);
 
-    var t = [shift_x,shift_y];
+    var translate_x = window.innerWidth / 2 - center_proj[0] * scale;
+    var translate_y = window.innerHeight / 2 - center_proj[1] * scale;
 
-    move(t,zoom);
+    var t = [translate_x, translate_y];
+    move(t, scale);
 
-
-    // document.getElementById("google_map").style.width = "1250px";
-
-    //document.getElementById("googlem_holder").style.width = innerWidth+"px";
-    //document.getElementById("googlem_holder").style.height = innerHeight+"px";
-    d3.select("#googlem_holder").style("visibility","hidden");
+    d3.select("#googlem_holder").style("visibility", "hidden");
 }
 
 function open_GoogleMap() {
-    if(pop_layer)
+    if (pop_layer)
         document.getElementById('pop_densityBtn').click();
 
-    if(co2_layer)
+    if (co2_layer)
         document.getElementById('co2_emissionBtn').click();
 
-    if(gdp_layer)
+    if (gdp_layer)
         document.getElementById('gdp_Btn').click();
 
-    d3.select("#googlem_holder").style("visibility","visible");
+    d3.select("#googlem_holder").style("visibility", "visible");
 
     //adjust the map to be return
     var zoomlvl = zoom.scale();
-    var  translate= zoom.translate();
-    var center_x =  (innerWidth/2-translate[0])/zoomlvl;
-    var center_y = (innerHeight/2-translate[1])/zoomlvl;
 
-
-    var map_center = projection.invert([center_x, center_y]);//
-    var c = new google.maps.LatLng(map_center[1],map_center[0]);
-
-    //google.maps.event.trigger(gmap, 'resize');
-
+    var map_center = lnglat_pos(window.innerWidth / 2, window.innerHeight / 2);
+    var c = new google.maps.LatLng(map_center[1], map_center[0]);
     gmap.panTo(c);
-    gmap.setZoom(parseInt(zoomlvl-0.5)+3);
+
+    if (zoomlvl < 3.5)
+        gmap.setZoom(parseInt(zoomlvl - 0.5) + 3);
+    else if (zoomlvl < 5)
+        gmap.setZoom(parseInt(zoomlvl - 0.5) + 2);
+    else {
+        var map_ws = lnglat_pos(0, window.innerHeight);
+        var map_en = lnglat_pos(window.innerWidth, 0);
+
+        var bound = new google.maps.LatLngBounds(
+            new google.maps.LatLng(map_ws[1], map_ws[0]),
+            new google.maps.LatLng(map_en[1], map_en[0]),
+            false
+        );
+
+        gmap.fitBounds(bound);
+    }
 }
 
-function handle_switch(){
+function handle_switch() {
     var input = document.getElementsByClassName('switch-input');
 
     var res = input[0].checked;
 
-    if(res){
+    if (res) {
         open_GoogleMap();
-    }else{
+    } else {
         close_GoogleMap();
     }
 }
-
 
 function formatNum(num) {
     var format = d3.format(',.02f');
@@ -685,20 +693,20 @@ var staff_circles = [];
 var staff_infowindows = [];
 
 //function to add clusters of projects
-function add_cluster_googleMap(color, lat, lon,text, clusterObj,className) {
+function add_cluster_googleMap(color, lat, lon, text, clusterObj, className) {
     var area = clusterObj["area"];
     if (area == undefined) area = 2;
     //var radius_unit = 100000;
     //var radius = Math.sqrt(clusterObj["area"] / Math.PI) / scale;
 
     var scale_unit = 15;
-    var scale = Math.sqrt(area / Math.PI) *scale_unit;
+    var scale = Math.sqrt(area / Math.PI) * scale_unit;
 
     var latLng = new google.maps.LatLng(lat, lon);
 
     var marker = new google.maps.Marker({
         position: latLng,
-        map:gmap,
+        map: gmap,
         icon: {
             path: google.maps.SymbolPath.CIRCLE,
             fillOpacity: 0.27,
@@ -728,12 +736,12 @@ function add_cluster_googleMap(color, lat, lon,text, clusterObj,className) {
     project_img.src = "img/project_img/" + 1 + "_fcl_vis.jpg";
 
     var mouseover_String = " <div><div class='pic_holder Centerer'>" +
-        "<img class='tooltip_pic' src='"+project_img.src+"'></div>" +
-        "<div class='tooltip_text'><b style='font-size:17px;'>" + text+ "</b>";
+        "<img class='tooltip_pic' src='" + project_img.src + "'></div>" +
+        "<div class='tooltip_text'><b style='font-size:17px;'>" + text + "</b>";
 
 
     var infowindow_mouseover = new google.maps.InfoWindow({
-        content:mouseover_String,
+        content: mouseover_String,
         maxWidth: 300
         // position:latLng
     });
@@ -741,14 +749,14 @@ function add_cluster_googleMap(color, lat, lon,text, clusterObj,className) {
 
     marker.addListener('mouseover', function () {
         this.set("strokeColor", 'red');
-        infowindow_mouseover.open(gmap,this);
+        infowindow_mouseover.open(gmap, this);
     });
 
 
     marker.addListener('click', function () {
         infowindow_mouseover.setMap(null);
         gmap.panTo(latLng);
-        draw_zoomableCircles_googleMap(scale,latLng,clusterObj,className);
+        draw_zoomableCircles_googleMap(scale, latLng, clusterObj, className);
     });
 
     marker.addListener('mouseout', function () {
@@ -756,19 +764,22 @@ function add_cluster_googleMap(color, lat, lon,text, clusterObj,className) {
         infowindow_mouseover.setMap(null);
     });
 
-    switch(className){
-        case 'project_layer': project_circles.push(marker);
+    switch (className) {
+        case 'project_layer':
+            project_circles.push(marker);
             project_circles_infowindows.push(infowindow_mouseover);
             break;
-        case 'network_layer':  network_circles.push(marker);
+        case 'network_layer':
+            network_circles.push(marker);
             network_infowindows.push(infowindow_mouseover);
             break;
-        case 'staff_layer': staff_circles.push(marker);
+        case 'staff_layer':
+            staff_circles.push(marker);
             staff_infowindows.push(infowindow_mouseover);
             break;
 
         default:
-            console.log("wrong "+className);
+            console.log("wrong " + className);
             break;
     }
 
@@ -780,7 +791,7 @@ var circles = [];
 var circles_infowindow_mouseover = [];
 var circles_infowindow_click = [];
 //clear all circles
-function clear_allCircles(){
+function clear_allCircles() {
     circles.forEach(function (m) {
         m.setMap(null);
     });
@@ -798,17 +809,19 @@ function clear_allCircles(){
 }
 
 //draw zoomable circles when clusters onclick
-function draw_zoomableCircles_googleMap(scale,latLng,clusterObj,className) {
+function draw_zoomableCircles_googleMap(scale, latLng, clusterObj, className) {
 
     clear_allCircles();
-    var color ='#75dccd';
+    var color = '#75dccd';
 
     var diameter = scale;
 
     var pack = d3.layout.pack()
         .padding(2)
-        .size([diameter , diameter ])
-        .value(function(d) { return d.size;});
+        .size([diameter, diameter])
+        .value(function (d) {
+            return d.size;
+        });
 
 
     var nodes = pack.nodes(clusterObj);
@@ -817,7 +830,7 @@ function draw_zoomableCircles_googleMap(scale,latLng,clusterObj,className) {
     //draw the root
     var holder = new google.maps.Marker({
         position: latLng,
-        map:gmap,
+        map: gmap,
         icon: {
             path: google.maps.SymbolPath.CIRCLE,
             fillOpacity: 0.9,
@@ -831,7 +844,7 @@ function draw_zoomableCircles_googleMap(scale,latLng,clusterObj,className) {
 
     circles.push(holder);
 
-    holder.addListener('click',function(){//onclick clear all circles
+    holder.addListener('click', function () {//onclick clear all circles
         console.log("clear the circles!");
         circles.forEach(function (m) {
             m.setMap(null);
@@ -851,41 +864,41 @@ function draw_zoomableCircles_googleMap(scale,latLng,clusterObj,className) {
 
     });
 
-    var root  =nodes[0];
+    var root = nodes[0];
     //convert latLng to pixel coordinates
 
 
     var pixelCoordinate = gmap.getProjection().fromLatLngToPoint(latLng);
 
     var root_x = pixelCoordinate.x;
-    var root_y =pixelCoordinate.y;
+    var root_y = pixelCoordinate.y;
 
 
-    var k = diameter/(root.r*2);
-    var translate_x ;
+    var k = diameter / (root.r * 2);
+    var translate_x;
     var translate_y;
     var node;
     var length = nodes.length;
     var s = gmap.getZoom();
-    var t = 0.2*s+0.7;
-    if(s>=15)t = 0.2*s+0.5;
+    var t = 0.2 * s + 0.7;
+    if (s >= 15)t = 0.2 * s + 0.5;
 
     var infowindows_mouseover = {};
     var infowindows_click = {};
 
-    for(var i =1;i<length;i++){
+    for (var i = 1; i < length; i++) {
         node = nodes[i];
-        translate_x = (node.x - root.x)*k/Math.pow(s,t);
-        translate_y = (node.y - root.y)*k/Math.pow(s,t);
+        translate_x = (node.x - root.x) * k / Math.pow(s, t);
+        translate_y = (node.y - root.y) * k / Math.pow(s, t);
         var pixel_x = root_x - translate_x;
         var pixel_y = root_y - translate_y;
-        var point =  new google.maps.Point(pixel_x,pixel_y);
+        var point = new google.maps.Point(pixel_x, pixel_y);
         var coordinates = gmap.getProjection().fromPointToLatLng(point);
-        var radius = node.r *k*2;
+        var radius = node.r * k * 2;
         var zindex = google.maps.Marker.MAX_ZINDEX + 1;
         var marker1 = new google.maps.Marker({
             position: coordinates,//point,//
-            map:gmap,
+            map: gmap,
             icon: {
                 path: google.maps.SymbolPath.CIRCLE,
                 fillOpacity: 0.2,
@@ -895,17 +908,20 @@ function draw_zoomableCircles_googleMap(scale,latLng,clusterObj,className) {
                 strokeWeight: 1,
                 scale: radius //pixels
             },
-            zIndex:zindex
+            zIndex: zindex
         });
 
 
         var img_src;
-        switch (className){
-            case 'pop_layer': img_src = "img/project_img/" + node.itemIndex  + "_fcl_vis.jpg";
+        switch (className) {
+            case 'pop_layer':
+                img_src = "img/project_img/" + node.itemIndex + "_fcl_vis.jpg";
                 break;
-            case 'network_layer': img_src = "img/network_img/"+ node.itemIndex +"_network.png"  ;
+            case 'network_layer':
+                img_src = "img/network_img/" + node.itemIndex + "_network.png";
                 break;
-            default: img_src = "img/project_img/0_fcl_vis.jpg";
+            default:
+                img_src = "img/project_img/0_fcl_vis.jpg";
                 break;
         }
 
@@ -914,10 +930,10 @@ function draw_zoomableCircles_googleMap(scale,latLng,clusterObj,className) {
         console.log(img_src);
 
         var mouseover_String = " <div><div class='pic_holder Centerer'>" +
-            "<img class='tooltip_pic' src='"+project_img.src+"'></div>" +
-            "<div class='tooltip_text'><b style='font-size:17px;'>" + node.name+ "</b>";
+            "<img class='tooltip_pic' src='" + project_img.src + "'></div>" +
+            "<div class='tooltip_text'><b style='font-size:17px;'>" + node.name + "</b>";
 
-        var click_String = "<div class='tooltip_holder'><div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+project_img.src+"' onerror='imgErr(this)'></div>" +
+        var click_String = "<div class='tooltip_holder'><div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='" + project_img.src + "' onerror='imgErr(this)'></div>" +
             "<div class='tooltip_text'><b>" + node.name + "</b><p>" + node.text + "</div></div>";
 
 
@@ -936,12 +952,12 @@ function draw_zoomableCircles_googleMap(scale,latLng,clusterObj,className) {
 
         marker1.myHtmlContent = node.itemIndex;
 
-        infowindows_mouseover[node.itemIndex]=infowindow_mouseover;
-        infowindows_click[node.itemIndex]=infowindow_click;
+        infowindows_mouseover[node.itemIndex] = infowindow_mouseover;
+        infowindows_click[node.itemIndex] = infowindow_click;
 
         marker1.addListener('mouseover', function () {
             this.set("strokeOpacity", 1);
-            infowindows_mouseover[this.myHtmlContent].open(gmap,this);
+            infowindows_mouseover[this.myHtmlContent].open(gmap, this);
 
         });
 
@@ -952,7 +968,7 @@ function draw_zoomableCircles_googleMap(scale,latLng,clusterObj,className) {
             //console.log();
             infowindows_click[this.myHtmlContent].setContent(this.myHtmlContent);
             infowindows_mouseover[this.myHtmlContent].setMap(null);
-            infowindows_click[this.myHtmlContent].open(gmap,this);
+            infowindows_click[this.myHtmlContent].open(gmap, this);
         });
 
         marker1.addListener('mouseout', function () {
@@ -989,21 +1005,21 @@ function project(latLng) {
 
 //function to add clusters of projects
 //color,item["latitude"],item["longitude"],item["name"],item["text"],1,itemIndex+1,scale,className
-function add_point_googleMap(color, lat, lon,name,text,index,className,country) {
+function add_point_googleMap(color, lat, lon, name, text, index, className, country) {
 
     var area = 1;
     //var radius_unit = 100000;
     //var radius = Math.sqrt(clusterObj["area"] / Math.PI) / scale;
 
     var scale_unit = 15;
-    var scale = Math.sqrt(area / Math.PI) *scale_unit;
+    var scale = Math.sqrt(area / Math.PI) * scale_unit;
 
     var latLng = new google.maps.LatLng(lat, lon);
 
     var marker = new google.maps.Marker({
 
         position: latLng,
-        map:gmap,
+        map: gmap,
         icon: {
             path: google.maps.SymbolPath.CIRCLE,
             fillOpacity: 0.27,
@@ -1017,16 +1033,18 @@ function add_point_googleMap(color, lat, lon,name,text,index,className,country) 
 
     var img_src;
 
-    var country_str = country.replace(/ /g,'');//remove all blank spaces
+    var country_str = country.replace(/ /g, '');//remove all blank spaces
     var country_filename = country_str.toLowerCase();
-    switch (className){
-        case 'pop_layer': img_src = "img/project_img/" + index + "_fcl_vis.jpg";
+    switch (className) {
+        case 'pop_layer':
+            img_src = "img/project_img/" + index + "_fcl_vis.jpg";
             break;
-        case 'network_layer': img_src = "img/network_img/"+index+"_network.png"  ;
+        case 'network_layer':
+            img_src = "img/network_img/" + index + "_network.png";
             break;
         default:
             // img_src = "img/project_img/0_fcl_vis.jpg";
-            img_src = "img/national_flag/"+country_filename+".png";
+            img_src = "img/national_flag/" + country_filename + ".png";
             break;
     }
     //add in picture for the project
@@ -1037,11 +1055,11 @@ function add_point_googleMap(color, lat, lon,name,text,index,className,country) 
     //     "<img class='tooltip_pic' src='"+item_img.src+"'></div>" +
     //     "<div class='tooltip_text'><b style='font-size:17px;'>" + name+ "</b>";
 
-    var mouseover_String = "<div class='tooltip_holder' id='about_fcl_tooltip_country' ><div class='tooltip_text'>" + country + "</div>"+
-        "<div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+item_img.src+"' onerror='imgErr(this)'> </div>" +
+    var mouseover_String = "<div class='tooltip_holder' id='about_fcl_tooltip_country' ><div class='tooltip_text'>" + country + "</div>" +
+        "<div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='" + item_img.src + "' onerror='imgErr(this)'> </div>" +
         "</div>";
 
-    var click_String = "<div class='tooltip_holder'><div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='"+item_img.src+"'></div>" +
+    var click_String = "<div class='tooltip_holder'><div class='pic_holder Centerer'><img class='tooltip_pic Centered' src='" + item_img.src + "'></div>" +
         "<div class='tooltip_text'><b>" + name + "</b><p>" + text + "</div></div>";
 
 
@@ -1061,13 +1079,13 @@ function add_point_googleMap(color, lat, lon,name,text,index,className,country) 
 
     marker.addListener('mouseover', function () {
         this.set("strokeColor", 'red');
-        infowindow_mouseover.open(gmap,this);
+        infowindow_mouseover.open(gmap, this);
     });
 
     marker.addListener('click', function () {
         // gmap.panTo(latLng);
         infowindow_mouseover.setMap(null);
-        infowindow_click.open(gmap,this);
+        infowindow_click.open(gmap, this);
         // draw_circles(clusterObj,className)
     });
 
@@ -1076,21 +1094,25 @@ function add_point_googleMap(color, lat, lon,name,text,index,className,country) 
         infowindow_mouseover.setMap(null);
     });
 
-    switch(className){
-        case 'project_layer': project_circles.push(marker);
+    switch (className) {
+        case 'project_layer':
+            project_circles.push(marker);
             project_circles_infowindows.push(infowindow_mouseover);
             project_circles_infowindows.push(infowindow_click);
             break;
-        case 'network_layer':  network_circles.push(marker);
+        case 'network_layer':
+            network_circles.push(marker);
             network_infowindows.push(infowindow_mouseover);
             network_infowindows.push(infowindow_click);
             break;
-        case 'staff_layer': staff_circles.push(marker);
+        case 'staff_layer':
+            staff_circles.push(marker);
             staff_infowindows.push(infowindow_mouseover);
             staff_infowindows.push(infowindow_click);
             break;
 
-        default: console.log("wrong layer in google map: "+className);
+        default:
+            console.log("wrong layer in google map: " + className);
             break;
     }
 
@@ -1098,7 +1120,7 @@ function add_point_googleMap(color, lat, lon,name,text,index,className,country) 
 }
 
 //destruct all project circles on google map
-function clear_allProject_Circles(){
+function clear_allProject_Circles() {
     project_circles.forEach(function (m) {
         m.setMap(null);
     });
@@ -1113,9 +1135,8 @@ function clear_allProject_Circles(){
 }
 
 
-
 //destruct all network circles on google map
-function clear_allNetwork(){
+function clear_allNetwork() {
     network_circles.forEach(function (m) {
         m.setMap(null);
     });
@@ -1130,7 +1151,7 @@ function clear_allNetwork(){
 
 
 //destruct all staff circles on google map
-function clear_allStaff(){
+function clear_allStaff() {
     staff_circles.forEach(function (m) {
         m.setMap(null);
     });
