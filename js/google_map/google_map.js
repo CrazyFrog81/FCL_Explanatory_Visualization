@@ -693,12 +693,9 @@ var network_infowindows = [];
 var staff_circles = [];
 var staff_infowindows = [];
 
-//function to add clusters of projects
-function add_cluster_googleMap(color, lat, lon, text, clusterObj, className) {
-    var area = clusterObj["area"];
+//new function to add clusters of projects
+function add_zoomable_cluster_googleMap(color, lat, lon, name, text, area, scale, layer_name, country, project_number){
     if (area == undefined) area = 2;
-    //var radius_unit = 100000;
-    //var radius = Math.sqrt(clusterObj["area"] / Math.PI) / scale;
 
     var scale_unit = 15;
     var scale = Math.sqrt(area / Math.PI) * scale_unit;
@@ -718,73 +715,54 @@ function add_cluster_googleMap(color, lat, lon, text, clusterObj, className) {
             scale: scale //pixels
         }
     });
-    /*var circle = new google.maps.Circle({
-     center: latLng,
-     clickable: true,
-     draggable: false,
-     editable: false,
-     fillColor: color,
-     fillOpacity: 0.27,
-     map: gmap,
-     radius: radius * radius_unit,
-     strokeColor: '#000',
-     strokeOpacity: 0.62,
-     strokeWeight: 0.5
-     });*/
 
+    var country_str = country.replace(/ /g, '');//remove all blank spaces
+    var country_filename = country_str.toLowerCase();
+    var gpoint = g.append("g").attr("class", "items " + layer_name);
+    var point = projection([lon, lat]);
+    var point_x = point[0];
+    var point_y = point[1];
 
-    var project_img = new Image();
-    project_img.src = "img/project_img/" + 1 + "_fcl_vis.jpg";
+    var img_src = [];
 
-    var mouseover_String = " <div><div class='pic_holder Centerer'>" +
-        "<img class='tooltip_pic' src='" + project_img.src + "'></div>" +
-        "<div class='tooltip_text'><b style='font-size:17px;'>" + text + "</b>";
-
-
-    var infowindow_mouseover = new google.maps.InfoWindow({
-        content: mouseover_String,
-        maxWidth: 300
-        // position:latLng
-    });
-
-
-    marker.addListener('mouseover', function () {
-        this.set("strokeColor", 'red');
-        infowindow_mouseover.open(gmap, this);
-    });
-
+    switch (layer_name) {
+        case 'project_layer':
+        case 'staff_layer':
+            img_src = "img/national_flag/" + country_filename + ".png";
+            // img_src = "img/project_img/" + imgNo + "_fcl_vis.jpg";
+            break;
+        case 'network_layer':
+            img_src = "img/network_img/" + scale + "_network.png";
+            break;
+        default:
+            // img_src = "img/project_img/"+imgNo+"_fcl_vis.jpg";
+            img_src = "img/national_flag/" + country_filename + ".png";
+            break;
+    }
+    //add in picture for the project
+    var country_or_network_logo_img = new Image();
+    country_or_network_logo_img.src = img_src;
 
     marker.addListener('click', function () {
-        infowindow_mouseover.setMap(null);
-        gmap.panTo(latLng);
-        draw_zoomableCircles_googleMap(scale, latLng, clusterObj, className);
+        // gmap.panTo(latLng);
+        showFCLInfoTooltip_on_googlemap(layer_name, lon, lat, country, country_or_network_logo_img, project_number);
     });
 
-    marker.addListener('mouseout', function () {
-        this.set("strokeColor", 'black');
-        infowindow_mouseover.setMap(null);
-    });
-
-    switch (className) {
+    switch (layer_name) {
         case 'project_layer':
             project_circles.push(marker);
-            project_circles_infowindows.push(infowindow_mouseover);
             break;
         case 'network_layer':
             network_circles.push(marker);
-            network_infowindows.push(infowindow_mouseover);
             break;
         case 'staff_layer':
             staff_circles.push(marker);
-            staff_infowindows.push(infowindow_mouseover);
             break;
 
         default:
             console.log("wrong " + className);
             break;
     }
-
-
 }
 
 
@@ -1117,6 +1095,22 @@ function removeAll_fcl_tooltips()
         }
         if(tooltip_staff != null) {
             tooltip_staff.remove();
+        }
+
+        var tooltip_project_google_map_id = "about_fcl_tooltip_google_map_project_layer_"+country[i];
+        var tooltip_network_google_map_id = "about_fcl_tooltip_google_map_network_layer_"+country[i];
+        var tooltip_staff_google_map_id = "about_fcl_tooltip_google_map_staff_layer_"+country[i];
+        var tooltip_project_google_map = document.getElementById(tooltip_project_google_map_id);
+        var tooltip_network_google_map = document.getElementById(tooltip_network_google_map_id);
+        var tooltip_staff_google_map =document.getElementById(tooltip_staff_google_map_id);
+        if(tooltip_project_google_map != null) {
+            tooltip_project_google_map.remove();
+        }
+        if(tooltip_network_google_map != null) {
+            tooltip_network_google_map.remove();
+        }
+        if(tooltip_staff_google_map != null) {
+            tooltip_staff_google_map.remove();
         }
     }
 }

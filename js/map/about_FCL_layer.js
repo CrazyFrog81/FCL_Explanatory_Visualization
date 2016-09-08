@@ -390,61 +390,117 @@ function add_point(color, lat, lon, title, text, area, imgNo, scale, layer_name,
 }
 
 //function to add clusters of projects
-function add_zoomable_cluster(color, lat, lon, title, text, area, scale, clusterObj, className, country) {
-    if (area == undefined) area = 2;
+function add_zoomable_cluster(color, lat, lon, name, text, area, scale, layer_name, country, project_number) {
+    if (area == undefined) area = 1;
+    // if (imgNo == undefined) imgNo = 0;
 
-    var gpoint = g.append("g").attr("class", "items " + className);
-    var point_x = projection([lon, lat])[0];
-    var point_y = projection([lon, lat])[1];
+    var country_str = country.replace(/ /g, '');//remove all blank spaces
+    var country_filename = country_str.toLowerCase();
+    var gpoint = g.append("g").attr("class", "items " + layer_name);
+    var point = projection([lon, lat]);
+    var point_x = point[0];
+    var point_y = point[1];
+
+    var img_src = [];
+
+    switch (layer_name) {
+        case 'project_layer':
+        case 'staff_layer':
+            img_src = "img/national_flag/" + country_filename + ".png";
+            // img_src = "img/project_img/" + imgNo + "_fcl_vis.jpg";
+            break;
+        case 'network_layer':
+            img_src = "img/network_img/" + scale + "_network.png";
+            break;
+        default:
+            // img_src = "img/project_img/"+imgNo+"_fcl_vis.jpg";
+            img_src = "img/national_flag/" + country_filename + ".png";
+            break;
+    }
+    //add in picture for the project
+    var country_or_network_logo_img = new Image();
+    country_or_network_logo_img.src = img_src;
 
     gpoint.selectAll("circle")
-        .data([clusterObj])
+        .data([{"area": area}])
         .enter()
         .append("svg:circle")
+        .style("stroke", "#000")
+        .style("stroke-width", "0.5px")
         .attr("cx", point_x)
         .attr("cy", point_y)
-        .attr("class", "cluster")
-        .style("stroke", "#000")
-        .style("stroke-width", '0.5px')
-        .style("fill", color//function () {return color_scheme[color_status];}
-        ).style("opacity", 0.60)
+        .attr("class", "point")
+        .style("fill", color)
+        .style("opacity", 0.60)
         .attr("r", function (d) {
             return Math.sqrt(d["area"] * area_unit / Math.PI) / scale;
         })
         .on("mouseover", function () {
-            var left = zoom.translate()[0];
-            var top = zoom.translate()[1];
-            var sc = zoom.scale();
-
-            // ZW: no cluster tooltip, i.e., Number: xxx
-
-            // cluster_tooltip.attr("style", "right:" + (innerWidth - x * sc - left) + "px;bottom:" + (innerHeight - y * sc - top) + "px;visibility: visible")
-            //     .html("<div id='tooltip_holder'>" +
-            //         "<div id='tooltip_text'>" + text + "</div></div>");
-
-            // showFCLInfoTooltip(point_x, point_y, left, top, scale, country, project_img, project_number);
+            // showFCLInfoTooltip(layer_name, lon, lat, country, country_or_network_logo_img, project_number);
         })
         .on("mouseout", function () {
+            // return cluster_tooltip.attr("style","visibility: hidden");
         })
         .on("click", function () {
-            var shift_x = innerWidth / 2 - projection([lon, lat])[0] * scale;
-            var shift_y = innerHeight / 2 - projection([lon, lat])[1] * scale;
-            move([shift_x, shift_y], scale);
-
-            var left = zoom.translate()[0];
-            var top = zoom.translate()[1];
-            var scale = zoom.scale();
-
-            // showFCLInfoTooltip(point_x, point_y, left, top, scale, country, project_img, project_number);
-
-            // ZW: no zoomable circles
-
-            // cluster_tooltip.attr("style", "right:" + (innerWidth - x * sc - left) + "px;bottom:" + (innerHeight - y * sc - top) + "px;visibility: visible");
-            //
-            // //this.attr("style", "visibility: hidden");
-            // draw_circles(clusterObj, className);
+            showFCLInfoTooltip(layer_name, lon, lat, country, country_or_network_logo_img, project_number);
         });
 }
+// function add_zoomable_cluster(color, lat, lon, title, text, area, scale, clusterObj, className, country) {
+//
+//     if (area == undefined) area = 2;
+//
+//     var gpoint = g.append("g").attr("class", "items " + className);
+//     var point_x = projection([lon, lat])[0];
+//     var point_y = projection([lon, lat])[1];
+//
+//     gpoint.selectAll("circle")
+//         .data([clusterObj])
+//         .enter()
+//         .append("svg:circle")
+//         .attr("cx", point_x)
+//         .attr("cy", point_y)
+//         .attr("class", "cluster")
+//         .style("stroke", "#000")
+//         .style("stroke-width", '0.5px')
+//         .style("fill", color//function () {return color_scheme[color_status];}
+//         ).style("opacity", 0.60)
+//         .attr("r", function (d) {
+//             return Math.sqrt(d["area"] * area_unit / Math.PI) / scale;
+//         })
+//         .on("mouseover", function () {
+//             var left = zoom.translate()[0];
+//             var top = zoom.translate()[1];
+//             var sc = zoom.scale();
+//
+//             // ZW: no cluster tooltip, i.e., Number: xxx
+//
+//             // cluster_tooltip.attr("style", "right:" + (innerWidth - x * sc - left) + "px;bottom:" + (innerHeight - y * sc - top) + "px;visibility: visible")
+//             //     .html("<div id='tooltip_holder'>" +
+//             //         "<div id='tooltip_text'>" + text + "</div></div>");
+//
+//             // showFCLInfoTooltip(point_x, point_y, left, top, scale, country, project_img, project_number);
+//         })
+//         .on("mouseout", function () {
+//         })
+//         .on("click", function () {
+//             var shift_x = innerWidth / 2 - projection([lon, lat])[0] * scale;
+//             var shift_y = innerHeight / 2 - projection([lon, lat])[1] * scale;
+//             move([shift_x, shift_y], scale);
+//
+//             var left = zoom.translate()[0];
+//             var top = zoom.translate()[1];
+//             var scale = zoom.scale();
+//
+//             // showFCLInfoTooltip(point_x, point_y, left, top, scale, country, project_img, project_number);
+//
+//             // ZW: no zoomable circles
+//
+//             // cluster_tooltip.attr("style", "right:" + (innerWidth - x * sc - left) + "px;bottom:" + (innerHeight - y * sc - top) + "px;visibility: visible");
+//             //
+//             // //this.attr("style", "visibility: hidden");
+//             // draw_circles(clusterObj, className);
+//         });
+// }
 
 /*for the last tier, to create tree-structure zoomable circles for projects with same 
  or very close coordinates*/
@@ -513,6 +569,8 @@ function find_last_tier(tier_range, scale, className) {
     var clusterNumber = [];
     var cluster_aver_lat = [];
     var cluster_aver_lon = [];
+    var cluster_country = [];
+    var cluster_number = [];
 
     clusterNumber.push(0, 0);
     cluster_aver_lat.push(0);
@@ -525,6 +583,8 @@ function find_last_tier(tier_range, scale, className) {
                 clusterNumber.push(0);
                 cluster_aver_lat.push(0);
                 cluster_aver_lon.push(0);
+                cluster_country.push("");
+                cluster_number.push(0);
             }
             looptime = 0;
             stack.push(index);
@@ -580,6 +640,8 @@ function find_last_tier(tier_range, scale, className) {
         item = items[i];
         cluster_aver_lat[index] += Number(item["latitude"]);
         cluster_aver_lon[index] += Number(item["longitude"]);
+        cluster_country[index] = item["country"];
+        cluster_number[index] = item["Number"];
     }
 
 
@@ -633,10 +695,11 @@ function find_last_tier(tier_range, scale, className) {
         }
         var lat = cluster_aver_lat[clusterIndex];
         var lon = cluster_aver_lon[clusterIndex];
-        add_zoomable_cluster(color, lat, lon, name, text, area, scale, clusterObj, className);
-
-        add_cluster_googleMap(color, lat, lon, text, clusterObj, className);// area
+        // add_zoomable_cluster(color, lat, lon, name, text, area, scale, clusterObj, className);
+        // add_cluster_googleMap(color, lat, lon, text, clusterObj, className);// area
         //draw_circles(clusterObj);
+        add_zoomable_cluster(color, lat, lon, name, text, area, scale, className, cluster_country[i], cluster_number[i]);
+        add_zoomable_cluster_googleMap(color, lat, lon, name, text, area, scale, className, cluster_country[i], cluster_number[i]);
         clusterObj = {};
     }
 
