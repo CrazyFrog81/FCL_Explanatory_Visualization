@@ -701,7 +701,7 @@ function color_brushed3(ext) {
 
     range3 = [ticks3-L,ticks3-R];
 
-    display_urbanization_layer("#gpd_countries", cur_year, color_split3, colors3, country_gdp, country_pop, 1);
+    display_urbanization_layer("#gdp_countries", cur_year, color_split3, colors3, country_gdp, country_pop, 1);
 }
 
 function drag_handler3(){

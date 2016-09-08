@@ -38,7 +38,7 @@ function load_DData(_category) {
             color_split3 = [100000, 75000, 50000, 10000, 5000, 1000, 500, 0];
             draw_gdp_country();
 
-            display_urbanization_layer("#gpd_countries", cur_year, color_split3, colors3, country_gdp, country_pop, 1);
+            display_urbanization_layer("#gdp_countries", cur_year, color_split3, colors3, country_gdp, country_pop, 1);
             // display_Density3(1964);//read_co2Data();
             draw_colorSlider_3('gdp_layer');
             break;
@@ -64,6 +64,7 @@ function load_DData(_category) {
 }
 
 function display_urbanization_layer(country_layer, cur_year, color_splits, colors, urbanization_data_1, urbanization_data_2, multiplier) {
+    var range;
     switch (country_layer) {
         case "#co2_countries":
             if (range2 == undefined) {

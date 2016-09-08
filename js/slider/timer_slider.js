@@ -175,7 +175,7 @@ function update(value) {
         display_urbanization_layer("#co2_countries", cur_year, color_split2, colors2, country_co2_emission, country_pop, 1000);
 
     if (gdp_layer)
-        display_urbanization_layer("#gpd_countries", cur_year, color_split3, colors3, country_gdp, country_pop, 1);
+        display_urbanization_layer("#gdp_countries", cur_year, color_split3, colors3, country_gdp, country_pop, 1);
     label.text(cur_year);
 }
 
