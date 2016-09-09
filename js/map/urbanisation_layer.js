@@ -131,9 +131,10 @@ function display_urbanization_layer(country_layer, cur_year, color_splits, color
     });
 
     countries.on("click", function (d, i) {
-        if (chart_refresh) {
-            draw_charts(d.properties.name);
-        }
+        var lnglat = lnglat_pos(d3.event.pageX, d3.event.pageY);
+
+        draw_charts(d.properties.name, lnglat[0], lnglat[1]);
+
     });
 }
 
@@ -200,8 +201,84 @@ function transform2(d) {
     return "translate(" + d[0] + "," + d[1] + ")";
 }
 
+function redraw_charts() {
+    var tooltips = d3.selectAll(".tooltip").forEach(function (tips) {
+        tips.forEach(function (tip) {
+            if (tip.id == undefined || tip.id == "")
+                return;
+
+            var country_name = tip.dataset.country;
+            var lng = tip.dataset.lng;
+            var lat = tip.dataset.lat;
+            d3.select(tip).remove();
+
+            draw_charts(country_name, lng, lat);
+        })
+    });
+}
+
 /*draw the point charts for each country, onclick*/
-function draw_charts(country_name) {
+function draw_charts(country_name, lng, lat) {
+    if(!pop_layer && !co2_layer && !gdp_layer)
+        return;
+
+    var drag = d3.behavior.drag()
+        .on("dragstart", function () {
+            d3.select(this).style("background-color", "#eeeeee");
+        })
+        .on("drag", function (d) {
+            var offsets = this.getBoundingClientRect();
+
+            var new_x = offsets.left + d3.event.dx;
+            var new_y = offsets.top + d3.event.dy;
+
+            d3.select(this).style("left", new_x + "px");
+            d3.select(this).style("top", new_y + "px");
+        })
+        .on("dragend", function () {
+            mydragg.stopMoving("content_holder");
+            d3.select(this).style("background-color", "#ffffff");
+        });
+
+    var chart_tooltip_dynamic_id = "chart_tooltip_" + country_name;
+    var view_pos = viewport_pos(lng, lat);
+
+    var find_tooltip = document.getElementById(chart_tooltip_dynamic_id);
+    if (find_tooltip != null) {
+        // reposition the tooltip if it already exists
+        d3.select(find_tooltip)
+            .attr("data-lng", lng)
+            .attr("data-lat", lat)
+            .style("left", view_pos[0] + "px")
+            .style("top", view_pos[1] + "px");
+        return;
+    }
+
+    var country_chart_tooltip_dynamic = d3.select("#map_container").append("div").attr("class", "tooltip")
+        .attr("id", chart_tooltip_dynamic_id)
+        .attr("style", "visibility:hidden;display:inline;background-color:white;overflow:hidden;")
+        .attr("z-index", 2)
+        .attr("data-lng", lng)
+        .attr("data-lat", lat)
+        .attr("data-country", country_name)
+        .call(drag);
+
+    country_chart_tooltip_dynamic.append("span")
+        .attr("class", "close")
+        .on("click", function () {
+            //close
+            country_chart_tooltip_dynamic.remove();
+        });
+
+    country_chart_tooltip_dynamic
+        .style("visibility", "visible")
+        .selectAll("svg").remove();
+    country_chart_tooltip_dynamic
+        .style("left", view_pos[0] + "px")
+        .style("top", view_pos[1] + "px");
+
+    chart_tooltip_id_counting = chart_tooltip_id_counting + 1;
+
     var popMultiplier = 1;
     var co2Multiplier = 1000;
     var gdpMultiplier = 1;
@@ -287,64 +364,6 @@ function draw_charts(country_name) {
         }
     }
 
-
-    var drag = d3.behavior.drag()
-        .on("dragstart", function () {
-            d3.select(this).style("background-color", "#eeeeee");
-        })
-        .on("drag", function (d) {
-            var offsets = this.getBoundingClientRect();
-
-            var new_x = offsets.left + d3.event.dx;
-            var new_y = offsets.top + d3.event.dy;
-
-            d3.select(this).style("left", new_x + "px");
-            d3.select(this).style("top", new_y + "px");
-        })
-        .on("dragend", function () {
-            mydragg.stopMoving("content_holder");
-            d3.select(this).style("background-color", "#ffffff");
-        });
-
-    var chart_tooltip_dynamic_id = "chart_tooltip_" + country_name;
-
-    var lnglat = lnglat_pos(d3.event.pageX, d3.event.pageY);
-
-    var find_tooltip = document.getElementById(chart_tooltip_dynamic_id);
-    if (find_tooltip != null) {
-        // reposition the tooltip if it already exists
-        d3.select(find_tooltip)
-            .attr("data-lng", lnglat[0])
-            .attr("data-lat", lnglat[1])
-            .style("left", d3.event.pageX + "px")
-            .style("top", d3.event.pageY + "px");
-        return;
-    }
-
-    var country_chart_tooltip_dynamic = d3.select("#map_container").append("div").attr("class", "tooltip")
-        .attr("id", chart_tooltip_dynamic_id)
-        .attr("style", "visibility:hidden;display:inline;background-color:white;overflow:hidden;")
-        .attr("z-index", 2)
-        .attr("data-lng", lnglat[0])
-        .attr("data-lat", lnglat[1])
-        .call(drag);
-
-    chart_tooltip_id_counting = chart_tooltip_id_counting + 1;
-
-    country_chart_tooltip_dynamic.append("span")
-        .attr("class", "close")
-        .on("click", function () {
-            //close
-            country_chart_tooltip_dynamic.remove();
-        });
-
-    country_chart_tooltip_dynamic
-        .style("visibility", "visible")
-        .selectAll("svg").remove();
-    country_chart_tooltip_dynamic
-        .style("left", d3.event.pageX + "px")
-        .style("top", d3.event.pageY + "px");
-
     var mobileScreen = (window.innerWidth < 500);
 
     // Set the dimensions of the canvas / graph
@@ -405,7 +424,6 @@ function draw_charts(country_name) {
         .text(country_name);
 
     if (pop_layer) {
-
         // Adds the svg canvas
         // var svg = country_chart_tooltip
         var svg = country_chart_tooltip_dynamic
@@ -491,6 +509,10 @@ function draw_charts(country_name) {
 
                 return colors1[1];
             }
+
+            if (density >= color_split1[max])
+                return colors1[0];
+            else return colors1[colors1.length - 1];
         });
 
         // Add the X Axis

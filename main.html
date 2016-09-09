@@ -45,9 +45,6 @@
     var click_x, click_y;
 
     function newInput() {
-        //tooltip.style("visibility","hidden");
-        //d3.selectAll(".navg_button").classed("selectedBtn",false);
-
         if (this.id) {
             var holder = this.parentNode.id;
             var the_ul = d3.select("#" + holder).selectAll("ul");
@@ -56,8 +53,6 @@
 
             switch (this.id) {
                 case 'pop_densityBtn':
-                    chart_refresh = true;
-
                     if (res) {
                         SC.layer_count++;
                         SC.layer_stack[0] = SC.layer_count;
@@ -78,10 +73,10 @@
                             //d3.select("#label_slider").remove();
                         }
                     }
+
+                    redraw_charts();
                     break;
                 case 'co2_emissionBtn':
-                    chart_refresh = true;
-
                     if (res) {
                         SC.layer_count++;
                         SC.layer_stack[1] = SC.layer_count;
@@ -100,11 +95,10 @@
                             redraw_worldmap();
                         }
                     }
+                    redraw_charts();
                     break;
 
                 case 'gdp_Btn':
-                    chart_refresh = true;
-
                     if (res) {
                         SC.layer_count++;
                         SC.layer_stack[2] = SC.layer_count;
@@ -123,6 +117,7 @@
                             redraw_worldmap();
                         }
                     }
+                    redraw_charts();
                     break;
 
                 case  'fcl_projectsBtn':

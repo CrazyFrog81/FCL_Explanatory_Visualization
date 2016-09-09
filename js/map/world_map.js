@@ -89,7 +89,6 @@ var world_map_max_zoom = 1000;
 
 var zoom = d3.behavior.zoom().scaleExtent([1, world_map_max_zoom]).on("zoom", move);
 
-var chart_refresh = true;
 function setup() {
     offsetL = document.getElementById("map_container").offsetLeft + 10;
     offsetT = document.getElementById("map_container").offsetTop + 10;
