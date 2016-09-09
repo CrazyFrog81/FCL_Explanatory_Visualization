@@ -249,8 +249,8 @@ var project_markers = [];
 var project_infowindows = [];
 
 function draw_zoomin_singapore_marker(markerPos) {
-    var mouseover_String = " <div><div class='pic_holder Centerer'>" +
-        "<div class='tooltip_text'><b style='font-size:17px;'>" + "View Projects in Singapore" + "</b>";
+    var mouseover_String = "<div>" +
+        "<b style='font-size:17px;'>" + "View Projects in Singapore" + "</b></div>";
 
     var infowindow_mouseover = new google.maps.InfoWindow({
         maxWidth: 300,
@@ -270,7 +270,7 @@ function draw_zoomin_singapore_marker(markerPos) {
     });
 
     marker.addListener('click', function () {
-        console.log("gmap.setZoom(10);");
+        // console.log("gmap.setZoom(10);");
         gmap.setCenter({lat: 1.3521, lng: 103.8198});
         gmap.setZoom(12);
         infowindow_mouseover.setMap(null);
@@ -488,18 +488,18 @@ function close_GoogleMap() {
 
     var scale = window.innerWidth / 2 / (center_proj[0] - sw_proj[0]);
 
+    // if scale larger than maximum scale in world map,
+    // set scale to the maximum zoom - 1, and translate to the current center
+    if (scale > world_map_max_zoom){
+        scale = world_map_max_zoom - 1;
+    }
+
     var translate_x = window.innerWidth / 2 - center_proj[0] * scale;
     var translate_y = window.innerHeight / 2 - center_proj[1] * scale;
 
     var t = [translate_x, translate_y];
-    if (scale <= 0 || gmap.getZoom() == 2) {
-        scale = 1;
-        t = [58.972135808807366, -28.828173607545637];
-    }
 
     move(t, scale);
-
-    console.log(scale + " " + t);
 
     d3.select("#googlem_holder").style("visibility", "hidden");
 }

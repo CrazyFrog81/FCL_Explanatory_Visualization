@@ -85,7 +85,9 @@ var offsetL = 10, offsetT = 10;
 
 var projection, path, svg, g;
 
-var zoom = d3.behavior.zoom().scaleExtent([1, 100]).on("zoom", move);
+var world_map_max_zoom = 1000;
+
+var zoom = d3.behavior.zoom().scaleExtent([1, world_map_max_zoom]).on("zoom", move);
 
 var chart_refresh = true;
 function setup() {
@@ -233,12 +235,12 @@ function move(t, s) {
 
     svg.selectAll(".items").remove();
 
-    if(project_layer)
-        find_last_tier(tier_range,scale,'project_layer');
-    if(network_layer)
-        find_last_tier(tier_range,scale,'network_layer');
-    if(staff_layer)
-        find_last_tier(tier_range,scale,'staff_layer');
+    if (project_layer)
+        find_last_tier(tier_range, scale, 'project_layer');
+    if (network_layer)
+        find_last_tier(tier_range, scale, 'network_layer');
+    if (staff_layer)
+        find_last_tier(tier_range, scale, 'staff_layer');
 
     var cur_scale = zoom.scale();
 
@@ -287,9 +289,9 @@ function move(t, s) {
     d3.selectAll(".country").style("stroke-width", 1.5 / s);
     d3.selectAll(".text").style("font-size", 20 / s);
 
-    var tooltips = d3.selectAll(".tooltip").forEach(function(tips){
-        tips.forEach(function(tip){
-            if(tip.id == undefined || tip.id == "")
+    var tooltips = d3.selectAll(".tooltip").forEach(function (tips) {
+        tips.forEach(function (tip) {
+            if (tip.id == undefined || tip.id == "")
                 return;
 
             var new_pos = viewport_pos(tip.dataset.lng, tip.dataset.lat);
@@ -298,33 +300,33 @@ function move(t, s) {
         })
     });
 
-    var fcl_tooltips = d3.selectAll(".about_fcl_tooltip").forEach(function(tips){
-        tips.forEach(function(tip){
-            if(tip.id == undefined || tip.id == "")
+    var fcl_tooltips = d3.selectAll(".about_fcl_tooltip").forEach(function (tips) {
+        tips.forEach(function (tip) {
+            if (tip.id == undefined || tip.id == "")
                 return;
 
             var new_pos = viewport_pos(tip.dataset.lng, tip.dataset.lat);
 
             var x = new_pos[0];
-            if(tip.id.includes("info")){
+            if (tip.id.includes("info")) {
                 x += (document.getElementById(tip.id.replace("_info", "_country")).offsetWidth + 8);
                 // console.log(tip.id+" "+tip.id.replace("_info", "_country")+" "+document.getElementById(tip.id.replace("_info", "_country")).offsetWidth);
             }
 
-            d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1] + 60)  + "px");
+            d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1] + 60) + "px");
         })
     });
 
-    var fcl_tooltips_lines = d3.selectAll(".about_fcl_tooltip_line").forEach(function(tips){
-        tips.forEach(function(tip){
-            if(tip.id == undefined || tip.id == "")
+    var fcl_tooltips_lines = d3.selectAll(".about_fcl_tooltip_line").forEach(function (tips) {
+        tips.forEach(function (tip) {
+            if (tip.id == undefined || tip.id == "")
                 return;
 
             var new_pos = viewport_pos(tip.dataset.lng, tip.dataset.lat);
 
             var x = new_pos[0];
 
-            d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1])  + "px");
+            d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1]) + "px");
         })
     });
 }
@@ -333,7 +335,7 @@ function click() {
     var xxx = projection.invert(d3.mouse(this));
 }
 
-function viewport_pos(long, lat){
+function viewport_pos(long, lat) {
     var proj = projection([long, lat]);
 
     var viewport_x = proj[0] * zoom.scale() + zoom.translate()[0];
@@ -342,7 +344,7 @@ function viewport_pos(long, lat){
     return [viewport_x, viewport_y];
 }
 
-function lnglat_pos(viewport_x, viewport_y){
+function lnglat_pos(viewport_x, viewport_y) {
     var x = (viewport_x - zoom.translate()[0]) / zoom.scale();
     var y = (viewport_y - zoom.translate()[1]) / zoom.scale();
 
