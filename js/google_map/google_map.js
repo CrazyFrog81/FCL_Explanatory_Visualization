@@ -140,26 +140,7 @@ function initMap() {
     console.log(initial_center.lng() + "  " + initial_center.lat());
     var lastValidCenter = initial_center;
 
-    gmap.setOptions({minZoom: 2}, {maxZoom: 17});
-    /* var allowedBounds = new google.maps.LatLngBounds(
-     new google.maps.LatLng(-82, 150),//bottom left corner
-     new google.maps.LatLng(87, -139)
-     );
-
-
-
-     google.maps.event.addListener(gmap, 'center_changed', function() {
-     if (allowedBounds.contains(gmap.getCenter())) {
-     // still within valid bounds, so save the last valid position
-     lastValidCenter = gmap.getCenter();
-
-     return;
-     }
-
-     // not valid anymore => return to last valid position
-     gmap.panTo(lastValidCenter);
-
-     });*/
+    gmap.setOptions({minZoom: 3}, {maxZoom: 17});
 
     var pre_ne = new google.maps.LatLng(0, 0);
     google.maps.event.addListener(gmap, 'bounds_changed', function () {
