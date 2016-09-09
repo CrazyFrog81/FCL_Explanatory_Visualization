@@ -194,6 +194,7 @@ function draw_pop_layer() {
     pop_layer = true;
     d3.select("#pop_densityHolder").selectAll("ul").style("height", "73px");
     console.log("progress: draw_pop_layer!");
+    SC.layer_count++;
     SC.layer_stack[0] = SC.layer_count;
     load_DData("pop_layer");
 }
@@ -239,22 +240,6 @@ function move(t, s) {
     if(staff_layer)
         find_last_tier(tier_range,scale,'staff_layer');
 
-    //code for restrict base map boundary
-    /*  var h = map_height / 4;
-
-     var res = (map_width / map_height) * (s - 1);
-     t[0] = Math.min(res
-     ,
-     Math.max(map_width * (1 - s), t[0])
-     );
-     t[1] = Math.min(
-     h * (s - 1) + h * s,
-     Math.max(map_height * (1 - s) - h * s, t[1])
-     );
-
-     console.log("s = "+s+ "  res = "+res);
-     console.log('t[0] = '+t[0]+" t[1]="+t[1]);
-     */
     var cur_scale = zoom.scale();
 
     var margin_x = map_width * 0.1;
@@ -264,7 +249,6 @@ function move(t, s) {
     var max_t1 = (s - 1) * map_height + 2 * margin_y;
     if (t[0] >= 0) {
         t[0] = Math.min(t[0], margin_x);
-        //console.log(t[0]);
     } else {
         t[0] = Math.max(t[0], -max_t0);
     }
@@ -278,45 +262,6 @@ function move(t, s) {
     fcl_tooltip_list = [];
 
     svg.attr("transform", "translate(" + t + ")scale(" + s + ")");
-
-    var tooltips = d3.selectAll(".tooltip").forEach(function(tips){
-        tips.forEach(function(tip){
-            if(tip.id == undefined || tip.id == "")
-                return;
-
-            var new_pos = viewport_pos(tip.dataset.lng, tip.dataset.lat);
-
-            d3.select(tip).style("left", new_pos[0] + "px").style("top", new_pos[1] + "px");
-       })
-    });
-
-     var fcl_tooltips = d3.selectAll(".about_fcl_tooltip").forEach(function(tips){
-        tips.forEach(function(tip){
-            if(tip.id == undefined || tip.id == "")
-                return;
-
-            var new_pos = viewport_pos(tip.dataset.lng, tip.dataset.lat);
-
-            var x = new_pos[0];
-            if(tip.id.includes("info"))
-                x += 150;
-
-            d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1] + 60)  + "px");
-        })
-    });
-
-    var fcl_tooltips_lines = d3.selectAll(".about_fcl_tooltip_line").forEach(function(tips){
-        tips.forEach(function(tip){
-            if(tip.id == undefined || tip.id == "")
-                return;
-
-            var new_pos = viewport_pos(tip.dataset.lng, tip.dataset.lat);
-
-            var x = new_pos[0];
-
-            d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1])  + "px");
-        })
-    });
 
     d3.selectAll(".tooltip").attr("transform", "translate(" + t + ")scale(" + s + ")");
 
@@ -336,31 +281,52 @@ function move(t, s) {
             return Math.sqrt(area_unit * d["area"] / Math.PI) / s;
         });
 
-    //cg_g.remove();
     svg.selectAll(".zoomable").remove();
 
     //adjust the country hover stroke map_width based on zoom level
     d3.selectAll(".country").style("stroke-width", 1.5 / s);
     d3.selectAll(".text").style("font-size", 20 / s);
 
+    var tooltips = d3.selectAll(".tooltip").forEach(function(tips){
+        tips.forEach(function(tip){
+            if(tip.id == undefined || tip.id == "")
+                return;
 
-    //the tooltips
-    /*svg.selectAll("text").style("font-size",12/s).attr("y",function (d) {
-     return d['y']-70/scale;
-     });
-     svg.selectAll("line").style("stroke-width", 2 / s).attr("y2", function(d){
-     return d['y']-100/scale;
-     });
-     svg.selectAll("rect")
-     .attr('y',function(d){
-     return d['y']-100/scale ;
-     })
-     .style("width", 100 / s).style("height",50/s);*/
-    //d3.selectAll(".equator").style("stroke-width", 1/s+'px');
-    // d3.selectAll("graticule").style("stroke-width", 0.5/s+'px');
+            var new_pos = viewport_pos(tip.dataset.lng, tip.dataset.lat);
 
-    var center_x = (innerWidth / 2 - t[0]) / s;
-    var center_y = (innerHeight / 2 - t[1]) / s;
+            d3.select(tip).style("left", new_pos[0] + "px").style("top", new_pos[1] + "px");
+        })
+    });
+
+    var fcl_tooltips = d3.selectAll(".about_fcl_tooltip").forEach(function(tips){
+        tips.forEach(function(tip){
+            if(tip.id == undefined || tip.id == "")
+                return;
+
+            var new_pos = viewport_pos(tip.dataset.lng, tip.dataset.lat);
+
+            var x = new_pos[0];
+            if(tip.id.includes("info")){
+                x += (document.getElementById(tip.id.replace("_info", "_country")).offsetWidth + 8);
+                // console.log(tip.id+" "+tip.id.replace("_info", "_country")+" "+document.getElementById(tip.id.replace("_info", "_country")).offsetWidth);
+            }
+
+            d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1] + 60)  + "px");
+        })
+    });
+
+    var fcl_tooltips_lines = d3.selectAll(".about_fcl_tooltip_line").forEach(function(tips){
+        tips.forEach(function(tip){
+            if(tip.id == undefined || tip.id == "")
+                return;
+
+            var new_pos = viewport_pos(tip.dataset.lng, tip.dataset.lat);
+
+            var x = new_pos[0];
+
+            d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1])  + "px");
+        })
+    });
 }
 
 function click() {
