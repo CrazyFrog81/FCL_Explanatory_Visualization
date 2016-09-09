@@ -161,75 +161,63 @@ function initMap() {
 
      });*/
 
-    var cur_bounds;
+    var pre_ne = new google.maps.LatLng(0, 0);
     google.maps.event.addListener(gmap, 'bounds_changed', function () {
-        // console.log("real bound "+gmap.getBounds() +" center "+gmap.getCenter()+ " zoom "+gmap.getZoom() +" viewport "+window.innerWidth +" "+window.innerHeight);
-        //
-        // console.log("center "+viewport_pos(gmap.getCenter().lng(), gmap.getCenter().lat()));
+        //console.log("real bound " + gmap.getBounds() + " center " + gmap.getCenter() + " zoom " + gmap.getZoom() + " viewport " + window.innerWidth + " " + window.innerHeight);
 
-        cur_bounds = gmap.getBounds();
         var cur_scale = gmap.getZoom();
-
-        var top_right_corner = cur_bounds.getNorthEast();
-        var bottom_left_corner = cur_bounds.getSouthWest();
-
-        var bounds_world = new google.maps.LatLngBounds(bottom_left_corner, top_right_corner);
-        // gmap.fitBounds(bounds_world);
-
-
-        if (cur_scale <= 2) {
+        if (cur_scale == 2) {
             gmap.panTo(initial_center);
             return;
         }
 
+        var min_lat = -77, max_lat = 85;
+        var min_lng = -180, max_lng = 180;
 
-        /*var R = top_right_corner.lng();
-         var L = bottom_left_corner.lng();
+        var cur_bounds, cur_center, ne, sw;
 
+        updateBound();
 
-         var resL_L = !(L>0 && lastValidCenter.lng()<0) ;
-         var bound_range = Math.abs(R-L);
-         if(!resL_L&&cur_scale<4)bound_range = Math.abs(180-L + R+180);
-         console.log("bound_range = "+bound_range);
-         console.log("-180"+"L="+L+"  "+(180-bound_range));
+        if (sw.lat() < min_lat) {
+            var lat_displacement = min_lat - sw.lat() + 1;
+            var new_center = new google.maps.LatLng(cur_center.lat() + lat_displacement, cur_center.lng());
+            gmap.panTo(new_center);
+        }
 
+        updateBound();
+        if (ne.lat() > max_lat) {
+            var lat_displacement = ne.lat() - max_lat + 1;
+            var new_center = new google.maps.LatLng(cur_center.lat() - lat_displacement, cur_center.lng());
+            gmap.panTo(new_center);
+        }
 
-         var resL_R = L<= (180-bound_range);
+        updateBound();
+        var displacement = pre_ne.lng() - ne.lng(); //  180 > displacement > 0, move left;
+                                                    // displacement < 0 or displacement > 180,  move right
 
+        if (sw.lng() > 0 && sw.lng() > ne.lng() && displacement && displacement > 0 && displacement < 180) { // move left
+            var lng_displacement = max_lng - sw.lng() + 1;
+            var new_center = new google.maps.LatLng(cur_center.lat(), cur_center.lng() + lng_displacement);
+            gmap.panTo(new_center);
+        }
 
-         if(resL_L && resL_R){
-         lastValidCenter = gmap.getCenter();
-         return;
-         }else{
-         if(!resL_L){
+        updateBound();
+        if (ne.lng() < 0 && sw.lng() > ne.lng()) {
+            var lng_displacement = ne.lng() - min_lng + 1;
 
-         console.log("L wrong "+"BOUND_RANGE="+bound_range);
+            var new_center = new google.maps.LatLng(cur_center.lat(), cur_center.lng() - lng_displacement);
+            gmap.panTo(new_center);
+        }
 
-         lastValidCenter = new google.maps.LatLng(lastValidCenter.lat(),-(180-bound_range/2));
-         }else{
-         console.log("R wrong"+"BOUND_RANGE="+bound_range);
-         lastValidCenter = new google.maps.LatLng(lastValidCenter.lat(),(180-bound_range/2));
-         }
-         gmap.panTo(lastValidCenter);
+        pre_ne = ne;
 
-         }
+        function updateBound(){
+            cur_bounds = gmap.getBounds();
+            cur_center = gmap.getCenter();
 
-         //console.log("top_right = "+top_right_corner+" bottom_left = "+bottom_left_corner);
-
-         if(top_right_corner.lng()){
-
-         }*/
-        /*if ()//allowedBounds.contains(top_right_corner)&& allowedBounds.contains(bottom_left_corner)) {
-         // still within valid bounds, so save the last valid position
-         lastValidCenter = gmap.getCenter();
-
-         return;
-         }
-
-         // not valid anymore => return to last valid position
-         gmap.panTo(lastValidCenter);*/
-
-
+            ne = cur_bounds.getNorthEast();
+            sw = cur_bounds.getSouthWest();
+        }
     });
 
     // Define the LatLng coordinates for the polygon's path.
@@ -250,7 +238,6 @@ function initMap() {
     //---draw a marker for zoom into Singapore---//
 
     d3.json("data/fcl/ProjectInformation.json", function (error, info_json_in) {
-
         info_json = info_json_in;//topojson.feature(info_json_in, );
         //console.log(info_json[0].contact);
         for (var i = 0; i < info_json.length; i++) {
@@ -279,106 +266,6 @@ function makeMarkerIcon(markerColor) {
 var project_polygons = [];
 var project_markers = [];
 var project_infowindows = [];
-function draw_polygon(triangleCoords, markerPos, fillcolor, info) {
-
-    // Construct the polygon.
-    var bermudaTriangle = new google.maps.Polygon({
-        paths: triangleCoords,
-        strokeColor: fillcolor,
-        strokeOpacity: 0.35,
-        strokeWeight: 2,
-        fillColor: fillcolor,
-        fillOpacity: 0.35
-    });
-
-    bermudaTriangle.setMap(gmap);
-
-
-    var project_img = new Image();
-    project_img.src = "img/project_img/" + 1 + "_fcl_vis.jpg";
-
-    var mouseover_String = " <div><div class='pic_holder Centerer'>" +
-        "<img class='tooltip_pic' src='" + project_img.src + "'></div>" +
-        "<div class='tooltip_text'><b style='font-size:17px;'>" + "The Singapore Project" + "</b>";
-
-    var contentString = " <div><div class='pic_holder Centerer'>" +
-        "<img class='tooltip_pic' src='" + project_img.src + "'></div>" +
-        "<div class='tooltip_text'><b style='font-size:17px;'>" + "The Singapore Project" + "</b>" +
-        "<br><br> <b>Contact:</b> " + info[0] +
-        "<br><br> <b>Description:</b> " + info[1] + "</div></div>";
-
-    var infowindow_mouseover = new google.maps.InfoWindow({
-        maxWidth: 300,
-        content: mouseover_String
-    });
-
-    var infowindow_click = new google.maps.InfoWindow({
-        maxWidth: 300
-    });
-
-    var defaultIcon = makeMarkerIcon('FFFF24');
-    var highlightedIcon = makeMarkerIcon('E74C3C');
-
-    var marker = new google.maps.Marker({
-        position: markerPos,
-        animation: google.maps.Animation.DROP,
-        icon: defaultIcon,
-        map: gmap,
-        //title: 'The Info Window'
-    });
-
-    marker.myHtmlContent = contentString;
-    infowindow_click.setContent(marker.myHtmlContent);
-
-    marker.addListener('click', function () {
-        infowindow_mouseover.setMap(null);
-        infowindow_click.open(gmap, marker);
-    });
-
-    marker.addListener('mouseover', function () {
-        this.setIcon(highlightedIcon);
-        bermudaTriangle.set("strokeColor", 'red');
-        bermudaTriangle.set("fillColor", 'red');
-        infowindow_mouseover.open(gmap, marker);
-    });
-
-
-    marker.addListener('mouseout', function () {
-        this.setIcon(defaultIcon);
-        bermudaTriangle.set("strokeColor", fillcolor);
-        bermudaTriangle.set("fillColor", fillcolor);
-        infowindow_mouseover.setMap(null);
-
-    });
-
-    bermudaTriangle.addListener('click', function () {
-        infowindow_mouseover.setMap(null);
-        infowindow_click.open(gmap, marker);
-    });
-
-    bermudaTriangle.addListener('mouseover', function () {
-        marker.setIcon(highlightedIcon);
-        this.set("strokeColor", 'red');
-        this.set("fillColor", 'red');
-        infowindow_mouseover.open(gmap, marker);
-    });
-
-    bermudaTriangle.addListener('mouseout', function () {
-        marker.setIcon(defaultIcon);
-        this.set("strokeColor", fillcolor);
-        this.set("fillColor", fillcolor);
-        infowindow_mouseover.setMap(null);
-    });
-
-    //bermudaTriangle.bindTo('strokeColor',marker,'strokeColor');
-    //bermudaTriangle.setOptions({clickable:false});
-
-    project_polygons.push(bermudaTriangle);
-    project_markers.push(marker);
-    project_infowindows.push(infowindow_mouseover);
-    project_infowindows.push(infowindow_click);
-
-}
 
 function draw_zoomin_singapore_marker(markerPos) {
     var mouseover_String = " <div><div class='pic_holder Centerer'>" +
@@ -619,13 +506,19 @@ function close_GoogleMap() {
     var sw_proj = projection([sw.lng(), sw.lat()]);
 
     var scale = window.innerWidth / 2 / (center_proj[0] - sw_proj[0]);
-    var scale_veri = window.innerHeight / 2 / (sw_proj[1] - center_proj[1]);
 
     var translate_x = window.innerWidth / 2 - center_proj[0] * scale;
     var translate_y = window.innerHeight / 2 - center_proj[1] * scale;
 
     var t = [translate_x, translate_y];
+    if (scale <= 0 || gmap.getZoom() == 2) {
+        scale = 1;
+        t = [58.972135808807366, -28.828173607545637];
+    }
+
     move(t, scale);
+
+    console.log(scale + " " + t);
 
     d3.select("#googlem_holder").style("visibility", "hidden");
 }
@@ -694,7 +587,7 @@ var staff_circles = [];
 var staff_infowindows = [];
 
 //new function to add clusters of projects
-function add_zoomable_cluster_googleMap(color, lat, lon, name, text, area, scale, layer_name, country, project_number){
+function add_zoomable_cluster_googleMap(color, lat, lon, name, text, area, scale, layer_name, country, project_number) {
     if (area == undefined) area = 2;
 
     var scale_unit = 15;
@@ -985,7 +878,7 @@ function project(latLng) {
 //function to add clusters of projects
 //color,item["latitude"],item["longitude"],item["name"],item["text"],1,itemIndex+1,scale,className
 // function add_point_googleMap(color, lat, lon, name, text, index, className, country) {
-function add_point_googleMap(color, lat, lon, name, text, area, imgNo, scale, layer_name, country, project_number){
+function add_point_googleMap(color, lat, lon, name, text, area, imgNo, scale, layer_name, country, project_number) {
     if (area == undefined) area = 1;
     if (imgNo == undefined) imgNo = 0;
 
@@ -1027,7 +920,7 @@ function add_point_googleMap(color, lat, lon, name, text, area, imgNo, scale, la
             strokeOpacity: 1.0,
             strokeColor: 'black',
             strokeWeight: 0.5,
-            scale: scale+4 //pixels
+            scale: scale + 4 //pixels
         }
     });
 
@@ -1054,7 +947,7 @@ function add_point_googleMap(color, lat, lon, name, text, area, imgNo, scale, la
     }
 }
 
-function viewport_pos_googlemap(long, lat){
+function viewport_pos_googlemap(long, lat) {
 
     var center = gmap.getCenter();
     var sw = gmap.getBounds().getSouthWest();
@@ -1077,39 +970,38 @@ function viewport_pos_googlemap(long, lat){
     return [viewport_x, viewport_y];
 }
 
-function removeAll_fcl_tooltips()
-{
-    var country = ["United Kingdom","Netherlands","Germany","Norway","Russian Federation","China","Japan","United States","France","Hong Kong","Philippines","Malaysia","Brazil","South Africa","United Arab Emirates","Singapore","Australia","Indonesia","India","Bangladesh","Viet Nam","Thailand"];
-    for(var i = 0; i < country.length; i ++){
-        var tooltip_project_id = "about_fcl_tooltip_project_layer_"+country[i];
-        var tooltip_network_id = "about_fcl_tooltip_network_layer_"+country[i];
-        var tooltip_staff_id = "about_fcl_tooltip_staff_layer_"+country[i];
+function removeAll_fcl_tooltips() {
+    var country = ["United Kingdom", "Netherlands", "Germany", "Norway", "Russian Federation", "China", "Japan", "United States", "France", "Hong Kong", "Philippines", "Malaysia", "Brazil", "South Africa", "United Arab Emirates", "Singapore", "Australia", "Indonesia", "India", "Bangladesh", "Viet Nam", "Thailand"];
+    for (var i = 0; i < country.length; i++) {
+        var tooltip_project_id = "about_fcl_tooltip_project_layer_" + country[i];
+        var tooltip_network_id = "about_fcl_tooltip_network_layer_" + country[i];
+        var tooltip_staff_id = "about_fcl_tooltip_staff_layer_" + country[i];
         var tooltip_project = document.getElementById(tooltip_project_id);
         var tooltip_network = document.getElementById(tooltip_network_id);
-        var tooltip_staff =document.getElementById(tooltip_staff_id);
-        if(tooltip_project != null) {
+        var tooltip_staff = document.getElementById(tooltip_staff_id);
+        if (tooltip_project != null) {
             tooltip_project.remove();
         }
-        if(tooltip_network != null) {
+        if (tooltip_network != null) {
             tooltip_network.remove();
         }
-        if(tooltip_staff != null) {
+        if (tooltip_staff != null) {
             tooltip_staff.remove();
         }
 
-        var tooltip_project_google_map_id = "about_fcl_tooltip_google_map_project_layer_"+country[i];
-        var tooltip_network_google_map_id = "about_fcl_tooltip_google_map_network_layer_"+country[i];
-        var tooltip_staff_google_map_id = "about_fcl_tooltip_google_map_staff_layer_"+country[i];
+        var tooltip_project_google_map_id = "about_fcl_tooltip_google_map_project_layer_" + country[i];
+        var tooltip_network_google_map_id = "about_fcl_tooltip_google_map_network_layer_" + country[i];
+        var tooltip_staff_google_map_id = "about_fcl_tooltip_google_map_staff_layer_" + country[i];
         var tooltip_project_google_map = document.getElementById(tooltip_project_google_map_id);
         var tooltip_network_google_map = document.getElementById(tooltip_network_google_map_id);
-        var tooltip_staff_google_map =document.getElementById(tooltip_staff_google_map_id);
-        if(tooltip_project_google_map != null) {
+        var tooltip_staff_google_map = document.getElementById(tooltip_staff_google_map_id);
+        if (tooltip_project_google_map != null) {
             tooltip_project_google_map.remove();
         }
-        if(tooltip_network_google_map != null) {
+        if (tooltip_network_google_map != null) {
             tooltip_network_google_map.remove();
         }
-        if(tooltip_staff_google_map != null) {
+        if (tooltip_staff_google_map != null) {
             tooltip_staff_google_map.remove();
         }
     }
@@ -1135,10 +1027,10 @@ function showFCLInfoTooltip_on_googlemap(layer_name, long, lat, country, country
 
     var viewport_position = viewport_pos_googlemap(long, lat);
 
-    var about_fcl_tooltip_dynamic_id = "about_fcl_tooltip_google_map_" + layer_name+"_"+country;
+    var about_fcl_tooltip_dynamic_id = "about_fcl_tooltip_google_map_" + layer_name + "_" + country;
 
     var find_tooltip = document.getElementById(about_fcl_tooltip_dynamic_id);
-    if(find_tooltip != null) {
+    if (find_tooltip != null) {
         find_tooltip.remove();
         return;
     }
@@ -1150,7 +1042,7 @@ function showFCLInfoTooltip_on_googlemap(layer_name, long, lat, country, country
     //---national flag tooltip---//
     var y_displacement = 60;
     about_fcl_tooltip.append("div")
-        .attr("id", about_fcl_tooltip_dynamic_id+"_country")
+        .attr("id", about_fcl_tooltip_dynamic_id + "_country")
         .attr("class", "about_fcl_tooltip")
         .attr("style", "left:" + (viewport_position[0]) + "px;bottom:" + (window.innerHeight - viewport_position[1] + y_displacement) + "px;visibility: visible;")
         .attr("data-lng", long)
@@ -1163,10 +1055,10 @@ function showFCLInfoTooltip_on_googlemap(layer_name, long, lat, country, country
         );
 
     //---number tooltip---//
-    var about_fcl_tooltip_country_width = document.getElementById(about_fcl_tooltip_dynamic_id+"_country").offsetWidth;
+    var about_fcl_tooltip_country_width = document.getElementById(about_fcl_tooltip_dynamic_id + "_country").offsetWidth;
     var tooltip_2_x = viewport_position[0] + about_fcl_tooltip_country_width + 8;
     about_fcl_tooltip.append("div")
-        .attr("id", about_fcl_tooltip_dynamic_id+"_info")
+        .attr("id", about_fcl_tooltip_dynamic_id + "_info")
         .attr("class", "about_fcl_tooltip")
         .attr("style", "left:" + tooltip_2_x + "px;bottom:" + (window.innerHeight - viewport_position[1] + y_displacement) + "px;visibility: visible;")
         .attr("data-lng", long)
@@ -1179,9 +1071,9 @@ function showFCLInfoTooltip_on_googlemap(layer_name, long, lat, country, country
 
     //---flagpole---//
     about_fcl_tooltip.append("div")
-        .attr("id", about_fcl_tooltip_dynamic_id+"_line")
+        .attr("id", about_fcl_tooltip_dynamic_id + "_line")
         .attr("class", "about_fcl_tooltip_line")
-        .attr("style", "left:" + (viewport_position[0]-1) + "px;bottom:" + (window.innerHeight - viewport_position[1]) + "px;visibility: visible;")
+        .attr("style", "left:" + (viewport_position[0] - 1) + "px;bottom:" + (window.innerHeight - viewport_position[1]) + "px;visibility: visible;")
         .attr("data-lng", long)
         .attr("data-lat", lat);
 }

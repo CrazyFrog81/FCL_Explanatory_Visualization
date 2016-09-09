@@ -194,7 +194,6 @@ function draw_pop_layer() {
     pop_layer = true;
     d3.select("#pop_densityHolder").selectAll("ul").style("height", "73px");
     console.log("progress: draw_pop_layer!");
-    SC.layer_count++;
     SC.layer_stack[0] = SC.layer_count;
     load_DData("pop_layer");
 }
