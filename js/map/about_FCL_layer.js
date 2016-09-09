@@ -147,6 +147,19 @@ function generate_allDistMatrix() {
             Obj["latitude"] = pointA.Latitude;
             Obj["longitude"] = pointA.Longitude;
             Obj["country"] = pointA.Country;
+
+            //---added by UnixC begin, counting project number for one country---//
+            var pointA_Country = pointA.Country;
+            // ZW: count starts from 0
+            var collaborator_no_count = 0;
+            items.forEach(function (pointB) {
+                if (pointA_Country == pointB.Country) {
+                    collaborator_no_count = collaborator_no_count + 1;
+                }
+            });
+            Obj["Number"] = collaborator_no_count;
+            //---added by UnixC end---//
+
             SC.network.push(Obj);
             Obj = {};
 
@@ -157,19 +170,6 @@ function generate_allDistMatrix() {
                 distance = d3.geo.distance(positionA, positionB) * distance_Multiplier;
                 matrix[pointA.No - 1].push(distance);
             })
-
-            //---added by UnixC begin, counting project number for one country---//
-            var pointA_Country = pointA.Country;
-
-            // ZW: count starts from 0
-            var collaborator_no_count = 0;
-            items.forEach(function (pointB) {
-                if (pointA_Country == pointB.Country) {
-                    collaborator_no_count = collaborator_no_count + 1;
-                }
-            });
-            Obj["Number"] = collaborator_no_count;
-            //---added by UnixC end---//
         });
 
         SC.network_matrix = matrix;
@@ -201,6 +201,20 @@ function generate_allDistMatrix() {
             Obj["latitude"] = pointA.Latitude;
             Obj["longitude"] = pointA.Longitude;
             Obj["country"] = pointA.Nationality;
+
+            //---added by UnixC begin, counting project number for one country---//
+            var pointA_Country = pointA.Nationality;
+
+            // ZW: count starts from 0
+            var staff_no_count = 0;
+            items.forEach(function (pointB) {
+                if (pointA_Country == pointB.Nationality) {
+                    staff_no_count = staff_no_count + 1;
+                }
+            });
+            Obj["Number"] = staff_no_count;
+            //---added by UnixC end---//
+
             SC.staff.push(Obj);
             Obj = {};
 
@@ -211,19 +225,6 @@ function generate_allDistMatrix() {
                 distance = d3.geo.distance(positionA, positionB) * distance_Multiplier;
                 matrix[pointA.No - 1].push(distance);
             })
-
-            //---added by UnixC begin, counting project number for one country---//
-            var pointA_Country = pointA.Country;
-
-            // ZW: count starts from 0
-            var staff_no_count = 0;
-            items.forEach(function (pointB) {
-                if (pointA_Country == pointB.Country) {
-                    staff_no_count = staff_no_count + 1;
-                }
-            });
-            Obj["Number"] = staff_no_count;
-            //---added by UnixC end---//
         });
 
         SC.staff_matrix = matrix;
