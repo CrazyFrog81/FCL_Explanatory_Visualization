@@ -9,9 +9,6 @@ d3.selection.prototype.moveToFront = function () {
     });
 };
 
-var about_fcl_tooltip_country, about_fcl_tooltip_info, about_fcl_tooltip_connect_line;
-var cluster_tooltip;
-
 /*calculate distance between any two project locations*/
 
 function draw_projectLayer() {
@@ -393,7 +390,6 @@ function add_point(color, lat, lon, title, text, area, imgNo, scale, layer_name,
 //function to add clusters of projects
 function add_zoomable_cluster(color, lat, lon, name, text, area, scale, layer_name, country, project_number) {
     if (area == undefined) area = 1;
-    // if (imgNo == undefined) imgNo = 0;
 
     var country_str = country.replace(/ /g, '');//remove all blank spaces
     var country_filename = country_str.toLowerCase();

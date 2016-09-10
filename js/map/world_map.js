@@ -76,7 +76,7 @@ function read_co2Data() {
             co2_density = co2_density_data;
             console.log("progress: read_co2");
             draw_worldmap();
-            draw_pop_layer();
+            init_pop_layer();
         });
     });
 }
@@ -122,8 +122,6 @@ function draw_worldmap() {
      .attr("class", "equator")
      .attr("d", path);*/
 
-    var tooltip_info = {};
-
     var country = g.selectAll(".country").data(this.world_topo);
 
     country.enter().insert("path").attr("class", "country")
@@ -140,37 +138,9 @@ function draw_worldmap() {
     console.log("progress: draw_worldmap");
 }
 
-/* to draw a different layer of country shapes*/
-function draw_pop_country() {
-    var country = g.append("g").attr("id", "pop_countries")
-        .attr("class", "pop_layer").selectAll(".country").data(this.world_topo);
-
-    country.enter().insert("path").attr("class", "country")
-        .attr("z-index", 4)
-        .attr("d", path)
-        .attr("fill", worldmap_background)
-        .style("opacity", function () {
-            var res = 0.8 - 0.2 * SC.layer_count;
-            return res;
-        });
-}
-
-function draw_co2_country() {
-    var country = g.append("g").attr("id", "co2_countries")
-        .attr("class", "co2_layer").selectAll(".country").data(this.world_topo);
-
-    country.enter().insert("path").attr("class", "country")
-        .attr("z-index", 4)
-        .attr("d", path).attr("fill", worldmap_background)
-        .style("opacity", function () {
-            var res = 0.8 - 0.2 * SC.layer_count;
-            return res;
-        });
-}
-
-function draw_gdp_country() {
-    var country = g.append("g").attr("id", "gdp_countries")
-        .attr("class", "gdp_layer").selectAll(".country").data(this.world_topo);
+function draw_urbanization_layer(layer_id, layer_class){
+    var country = g.append("g").attr("id", layer_id)
+        .attr("class", layer_class).selectAll(".country").data(this.world_topo);
 
     country.enter().insert("path").attr("class", "country")
         .attr("z-index", 4)
@@ -190,11 +160,11 @@ function redraw_worldmap() {
 }
 
 /*to use for initializing the population density display at the first open of the map */
-function draw_pop_layer() {
+function init_pop_layer() {
     document.getElementById("pop_densityBtn").classList.toggle("selectedBtn");
     pop_layer = true;
     d3.select("#pop_densityHolder").selectAll("ul").style("height", "73px");
-    console.log("progress: draw_pop_layer!");
+    console.log("progress: init_pop_layer!");
     SC.layer_count++;
     SC.layer_stack[0] = SC.layer_count;
     load_DData("pop_layer");
@@ -349,7 +319,6 @@ function lnglat_pos(viewport_x, viewport_y) {
 
     return projection.invert([x, y]);
 }
-
 
 function formatNum(num) {
     var format = d3.format(',.02f');

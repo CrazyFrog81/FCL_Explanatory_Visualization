@@ -35,14 +35,12 @@
     var staff_layer = false;
 
     var map_width, map_height;
-    map_width = screen.width;//document.getElementById("content_holder").offsetWidth;//
-    map_height = screen.height;//window.innerHeight;//
+    map_width = screen.width;
+    map_height = screen.height;
 
     var point_layer_count = 0;
 
     var ul_height = 73;
-
-    var click_x, click_y;
 
     function newInput() {
         if (this.id) {
@@ -70,7 +68,6 @@
                         remove_layer('.pop_layer');
                         if (!(pop_layer | co2_layer | gdp_layer)) {
                             redraw_worldmap();
-                            //d3.select("#label_slider").remove();
                         }
                     }
 
@@ -131,7 +128,6 @@
                         project_layer = false;
                         document.getElementById("fcl_projectsBtn_img").src = "img/grey_out.png";
                         remove_layer('.project_layer');
-                        // clear_allProject_Poly(); //clear polygon
                         clear_allProject_Circles();
                         point_layer_count--;
                     }
@@ -522,20 +518,12 @@
         d3.selectAll(".about_fcl_tooltip_container").remove();
     }
 
-    function close_window() {
-        console.log("closing window");
+    function sendCommands(commands) {
+        commands = String(commands);
+        console.log(commands);
 
         var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", "http://localhost/FCL_Exhibition/end_fcl_map.php", true);
-        xmlhttp.send();
-    }
-
-    // @deprecated: cannot start GLFW program from Chrome/IE
-    function start_demo_polis() {
-        console.log("start demo polis");
-
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", "http://localhost/FCL_Exhibition/start_demo_polis.php", true);
+        xmlhttp.open("GET", "http://localhost/FCL_Exhibition/exhibition.php?commands="+commands, true);
         xmlhttp.send();
     }
 </script>
@@ -543,25 +531,21 @@
 <ul id="menu" class="mfb-component--bl mfb-zoomin" data-mfb-toggle="hover">
     <li class="mfb-component__wrap">
         <a href="#" class="mfb-component__button--main">
-            <i href="#" onclick="close_window()" class="mfb-component__main-icon--resting ion-plus-round">
+            <i href="#" onclick="sendCommands('home')" class="mfb-component__main-icon--resting ion-plus-round">
                 HOME
             </i>
         </a>
 
         <a href="#" class="mfb-component__button--main">
-            <i class="mfb-component__main-icon--resting ion-plus-round">
-                CIVAL
-            </i>
-
-            <i class="mfb-component__main-icon--resting ion-plus-round">
+            <i href="#" onclick="sendCommands('cival')" class="mfb-component__main-icon--resting ion-plus-round">
                 CIVAL
             </i>
         </a>
 
-        <!--<a href="#" onclick="start_demo_polis()" class="mfb-component__button&#45;&#45;main">-->
-        <!--<i class="mfb-component__main-icon&#45;&#45;resting ion-plus-round">-->
-        <!--POLIS-->
-        <!--</i>-->
+        <!--<a href="#" class="mfb-component__button&#45;&#45;main">-->
+            <!--<i href="#" onclick="sendCommands('polis')" class="mfb-component__main-icon&#45;&#45;resting ion-plus-round">-->
+                <!--POLIS-->
+            <!--</i>-->
         <!--</a>-->
     </li>
 </ul>
