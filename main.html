@@ -53,15 +53,15 @@
                 case 'pop_densityBtn':
                     if (res) {
                         SC.layer_count++;
-                        SC.layer_stack[0] = SC.layer_count;
+//                        SC.layer_stack[0] = SC.layer_count;
                         pop_layer = true;
 
                         document.getElementById("pop_densityBtn_img").src = "img/eye_white.png";
                         the_ul.style("height", ul_height + "px");
-                        load_DData("pop_layer");
+                        displayUrbanizationData("pop_layer");
                     } else {
                         SC.layer_count--;
-                        SC.layer_stack[0] = 0;
+//                        SC.layer_stack[0] = 0;
                         pop_layer = false;
                         document.getElementById("pop_densityBtn_img").src = "img/eye_black.png";
                         the_ul.style("height", "0");
@@ -76,14 +76,14 @@
                 case 'co2_emissionBtn':
                     if (res) {
                         SC.layer_count++;
-                        SC.layer_stack[1] = SC.layer_count;
+//                        SC.layer_stack[1] = SC.layer_count;
                         co2_layer = true;
                         document.getElementById("co2_emissionBtn_img").src = "img/eye_white.png";
                         the_ul.style("height", ul_height + "px");
-                        load_DData("co2_layer");
+                        displayUrbanizationData("co2_layer");
                     } else {
                         SC.layer_count--;
-                        SC.layer_stack[1] = 0;
+//                        SC.layer_stack[1] = 0;
                         co2_layer = false;
                         document.getElementById("co2_emissionBtn_img").src = "img/eye_black.png";
                         the_ul.style("height", "0");
@@ -98,14 +98,14 @@
                 case 'gdp_Btn':
                     if (res) {
                         SC.layer_count++;
-                        SC.layer_stack[2] = SC.layer_count;
+//                        SC.layer_stack[2] = SC.layer_count;
                         gdp_layer = true;
                         document.getElementById("gdp_Btn_img").src = "img/eye_white.png";
                         the_ul.style("height", ul_height + "px");
-                        load_DData("gdp_layer");
+                        displayUrbanizationData("gdp_layer");
                     } else {
                         SC.layer_count--;
-                        SC.layer_stack[2] = 0;
+//                        SC.layer_stack[2] = 0;
                         gdp_layer = false;
                         document.getElementById("gdp_Btn_img").src = "img/eye_black.png";
                         the_ul.style("height", "0");
@@ -122,7 +122,7 @@
                         project_layer = true;
                         document.getElementById("fcl_projectsBtn_img").src = "img/yellow.png";
 
-                        load_DData("project_layer");
+                        displayUrbanizationData("project_layer");
                         point_layer_count++;
                     } else {
                         project_layer = false;
@@ -137,7 +137,7 @@
                     if (res) {
                         network_layer = true;
                         document.getElementById("global_networkBtn_img").src = "img/blue.png";
-                        load_DData("network_layer");
+                        displayUrbanizationData("network_layer");
                         point_layer_count++;
                     } else {
                         network_layer = false;
@@ -152,7 +152,7 @@
                     if (res) {
                         staff_layer = true;
                         document.getElementById("academic_staffBtn_img").src = "img/pink.png";
-                        load_DData("staff_layer");
+                        displayUrbanizationData("staff_layer");
                         point_layer_count++;
                     } else {
                         staff_layer = false;
@@ -523,7 +523,7 @@
         console.log(commands);
 
         var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", "http://localhost/FCL_Exhibition/exhibition.php?commands="+commands, true);
+        xmlhttp.open("GET", "http://localhost/FCL_Exhibition/exhibition.php?commands=" + commands, true);
         xmlhttp.send();
     }
 </script>
@@ -543,9 +543,9 @@
         </a>
 
         <!--<a href="#" class="mfb-component__button&#45;&#45;main">-->
-            <!--<i href="#" onclick="sendCommands('polis')" class="mfb-component__main-icon&#45;&#45;resting ion-plus-round">-->
-                <!--POLIS-->
-            <!--</i>-->
+        <!--<i href="#" onclick="sendCommands('polis')" class="mfb-component__main-icon&#45;&#45;resting ion-plus-round">-->
+        <!--POLIS-->
+        <!--</i>-->
         <!--</a>-->
     </li>
 </ul>

@@ -82,7 +82,7 @@ var world_map_max_zoom = 1000;
 
 var zoom = d3.behavior.zoom().scaleExtent([1, world_map_max_zoom]).on("zoom", move);
 
-function setup() {
+function init() {
     offsetL = document.getElementById("map_container").offsetLeft + 10;
     offsetT = document.getElementById("map_container").offsetTop + 10;
 
@@ -103,17 +103,6 @@ function setup() {
         .attr("id", "map_container_g");
 
     g = svg.append("g").attr("id", "country_holder");
-}
-
-function draw_worldmap() {
-    removeAllChild();
-    setup();
-    loadFCLData(); // for 4-6 layers
-    //svg.append("path").datum(graticule).attr("class", "graticule").attr("d", path);
-
-    /*svg.append("path").datum({type: "LineString", coordinates: [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]]})
-     .attr("class", "equator")
-     .attr("d", path);*/
 
     var country = g.selectAll(".country").data(this.world_topo);
 
@@ -125,24 +114,16 @@ function draw_worldmap() {
         .attr("title", function (d, i) {
             return d.properties.name;
         }).attr("fill", worldmap_background);
+}
+
+function draw_worldmap() {
+    removeAllChild();
+    init();
+    loadFCLData();
 
     setup_slider(1964, 2014);
 
     console.log("progress: draw_worldmap");
-}
-
-function draw_urbanization_layer(layer_id, layer_class){
-    var country = g.append("g").attr("id", layer_id)
-        .attr("class", layer_class).selectAll(".country").data(this.world_topo);
-
-    country.enter().insert("path").attr("class", "country")
-        .attr("z-index", 4)
-        .attr("d", path)
-        .attr("fill", worldmap_background)
-        .style("opacity", function () {
-            var res = 0.8 - 0.2 * SC.layer_count;
-            return res;
-        });
 }
 
 /* to redraw world map upon close of all three color layer*/
@@ -150,17 +131,6 @@ function redraw_worldmap() {
     var country = g.selectAll(".country").data(this.world_topo);
 
     country.attr("fill", worldmap_background);
-}
-
-/*to use for initializing the population density display at the first open of the map */
-function init_pop_layer() {
-    document.getElementById("pop_densityBtn").classList.toggle("selectedBtn");
-    pop_layer = true;
-    d3.select("#pop_densityHolder").selectAll("ul").style("height", "73px");
-    console.log("progress: init_pop_layer!");
-    SC.layer_count++;
-    SC.layer_stack[0] = SC.layer_count;
-    load_DData("pop_layer");
 }
 
 //adjust shapes upon zoom and drag
@@ -233,23 +203,17 @@ function move(t, s) {
     zoom.translate(t);
     zoom.scale(s);
 
-    d3.selectAll(".point")
-        .style("stroke-width", 0.5 / s + 'px')
-        .attr("r", function (d) {
-            return Math.sqrt(area_unit * d["area"] / Math.PI) / s;
-        });
-
     d3.selectAll(".cluster")
-        .style("stroke-width", 0.5 / s + 'px')
+        .style("stroke-width", 0.5)
         .attr("r", function (d) {
-            return Math.sqrt(area_unit * d["area"] / Math.PI) / s;
+            return Math.sqrt(area_unit * d["area"] / Math.PI) / zoom.scale();
         });
 
     svg.selectAll(".zoomable").remove();
 
     //adjust the country hover stroke map_width based on zoom level
-    d3.selectAll(".country").style("stroke-width", 1.5 / s);
-    d3.selectAll(".text").style("font-size", 20 / s);
+    d3.selectAll(".country").style("stroke-width", 1.5);
+    d3.selectAll(".text").style("font-size", 20);
 
     var tooltips = d3.selectAll(".tooltip").forEach(function (tips) {
         tips.forEach(function (tip) {
@@ -272,7 +236,6 @@ function move(t, s) {
             var x = new_pos[0];
             if (tip.id.includes("info")) {
                 x += (document.getElementById(tip.id.replace("_info", "_country")).offsetWidth + 8);
-                // console.log(tip.id+" "+tip.id.replace("_info", "_country")+" "+document.getElementById(tip.id.replace("_info", "_country")).offsetWidth);
             }
 
             d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1] + 60) + "px");
@@ -311,14 +274,6 @@ function lnglat_pos(viewport_x, viewport_y) {
     var y = (viewport_y - zoom.translate()[1]) / zoom.scale();
 
     return projection.invert([x, y]);
-}
-
-function formatNum(num) {
-    var format = d3.format(',.02f');
-
-    var label = format(num / 1000000) + "M";
-
-    return label;
 }
 
 function removeAllChild() {

@@ -12,12 +12,11 @@ var range1;
 var range2;
 var range3;
 
-/*load_countrySize_and_property */
-function load_DData(_category) {
+function displayUrbanizationData(_category) {
     switch (_category) {
         case "pop_layer":
             color_split1 = [1500, 500, 400, 300, 200, 100, 50, 10, 0];
-            draw_urbanization_layer("pop_countries", "pop_layer");
+            init_urbanization_layer("pop_countries", "pop_layer");
 
             display_urbanization_layer("#pop_countries", cur_year, color_split1, colors1, country_pop, country_area, 1);
             draw_colorSlider_1('pop_layer');
@@ -25,7 +24,7 @@ function load_DData(_category) {
 
         case "co2_layer":
             color_split2 = [100, 50, 20, 10, 5, 1, 0.1, 0];
-            draw_urbanization_layer("co2_countries", "co2_layer");
+            init_urbanization_layer("co2_countries", "co2_layer");
 
             display_urbanization_layer("#co2_countries", cur_year, color_split2, colors2, country_co2_emission, country_pop, 1000);
             draw_colorSlider_2('co2_layer');
@@ -33,7 +32,7 @@ function load_DData(_category) {
 
         case "gdp_layer":
             color_split3 = [100000, 75000, 50000, 10000, 5000, 1000, 500, 0];
-            draw_urbanization_layer("gdp_countries", "gdp_layer");
+            init_urbanization_layer("gdp_countries", "gdp_layer");
 
             display_urbanization_layer("#gdp_countries", cur_year, color_split3, colors3, country_gdp, country_pop, 1);
             draw_colorSlider_3('gdp_layer');
@@ -57,6 +56,32 @@ function load_DData(_category) {
         default:
             break;
     }
+}
+
+
+/*to use for initializing the population density display at the first open of the map */
+function init_pop_layer() {
+    document.getElementById("pop_densityBtn").classList.toggle("selectedBtn");
+    pop_layer = true;
+    d3.select("#pop_densityHolder").selectAll("ul").style("height", "73px");
+    console.log("progress: init_pop_layer!");
+    SC.layer_count++;
+    // SC.layer_stack[0] = SC.layer_count;
+    displayUrbanizationData("pop_layer");
+}
+
+function init_urbanization_layer(layer_id, layer_class) {
+    var country = g.append("g").attr("id", layer_id)
+        .attr("class", layer_class).selectAll(".country").data(this.world_topo);
+
+    country.enter().insert("path").attr("class", "country")
+        .attr("z-index", 4)
+        .attr("d", path)
+        .attr("fill", worldmap_background)
+        .style("opacity", function () {
+            var res = 0.8 - 0.2 * SC.layer_count;
+            return res;
+        });
 }
 
 function display_urbanization_layer(country_layer, cur_year, color_splits, colors, urbanization_data_1, urbanization_data_2, multiplier) {
@@ -524,7 +549,7 @@ function draw_project_legend(className) {
         }).attr('fill', 'none'//function (d, i) {return '#C0C0C0';}
     ).attr('r', function (d, i) {
         //var s = zoom.scale();
-        return Math.sqrt(d * area_unit / (Math.PI));
+        return Math.sqrt(d * area_unit / (Math.PI) / zoom.scale());
     }).attr("opacity", 0.5);
 
     sg.selectAll('text').data(area).enter().append("text")

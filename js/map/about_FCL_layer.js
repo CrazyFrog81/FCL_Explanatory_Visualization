@@ -57,7 +57,6 @@ function loadFCLData() {
 var fcl_tooltip_list = [];
 var area_unit = 200;
 
-//function to add clusters of projects
 function draw_cluster(color, layer_name, cluster) {
     var country = cluster[0]["country"];
     var country_str = country.replace(/ /g, '');//remove all blank spaces
@@ -102,7 +101,7 @@ function draw_cluster(color, layer_name, cluster) {
         .style("fill", color)
         .style("opacity", 0.60)
         .attr("r", function (d) {
-            return Math.sqrt(d["area"] * area_unit / Math.PI);
+            return Math.sqrt(d["area"] * area_unit / Math.PI) / zoom.scale();
         })
         .on("mouseover", function () {
             // showFCLInfoTooltip(layer_name, lon, lat, country, country_or_network_logo_img, project_number);
@@ -216,8 +215,6 @@ function generate_clusters(layer_name, color, items) {
 
 var circle, focus, text; //svg
 
-// TODO: design better
-// TODO: the clusters should also have the tooltips
 function showFCLInfoTooltip(layer_name, long, lat, country, country_image, number) {
     console.log("showFCLInfoTooltip");
     var description;
@@ -269,6 +266,7 @@ function showFCLInfoTooltip(layer_name, long, lat, country, country_image, numbe
 
     //---number tooltip---//
     var about_fcl_tooltip_country_width = document.getElementById(about_fcl_tooltip_dynamic_id + "_country").offsetWidth;
+    var about_fcl_tooltip_country_height = document.getElementById(about_fcl_tooltip_dynamic_id + "_country").offsetHeight;
     var tooltip_2_x = viewport_position[0] + about_fcl_tooltip_country_width + 8;
     about_fcl_tooltip.append("div")
         .attr("id", about_fcl_tooltip_dynamic_id + "_info")
@@ -289,4 +287,6 @@ function showFCLInfoTooltip(layer_name, long, lat, country, country_image, numbe
         .attr("style", "left:" + (viewport_position[0] - 1) + "px;bottom:" + (window.innerHeight - viewport_position[1]) + "px;visibility: visible;")
         .attr("data-lng", long)
         .attr("data-lat", lat);
+
+    document.getElementById(about_fcl_tooltip_dynamic_id + "_line").style.height = (y_displacement + about_fcl_tooltip_country_height) + "px";
 }
