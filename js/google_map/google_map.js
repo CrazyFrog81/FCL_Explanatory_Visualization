@@ -78,61 +78,60 @@ function initMap() {
     google.maps.event.addListener(gmap, 'zoom_changed', function () {
         //if(network_layer|staff_layer){
 
-        clear_allCircles();
-        var s = gmap.getZoom() - 1;
-        zoom.scale(s); //update the zoom level in base map
-
-        var tier1_scale = 2;
-        var tier2_scale = 2.5;
-        var tier3_scale = 3;
-        var tier4_scale = 3.5;
-        var google_map_scale = 4;
-        var tier_range = 100;
-        var scale = 2;
-
-        if (s >= tier4_scale) {
-            /*if(project_layer&&callcount>0){
-             callcount=0;
-             d3.select("#google_map").remove();
-             }*/
-            tier_range = 3;
-            scale = tier4_scale;
-            svg.selectAll(".items").remove();
-            if (project_layer)find_last_tier(tier_range, scale, 'project_layer');
-            if (network_layer)find_last_tier(tier_range, scale, 'network_layer');
-            if (staff_layer)find_last_tier(tier_range, scale, 'staff_layer');
-
-        } else if (s >= tier3_scale) {
-            tier_range = 5;
-            scale = tier3_scale;
-            svg.selectAll(".items").remove();
-            if (project_layer)find_last_tier(tier_range, scale, 'project_layer');
-            if (network_layer)find_last_tier(tier_range, scale, 'network_layer');
-            if (staff_layer)find_last_tier(tier_range, scale, 'staff_layer');
-
-        } else if (s >= tier2_scale) {
-            tier_range = 25;
-            scale = tier2_scale;
-            svg.selectAll(".items").remove();
-            if (project_layer)find_last_tier(tier_range, scale, 'project_layer');
-            if (network_layer)find_last_tier(tier_range, scale, 'network_layer');
-            if (staff_layer)find_last_tier(tier_range, scale, 'staff_layer');
-        } else if (s >= tier1_scale) {
-            tier_range = 50;
-            scale = tier1_scale;
-            svg.selectAll(".items").remove();
-            if (project_layer)find_last_tier(tier_range, scale, 'project_layer');
-            if (network_layer)find_last_tier(tier_range, scale, 'network_layer');
-            if (staff_layer)find_last_tier(tier_range, scale, 'staff_layer');
-        } else {
-            tier_range = 100;
-            scale = 1;
-            svg.selectAll(".items").remove();
-            if (project_layer)find_last_tier(tier_range, scale, 'project_layer');
-            if (network_layer)find_last_tier(tier_range, scale, 'network_layer');
-            if (staff_layer)find_last_tier(tier_range, scale, 'staff_layer');
-        }
-
+        // clear_allCircles();
+        // var s = gmap.getZoom() - 1;
+        // zoom.scale(s); //update the zoom level in base map
+        //
+        // var tier1_scale = 2;
+        // var tier2_scale = 2.5;
+        // var tier3_scale = 3;
+        // var tier4_scale = 3.5;
+        // var google_map_scale = 4;
+        // var tier_range = 100;
+        // var scale = 2;
+        //
+        // if (s >= tier4_scale) {
+        //     /*if(project_layer&&callcount>0){
+        //      callcount=0;
+        //      d3.select("#google_map").remove();
+        //      }*/
+        //     tier_range = 3;
+        //     scale = tier4_scale;
+        //     svg.selectAll(".items").remove();
+        //     if (project_layer)generate_clusters('project_layer');
+        //     if (network_layer)generate_clusters('network_layer');
+        //     if (staff_layer)generate_clusters('staff_layer');
+        //
+        // } else if (s >= tier3_scale) {
+        //     tier_range = 5;
+        //     scale = tier3_scale;
+        //     svg.selectAll(".items").remove();
+        //     if (project_layer)generate_clusters(tier_range, scale, 'project_layer');
+        //     if (network_layer)generate_clusters(tier_range, scale, 'network_layer');
+        //     if (staff_layer)generate_clusters(tier_range, scale, 'staff_layer');
+        //
+        // } else if (s >= tier2_scale) {
+        //     tier_range = 25;
+        //     scale = tier2_scale;
+        //     svg.selectAll(".items").remove();
+        //     if (project_layer)generate_clusters(tier_range, scale, 'project_layer');
+        //     if (network_layer)generate_clusters(tier_range, scale, 'network_layer');
+        //     if (staff_layer)generate_clusters(tier_range, scale, 'staff_layer');
+        // } else if (s >= tier1_scale) {
+        //     tier_range = 50;
+        //     scale = tier1_scale;
+        //     svg.selectAll(".items").remove();
+        //     if (project_layer)generate_clusters(tier_range, scale, 'project_layer');
+        //     if (network_layer)generate_clusters(tier_range, scale, 'network_layer');
+        //     if (staff_layer)generate_clusters(tier_range, scale, 'staff_layer');
+        // } else {
+        //     tier_range = 100;
+        //     scale = 1;
+        //     svg.selectAll(".items").remove();
+        //     if (project_layer)generate_clusters(tier_range, scale, 'project_layer');
+        //     if (network_layer)generate_clusters(tier_range, scale, 'network_layer');
+        //     if (staff_layer)generate_clusters(tier_range, scale, 'staff_layer');
+        // }
     });
 
     // restrict the appropriate region for users

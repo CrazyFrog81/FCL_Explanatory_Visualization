@@ -7,7 +7,7 @@ var colors1 = ["#0F1F8A", "#19215C", "#08306B", "#08519C", "#2171B5", "#4292C6",
 var colors2 = ["#6B0707", "#940707", "#AE0B0B", "#D91313", "#FB3D3D", "#F95454", "#F37777", "#F4B5B5", "#F2D7D7"];
 var colors3 = ["#2EB043", "#69A155", "#57ED00", "#63F714", "#94FF63", "#A8FF87", "#C4FFAB", "#DAFAD9"];//["#69FF1C","#5DE117","#57ED00","#63F714", "#94FF63","#A8FF87", "#C4FFAB"];//A8FF87
 
-var status = 0; //play(1) or stop(0 ) for the time_slider
+var status = 0;
 var range1;
 var range2;
 var range3;
@@ -41,17 +41,17 @@ function load_DData(_category) {
 
         case "project_layer":
             draw_project_legend('project_layer');
-            draw_projectLayer();
+            generate_clusters('project_layer', 'yellow', SC.projects);
             break;
 
         case "network_layer":
             draw_project_legend('network_layer');
-            draw_networkLayer();
+            generate_clusters('network_layer', 'blue', SC.network);
             break;
 
         case "staff_layer":
             draw_project_legend('staff_layer');
-            draw_staffLayer();
+            generate_clusters('staff_layer', 'pink', SC.staff);
             break;
 
         default:

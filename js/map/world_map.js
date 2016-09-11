@@ -6,17 +6,11 @@
  */
 
 window.SC = {};
-SC.projectNo = 0;
-SC.networkNo = 0;
-SC.staffNo = 0;
 
 SC.projects = [];
 SC.network = [];
 SC.staff = [];
 
-SC.project_matrix = [];
-SC.network_matrix = [];
-SC.staff_matrix = [];
 SC.layer_count = 0;
 SC.layer_stack = [0, 0, 0]; // index 0 for pop_layer, index 1 for co2, index 2 for GDP;
 //// each contains the layer stack number from 1-3, 0 stands for non-exists
@@ -53,7 +47,6 @@ function read_popData() {
                 read_gdpData();
             });
         });
-
     });
 }
 
@@ -115,7 +108,7 @@ function setup() {
 function draw_worldmap() {
     removeAllChild();
     setup();
-    generate_allDistMatrix(); // for 4-6 layers
+    loadFCLData(); // for 4-6 layers
     //svg.append("path").datum(graticule).attr("class", "graticule").attr("d", path);
 
     /*svg.append("path").datum({type: "LineString", coordinates: [[-180, 0], [-90, 0], [0, 0], [90, 0], [180, 0]]})
@@ -205,11 +198,11 @@ function move(t, s) {
     svg.selectAll(".items").remove();
 
     if (project_layer)
-        find_last_tier(tier_range, scale, 'project_layer');
+        generate_clusters('project_layer', 'yellow', SC.projects);
     if (network_layer)
-        find_last_tier(tier_range, scale, 'network_layer');
+        generate_clusters('network_layer', 'blue', SC.network);
     if (staff_layer)
-        find_last_tier(tier_range, scale, 'staff_layer');
+        generate_clusters('staff_layer', 'pink', SC.staff);
 
     var cur_scale = zoom.scale();
 
