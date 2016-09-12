@@ -49,6 +49,21 @@ div.about_fcl_tooltip_line{
     padding:5px 10px 10px 10px;
 }
 
+.tooltip_close {
+    color: #aaa;
+    float: right;
+    margin-top: 30px;
+    margin-left: 28px;
+    font-size: 28px;
+    font-weight: bold;
+    position: relative;
+    width:30px;
+    height:30px;
+    background-image: url("../img/close_button_white.png");
+    background-size: 100% 100%;
+    z-index: 30;
+}
+
 .tooltip_pic_logo{
     /*max-width: 300px;
     max-height:200px;

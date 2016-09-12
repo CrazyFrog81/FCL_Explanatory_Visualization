@@ -40,17 +40,17 @@ function displayUrbanizationData(_category) {
 
         case "project_layer":
             draw_project_legend('project_layer');
-            generate_clusters('project_layer', 'yellow', SC.projects);
+            SC.project_clusters = generate_clusters('project_layer', 'yellow', SC.projects);
             break;
 
         case "network_layer":
             draw_project_legend('network_layer');
-            generate_clusters('network_layer', 'blue', SC.network);
+            SC.network_clusters = generate_clusters('network_layer', 'blue', SC.network);
             break;
 
         case "staff_layer":
             draw_project_legend('staff_layer');
-            generate_clusters('staff_layer', 'pink', SC.staff);
+            SC.staff_clusters = generate_clusters('staff_layer', 'pink', SC.staff);
             break;
 
         default:
@@ -549,7 +549,7 @@ function draw_project_legend(className) {
         }).attr('fill', 'none'//function (d, i) {return '#C0C0C0';}
     ).attr('r', function (d, i) {
         //var s = zoom.scale();
-        return Math.sqrt(d * area_unit / (Math.PI) / zoom.scale());
+        return Math.sqrt(d * area_unit / (Math.PI));
     }).attr("opacity", 0.5);
 
     sg.selectAll('text').data(area).enter().append("text")

@@ -11,6 +11,10 @@ SC.projects = [];
 SC.network = [];
 SC.staff = [];
 
+SC.project_clusters = [];
+SC.network_clusters = [];
+SC.staff_clusters = [];
+
 SC.layer_count = 0;
 SC.layer_stack = [0, 0, 0]; // index 0 for pop_layer, index 1 for co2, index 2 for GDP;
 //// each contains the layer stack number from 1-3, 0 stands for non-exists
@@ -168,11 +172,11 @@ function move(t, s) {
     svg.selectAll(".items").remove();
 
     if (project_layer)
-        generate_clusters('project_layer', 'yellow', SC.projects);
+        SC.project_clusters = generate_clusters('project_layer', 'yellow', SC.projects);
     if (network_layer)
-        generate_clusters('network_layer', 'blue', SC.network);
+        SC.network_clusters = generate_clusters('network_layer', 'blue', SC.network);
     if (staff_layer)
-        generate_clusters('staff_layer', 'pink', SC.staff);
+        SC.staff_clusters = generate_clusters('staff_layer', 'pink', SC.staff);
 
     var cur_scale = zoom.scale();
 
@@ -192,8 +196,6 @@ function move(t, s) {
     } else {
         t[1] = Math.max(t[1], -(max_t1 * 1.1));
     }
-
-    fcl_tooltip_list = [];
 
     svg.attr("transform", "translate(" + t + ")scale(" + s + ")");
 
@@ -231,14 +233,23 @@ function move(t, s) {
             if (tip.id == undefined || tip.id == "")
                 return;
 
-            var new_pos = viewport_pos(tip.dataset.lng, tip.dataset.lat);
+            var check_tip_id = tip.id.replace("country", "");
+            check_tip_id = check_tip_id.replace("info", "");
+            // if tooltip does not exist
+            if (!check_tooltip_exist(check_tip_id)) {
+                remove_about_fcl_tooltip(check_tip_id);
+            } else {
+                var new_pos = viewport_pos(tip.dataset.lng, tip.dataset.lat);
 
-            var x = new_pos[0];
-            if (tip.id.includes("country")) {
-                x += (document.getElementById(tip.id.replace("_country", "_info")).offsetWidth + 8);
+                var x = new_pos[0];
+                if (tip.id.includes("country")) {
+                    x += (document.getElementById(tip.id.replace("_country", "_info")).offsetWidth + 8);
+
+                    $("#" + tip.id.replace("country", "") + "div").niceScroll().resize();
+                }
+
+                d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1] + 60) + "px");
             }
-
-            d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1] + 60) + "px");
         })
     });
 
@@ -283,6 +294,51 @@ function removeAllChild() {
     while (map_container.firstChild) {
         map_container.removeChild(map_container.firstChild);
     }
+}
+
+function check_tooltip_exist(tooltip_id) {
+    if (project_layer) {
+        var exist = check_tooltip_exist_in_cluster(tooltip_id, SC.project_clusters);
+
+        if (exist)
+            return true;
+    }
+
+    if (network_layer) {
+        var exist = check_tooltip_exist_in_cluster(tooltip_id, SC.network_clusters);
+
+        if (exist)
+            return true;
+    }
+
+    if (staff_layer) {
+        var exist = check_tooltip_exist_in_cluster(tooltip_id, SC.staff_clusters);
+
+        if (exist)
+            return true;
+    }
+
+    return false;
+}
+
+function check_tooltip_exist_in_cluster(tooltip_id, clusters) {
+    if(clusters == undefined)
+        return;
+
+    // console.log(tooltip_id+" "+clusters.length);
+
+    for (var index = 0; index < clusters.length; index++) {
+        var cluster = clusters[index];
+
+        // console.log(tooltip_id.replace("about_fcl_tooltip_", "")+" "+cluster["id"]);
+
+        if (tooltip_id.replace("about_fcl_tooltip_", "") == cluster["id"]) {
+
+            return true;
+        }
+    }
+
+    return false;
 }
 
 function handle_zoom(th) {

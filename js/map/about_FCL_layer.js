@@ -1,14 +1,3 @@
-/**
- * Created by yuhao on 27/5/16.
- */
-
-// https://github.com/wbkd/d3-extended
-d3.selection.prototype.moveToFront = function () {
-    return this.each(function () {
-        this.parentNode.appendChild(this);
-    });
-};
-
 function loadFCLData() {
     d3.csv("data/fcl/1. Projects.csv", function (err, projects) {
         projects.forEach(function (pointA) {
@@ -54,41 +43,6 @@ function loadFCLData() {
     });
 }
 
-var fcl_tooltip_list = [];
-var area_unit = 200;
-
-function draw_cluster(color, layer_name, cluster) {
-    var gpoint = g.append("g").attr("class", "items " + layer_name);
-    var lng = cluster["longitude"];
-    var lat = cluster["latitude"];
-
-    var point = projection([lng, lat]);
-    var point_x = point[0];
-    var point_y = point[1];
-
-    var img_src = [];
-
-    gpoint.selectAll("circle")
-        .data([{"area": cluster.length}])
-        .enter()
-        .append("svg:circle")
-        .style("stroke", "#000")
-        .style("stroke-width", "0.5px")
-        .attr("cx", point_x)
-        .attr("cy", point_y)
-        .attr("class", "point")
-        .style("fill", color)
-        .style("opacity", 0.60)
-        .attr("r", function (d) {
-            return Math.sqrt(d["area"] * area_unit / Math.PI) / zoom.scale();
-        })
-        .on("mouseout", function () {
-            // return cluster_tooltip.attr("style","visibility: hidden");
-        })
-        .on("click", function () {
-            showFCLInfoTooltip(layer_name, cluster);
-        });
-}
 
 function generate_clusters(layer_name, color, items) {
     var size = items.length;
@@ -109,8 +63,7 @@ function generate_clusters(layer_name, color, items) {
             var x_dist = b_viewport_pos[0] - a_viewport_pos[0];
             var y_dist = b_viewport_pos[1] - a_viewport_pos[1];
 
-            var dist = Math.sqrt(x_dist * x_dist + y_dist * y_dist);
-            dist_matrix[a_index][b_index] = dist;
+            dist_matrix[a_index][b_index] = Math.sqrt(x_dist * x_dist + y_dist * y_dist);
         }
 
         item_in_cluster_index[a_index] = -1;
@@ -176,7 +129,7 @@ function generate_clusters(layer_name, color, items) {
         cluster["all_country_info"] = [];
 
         cluster.forEach(function (item) {
-            cluster["id"] += item["index"] + "|" + item["country"] + "_";
+            cluster["id"] += item["index"] + "_" + item["country"].replace(/ /g, '') + "_";
 
             cluster["longitude"] += item["longitude"] / cluster.length;
             cluster["latitude"] += item["latitude"] / cluster.length;
@@ -199,6 +152,7 @@ function generate_clusters(layer_name, color, items) {
             }
         });
 
+
         cluster["all_country_info"].sort(function (a, b) {
             return b["count"] - a["count"];
         });
@@ -209,7 +163,7 @@ function generate_clusters(layer_name, color, items) {
     });
 
     svg.append("g")
-        .attr("class", layer_name)
+        .attr("class", layer_name);
     // console.log("form " + all_clusters.length + " clusters");
     var count = 0;
     for (var index = 0; index < all_clusters.length; index++) {
@@ -220,7 +174,42 @@ function generate_clusters(layer_name, color, items) {
 
         draw_cluster(color, layer_name, cluster);
     }
+
+    return all_clusters;
 }
+
+var area_unit = 200;
+
+function draw_cluster(color, layer_name, cluster) {
+    var gpoint = g.append("g").attr("class", "items " + layer_name);
+    var lng = cluster["longitude"];
+    var lat = cluster["latitude"];
+
+    var point = projection([lng, lat]);
+    var point_x = point[0];
+    var point_y = point[1];
+
+    gpoint.selectAll("circle")
+        .data([{"area": cluster.length}])
+        .enter()
+        .append("svg:circle")
+        .style("stroke", "#000")
+        .style("stroke-width", "0.5px")
+        .attr("cx", point_x)
+        .attr("cy", point_y)
+        .attr("class", "point")
+        .style("fill", color)
+        .style("opacity", 0.60)
+        .attr("r", function (d) {
+            return Math.sqrt(d["area"] * area_unit / Math.PI) / zoom.scale();
+        })
+        .on("mouseout", function () {
+        })
+        .on("click", function () {
+            showFCLInfoTooltip(layer_name, cluster);
+        });
+}
+
 
 var circle, focus, text; //svg
 
@@ -233,7 +222,7 @@ function showFCLInfoTooltip(layer_name, cluster) {
     var about_fcl_tooltip_dynamic_id = "about_fcl_tooltip_" + cluster["id"];
 
     var cluster_div =
-        "<div id= '" + about_fcl_tooltip_dynamic_id + "_div' class='tooltip_country_holder'>";
+        "<div id= '" + about_fcl_tooltip_dynamic_id + "div' class='tooltip_country_holder'>";
 
     var find_tooltip = document.getElementById(about_fcl_tooltip_dynamic_id);
     if (find_tooltip != null) {
@@ -250,15 +239,6 @@ function showFCLInfoTooltip(layer_name, cluster) {
             layer_description = "Num. of Projects:";
             layer_img = "img/icon_project.png";
 
-            cluster["all_country_info"].forEach(function (country_info) {
-                var country_name = country_info["country"];
-                var country_name_str = country_name.replace(/ /g, ''); //remove all blank spaces
-                var country_img = "img/national_flag/" + country_name_str.toLowerCase() + ".png";
-
-                cluster_div += "<div class='tooltip_text'>" + country_name.toUpperCase() + "</div>" +
-                    "<div class='pic_holder Centered'><img class='tooltip_pic Centered' src='" + country_img + "' onerror='imgErr(this)'> </div>";
-            });
-
             break;
 
         case 'network_layer':
@@ -274,7 +254,7 @@ function showFCLInfoTooltip(layer_name, cluster) {
             break;
     }
 
-    if(layer_name == "project_layer" || layer_name == "staff_layer"){
+    if (layer_name == "project_layer" || layer_name == "staff_layer") {
         cluster["all_country_info"].forEach(function (country_info) {
             var country_name = country_info["country"];
             var country_name_str = country_name.replace(/ /g, ''); //remove all blank spaces
@@ -283,7 +263,7 @@ function showFCLInfoTooltip(layer_name, cluster) {
             cluster_div += "<div class='tooltip_text'>" + country_name.toUpperCase() + "</div>" +
                 "<div class='pic_holder Centered'><img class='tooltip_pic Centered' src='" + country_img + "' onerror='imgErr(this)'> </div>";
         });
-    } else{
+    } else {
         cluster.forEach(function (item) {
             var collaborator_name = item["collaborator"];
             var collaborator_index = item["index"] + 1;
@@ -299,24 +279,31 @@ function showFCLInfoTooltip(layer_name, cluster) {
     var y_displacement = 60;
     //---number tooltip---//
     about_fcl_tooltip.append("div")
-        .attr("id", about_fcl_tooltip_dynamic_id + "_info")
+        .attr("id", about_fcl_tooltip_dynamic_id + "info")
         .attr("class", "about_fcl_tooltip")
         .attr("style", "left:" + viewport_position[0] + "px;bottom:" + (window.innerHeight - viewport_position[1] + y_displacement) + "px;visibility: visible;")
         .attr("data-lng", cluster["longitude"])
         .attr("data-lat", cluster["latitude"])
         .html("<div class='tooltip_info_holder'>" +
             "<div class='tooltip_text'>" + layer_description.toUpperCase() + "</div>" +
-            "<div class='pic_holder Centered'><img class='tooltip_pic_logo Centered' src='" + layer_img + "' onerror='imgErr(this)'>" + "         " + cluster.length + "</div>" +
+            "<div class='pic_holder Centered'><img class='tooltip_pic_logo Centered' src='" + layer_img + "' onerror='imgErr(this)'>" + cluster.length +
+            "<span class = 'tooltip_close' id = '" + about_fcl_tooltip_dynamic_id + "_close'>" + "</span>" +
             "</div>"
         );
 
-    var about_fcl_info_tooltip_width = document.getElementById(about_fcl_tooltip_dynamic_id + "_info").offsetWidth;
-    var about_fcl_info_tooltip_height = document.getElementById(about_fcl_tooltip_dynamic_id + "_info").offsetHeight;
+    $("#" + about_fcl_tooltip_dynamic_id + "_close").click(
+        function () {
+            remove_about_fcl_tooltip(about_fcl_tooltip_dynamic_id);
+        }
+    );
+
+    var about_fcl_info_tooltip_width = document.getElementById(about_fcl_tooltip_dynamic_id + "info").offsetWidth;
+    var about_fcl_info_tooltip_height = document.getElementById(about_fcl_tooltip_dynamic_id + "info").offsetHeight;
     var tooltip_2_x = viewport_position[0] + about_fcl_info_tooltip_width + 8;
 
     //---national flag tooltip---//
     about_fcl_tooltip.append("div")
-        .attr("id", about_fcl_tooltip_dynamic_id + "_country")
+        .attr("id", about_fcl_tooltip_dynamic_id + "country")
         .attr("class", "about_fcl_tooltip")
         .attr("style", "left:" + (tooltip_2_x) + "px;bottom:" + (window.innerHeight - viewport_position[1] + y_displacement) + "px;visibility: visible;")
         .attr("data-lng", cluster["longitude"])
@@ -324,16 +311,18 @@ function showFCLInfoTooltip(layer_name, cluster) {
         .html(cluster_div);
 
     // change the style
-    // $("#"+about_fcl_tooltip_dynamic_id+"_div").niceScroll({
-    //     touchbehavior: false,
-    //     cursorcolor: "#FFEEFF",
-    //     cursoropacitymax: 0.7,
-    //     cursorwidth: 11,
-    //     cursorborder: "1px solid #2848BE",
-    //     cursorborderradius: "8px",
-    //     background: "#ccc",
-    //     autohidemode: "auto"
-    // });
+    $("#" + about_fcl_tooltip_dynamic_id + "div").niceScroll({
+        touchbehavior: false,
+        cursorcolor: "#AAAAAA",
+        cursoropacitymax: 0.7,
+        cursorwidth: 11,
+        cursorborder: "1px solid #2848BE",
+        cursorborderradius: "8px",
+        background: "#ccc",
+        autohidemode: "auto"
+    });
+
+    // console.log("create nice scroll "+about_fcl_tooltip_dynamic_id+"div");
 
     //---flagpole---//
     about_fcl_tooltip.append("div")
@@ -344,4 +333,10 @@ function showFCLInfoTooltip(layer_name, cluster) {
         .attr("data-lat", cluster["latitude"]);
 
     document.getElementById(about_fcl_tooltip_dynamic_id + "_line").style.height = (y_displacement + about_fcl_info_tooltip_height) + "px";
+}
+
+function remove_about_fcl_tooltip(tooltip_id) {
+    // remove the nice scroll bar first
+    $("#" + tooltip_id + "div").niceScroll().resize().hide();
+    $("#" + tooltip_id).remove();
 }
