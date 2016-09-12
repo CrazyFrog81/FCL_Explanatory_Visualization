@@ -30,8 +30,8 @@ function loadFCLData() {
         items.forEach(function (pointA) {
             var Obj = {};
             Obj["index"] = pointA.No - 1;
-            Obj["title"]  = pointA.Title;
-            Obj["name"] = pointA.Name;
+            Obj["title"] = pointA.Title;
+            Obj["collaborator"] = pointA.Name;
             Obj["latitude"] = pointA.Latitude;
             Obj["longitude"] = pointA.Longitude;
             Obj["country"] = pointA.Country;
@@ -58,9 +58,6 @@ var fcl_tooltip_list = [];
 var area_unit = 200;
 
 function draw_cluster(color, layer_name, cluster) {
-    var country = cluster[0]["country"];
-    var country_str = country.replace(/ /g, '');//remove all blank spaces
-    var country_filename = country_str.toLowerCase();
     var gpoint = g.append("g").attr("class", "items " + layer_name);
     var lng = cluster["longitude"];
     var lat = cluster["latitude"];
@@ -70,24 +67,6 @@ function draw_cluster(color, layer_name, cluster) {
     var point_y = point[1];
 
     var img_src = [];
-
-    switch (layer_name) {
-        case 'project_layer':
-        case 'staff_layer':
-            img_src = "img/national_flag/" + country_filename + ".png";
-            // img_src = "img/project_img/" + imgNo + "_fcl_vis.jpg";
-            break;
-        case 'network_layer':
-            img_src = "img/network_img/" + country_filename + "_network.png";
-            break;
-        default:
-            // img_src = "img/project_img/"+imgNo+"_fcl_vis.jpg";
-            img_src = "img/national_flag/" + country_filename + ".png";
-            break;
-    }
-    //add in picture for the project
-    var country_or_network_logo_img = new Image();
-    country_or_network_logo_img.src = img_src;
 
     gpoint.selectAll("circle")
         .data([{"area": cluster.length}])
@@ -103,14 +82,11 @@ function draw_cluster(color, layer_name, cluster) {
         .attr("r", function (d) {
             return Math.sqrt(d["area"] * area_unit / Math.PI) / zoom.scale();
         })
-        .on("mouseover", function () {
-            // showFCLInfoTooltip(layer_name, lon, lat, country, country_or_network_logo_img, project_number);
-        })
         .on("mouseout", function () {
             // return cluster_tooltip.attr("style","visibility: hidden");
         })
         .on("click", function () {
-            showFCLInfoTooltip(layer_name, lng, lat, country, country_or_network_logo_img, cluster.length);
+            showFCLInfoTooltip(layer_name, cluster);
         });
 }
 
@@ -135,9 +111,6 @@ function generate_clusters(layer_name, color, items) {
 
             var dist = Math.sqrt(x_dist * x_dist + y_dist * y_dist);
             dist_matrix[a_index][b_index] = dist;
-
-            if (a["country"] == "United States" && b["country"] == "France")
-                console.log(a["country"] + " " + a_index + " " + b["country"] + " " + b_index + " " + dist);
         }
 
         item_in_cluster_index[a_index] = -1;
@@ -193,15 +166,51 @@ function generate_clusters(layer_name, color, items) {
         cluster["longitude"] = 0;
         cluster["latitude"] = 0;
 
+        // sort items in cluster according to the item index
+        cluster.sort(function (a, b) {
+            return parseInt(a["index"]) - parseInt(b["index"]);
+        });
+
+        cluster["id"] = layer_name + "_";
+
+        cluster["all_country_info"] = [];
+
         cluster.forEach(function (item) {
+            cluster["id"] += item["index"] + "|" + item["country"] + "_";
+
             cluster["longitude"] += item["longitude"] / cluster.length;
             cluster["latitude"] += item["latitude"] / cluster.length;
+
+            var item_country = item["country"];
+            var item_country_added = false;
+            for (var index = 0; index < cluster["all_country_info"].length; index++) {
+                var country_info_i = cluster["all_country_info"][index];
+                if (item_country == country_info_i["country"]) {
+                    country_info_i["count"]++;
+                    item_country_added = true;
+                    break;
+                }
+            }
+            if (!item_country_added) {
+                var new_item_country = [];
+                new_item_country["country"] = item_country;
+                new_item_country["count"] = 1;
+                cluster["all_country_info"].push(new_item_country);
+            }
         });
+
+        cluster["all_country_info"].sort(function (a, b) {
+            return b["count"] - a["count"];
+        });
+
+        // cluster["all_country_info"].forEach(function (country_info) {
+        //     console.log(cluster["id"] + " " + country_info["country"] + " " + country_info["count"]);
+        // })
     });
 
     svg.append("g")
         .attr("class", layer_name)
-    console.log("form " + all_clusters.length + " clusters");
+    // console.log("form " + all_clusters.length + " clusters");
     var count = 0;
     for (var index = 0; index < all_clusters.length; index++) {
         count += all_clusters[index].length;
@@ -215,29 +224,16 @@ function generate_clusters(layer_name, color, items) {
 
 var circle, focus, text; //svg
 
-function showFCLInfoTooltip(layer_name, long, lat, country, country_image, number) {
-    console.log("showFCLInfoTooltip");
-    var description;
+function showFCLInfoTooltip(layer_name, cluster) {
+    // console.log("showFCLInfoTooltip");
+    var layer_description;
+    var layer_img;
 
-    switch (layer_name) {
-        case 'project_layer':
-            description = "Num. of Projects:";
-            break;
+    var viewport_position = viewport_pos(cluster["longitude"], cluster["latitude"]);
+    var about_fcl_tooltip_dynamic_id = "about_fcl_tooltip_" + cluster["id"];
 
-        case 'network_layer':
-            description = "Num. of Collaborators:";
-            break;
-
-        case 'staff_layer':
-            description = "Num. of Researchers:";
-            break;
-    }
-
-    var viewport_position = viewport_pos(long, lat);
-
-    // console.log(long+" "+lat+" "+viewport_position+" "+d3.event.pageX+" "+d3.event.pageY);
-
-    var about_fcl_tooltip_dynamic_id = "about_fcl_tooltip_" + layer_name + "_" + country;
+    var cluster_div =
+        "<div id= '" + about_fcl_tooltip_dynamic_id + "_div' class='tooltip_country_holder'>";
 
     var find_tooltip = document.getElementById(about_fcl_tooltip_dynamic_id);
     if (find_tooltip != null) {
@@ -249,44 +245,103 @@ function showFCLInfoTooltip(layer_name, long, lat, country, country_image, numbe
         .attr("class", "about_fcl_tooltip_container")
         .attr("style", "fill: none").attr("id", about_fcl_tooltip_dynamic_id);
 
-    //---national flag tooltip---//
-    var y_displacement = 60;
-    about_fcl_tooltip.append("div")
-        .attr("id", about_fcl_tooltip_dynamic_id + "_country")
-        .attr("class", "about_fcl_tooltip")
-        .attr("style", "left:" + (viewport_position[0]) + "px;bottom:" + (window.innerHeight - viewport_position[1] + y_displacement) + "px;visibility: visible;")
-        .attr("data-lng", long)
-        .attr("data-lat", lat)
-        .html(
-            "<div class='tooltip_holder'>" +
-            "<div class='tooltip_text'>" + country.toUpperCase() + "</div>" +
-            "<div class='pic_holder Centered'><img class='tooltip_pic Centered' src='" + country_image.src + "' onerror='imgErr(this)'> </div>"
-            + "</div>"
-        );
+    switch (layer_name) {
+        case 'project_layer':
+            layer_description = "Num. of Projects:";
+            layer_img = "img/icon_project.png";
 
+            cluster["all_country_info"].forEach(function (country_info) {
+                var country_name = country_info["country"];
+                var country_name_str = country_name.replace(/ /g, ''); //remove all blank spaces
+                var country_img = "img/national_flag/" + country_name_str.toLowerCase() + ".png";
+
+                cluster_div += "<div class='tooltip_text'>" + country_name.toUpperCase() + "</div>" +
+                    "<div class='pic_holder Centered'><img class='tooltip_pic Centered' src='" + country_img + "' onerror='imgErr(this)'> </div>";
+            });
+
+            break;
+
+        case 'network_layer':
+            layer_description = "Num. of Collaborators:";
+            layer_img = "img/icon_network.png";
+
+            break;
+
+        case 'staff_layer':
+            layer_description = "Num. of Researchers:";
+            layer_img = "img/icon_researcher.png";
+
+            break;
+    }
+
+    if(layer_name == "project_layer" || layer_name == "staff_layer"){
+        cluster["all_country_info"].forEach(function (country_info) {
+            var country_name = country_info["country"];
+            var country_name_str = country_name.replace(/ /g, ''); //remove all blank spaces
+            var country_img = "img/national_flag/" + country_name_str.toLowerCase() + ".png";
+
+            cluster_div += "<div class='tooltip_text'>" + country_name.toUpperCase() + "</div>" +
+                "<div class='pic_holder Centered'><img class='tooltip_pic Centered' src='" + country_img + "' onerror='imgErr(this)'> </div>";
+        });
+    } else{
+        cluster.forEach(function (item) {
+            var collaborator_name = item["collaborator"];
+            var collaborator_index = item["index"] + 1;
+            var collaborator_img = "img/network_img/" + collaborator_index + "_network.png";
+
+            cluster_div += "<div class='tooltip_text'>" + collaborator_name.toUpperCase() + "</div>" +
+                "<div class='pic_holder Centered'><img class='tooltip_pic Centered' src='" + collaborator_img + "' onerror='imgErr(this)'> </div>";
+        });
+    }
+    cluster_div += "</div>";
+
+
+    var y_displacement = 60;
     //---number tooltip---//
-    var about_fcl_tooltip_country_width = document.getElementById(about_fcl_tooltip_dynamic_id + "_country").offsetWidth;
-    var about_fcl_tooltip_country_height = document.getElementById(about_fcl_tooltip_dynamic_id + "_country").offsetHeight;
-    var tooltip_2_x = viewport_position[0] + about_fcl_tooltip_country_width + 8;
     about_fcl_tooltip.append("div")
         .attr("id", about_fcl_tooltip_dynamic_id + "_info")
         .attr("class", "about_fcl_tooltip")
-        .attr("style", "left:" + tooltip_2_x + "px;bottom:" + (window.innerHeight - viewport_position[1] + y_displacement) + "px;visibility: visible;")
-        .attr("data-lng", long)
-        .attr("data-lat", lat)
-        .html("<div class='tooltip_holder'>" +
-            "<div class='tooltip_text'>" + description.toUpperCase() + "</div>" +
-            "<div class='pic_holder Centered'><img class='tooltip_pic_logo Centered' src='" + "img/national_flag/project.png" + "' onerror='imgErr(this)'>" + "         " + number + "</div>" +
+        .attr("style", "left:" + viewport_position[0] + "px;bottom:" + (window.innerHeight - viewport_position[1] + y_displacement) + "px;visibility: visible;")
+        .attr("data-lng", cluster["longitude"])
+        .attr("data-lat", cluster["latitude"])
+        .html("<div class='tooltip_info_holder'>" +
+            "<div class='tooltip_text'>" + layer_description.toUpperCase() + "</div>" +
+            "<div class='pic_holder Centered'><img class='tooltip_pic_logo Centered' src='" + layer_img + "' onerror='imgErr(this)'>" + "         " + cluster.length + "</div>" +
             "</div>"
         );
+
+    var about_fcl_info_tooltip_width = document.getElementById(about_fcl_tooltip_dynamic_id + "_info").offsetWidth;
+    var about_fcl_info_tooltip_height = document.getElementById(about_fcl_tooltip_dynamic_id + "_info").offsetHeight;
+    var tooltip_2_x = viewport_position[0] + about_fcl_info_tooltip_width + 8;
+
+    //---national flag tooltip---//
+    about_fcl_tooltip.append("div")
+        .attr("id", about_fcl_tooltip_dynamic_id + "_country")
+        .attr("class", "about_fcl_tooltip")
+        .attr("style", "left:" + (tooltip_2_x) + "px;bottom:" + (window.innerHeight - viewport_position[1] + y_displacement) + "px;visibility: visible;")
+        .attr("data-lng", cluster["longitude"])
+        .attr("data-lat", cluster["latitude"])
+        .html(cluster_div);
+
+    // change the style
+    // $("#"+about_fcl_tooltip_dynamic_id+"_div").niceScroll({
+    //     touchbehavior: false,
+    //     cursorcolor: "#FFEEFF",
+    //     cursoropacitymax: 0.7,
+    //     cursorwidth: 11,
+    //     cursorborder: "1px solid #2848BE",
+    //     cursorborderradius: "8px",
+    //     background: "#ccc",
+    //     autohidemode: "auto"
+    // });
 
     //---flagpole---//
     about_fcl_tooltip.append("div")
         .attr("id", about_fcl_tooltip_dynamic_id + "_line")
         .attr("class", "about_fcl_tooltip_line")
         .attr("style", "left:" + (viewport_position[0] - 1) + "px;bottom:" + (window.innerHeight - viewport_position[1]) + "px;visibility: visible;")
-        .attr("data-lng", long)
-        .attr("data-lat", lat);
+        .attr("data-lng", cluster["longitude"])
+        .attr("data-lat", cluster["latitude"]);
 
-    document.getElementById(about_fcl_tooltip_dynamic_id + "_line").style.height = (y_displacement + about_fcl_tooltip_country_height) + "px";
+    document.getElementById(about_fcl_tooltip_dynamic_id + "_line").style.height = (y_displacement + about_fcl_info_tooltip_height) + "px";
 }

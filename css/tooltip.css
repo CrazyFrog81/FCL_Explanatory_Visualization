@@ -16,11 +16,13 @@ div.about_fcl_tooltip{
     color: #ffffff;
     padding: 5px;
     background: #222222;
+    max-width: 200px;
     box-shadow: 4px 4px 4px #999999;
     opacity: 0.8;
     position: absolute;
     z-index: 30;
     overflow: hidden;
+    scrollbar-base-color:#ffeaff;
     vertical-align: middle;
 }
 
@@ -56,9 +58,14 @@ div.about_fcl_tooltip_line{
     padding:5px 10px 10px 10px;
 }
 
-.tooltip_holder{
-    /*width: 100px;
-    height: 60px;*/
+.tooltip_info_holder{
+    max-height: 95px;
+    overflow: hidden;
+}
+
+.tooltip_country_holder{
+    max-height: 95px;
+    overflow: auto;
 }
 
 .tooltip_text{
@@ -69,6 +76,7 @@ div.about_fcl_tooltip_line{
     vertical-align: middle;
     color:white;
     padding: 5px 10px 0px 10px;
+    white-space: nowrap ;
 }
 
 

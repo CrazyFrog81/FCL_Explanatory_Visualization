@@ -234,8 +234,8 @@ function move(t, s) {
             var new_pos = viewport_pos(tip.dataset.lng, tip.dataset.lat);
 
             var x = new_pos[0];
-            if (tip.id.includes("info")) {
-                x += (document.getElementById(tip.id.replace("_info", "_country")).offsetWidth + 8);
+            if (tip.id.includes("country")) {
+                x += (document.getElementById(tip.id.replace("_country", "_info")).offsetWidth + 8);
             }
 
             d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1] + 60) + "px");
