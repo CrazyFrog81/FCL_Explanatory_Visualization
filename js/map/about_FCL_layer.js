@@ -194,7 +194,7 @@ function draw_cluster(color, layer_name, cluster) {
         .enter()
         .append("svg:circle")
         .style("stroke", "#000")
-        .style("stroke-width", "0.5px")
+        .style("stroke-width", 0.5 / zoom.scale()+"px")
         .attr("cx", point_x)
         .attr("cy", point_y)
         .attr("class", "point")
@@ -226,7 +226,7 @@ function showFCLInfoTooltip(layer_name, cluster) {
 
     var find_tooltip = document.getElementById(about_fcl_tooltip_dynamic_id);
     if (find_tooltip != null) {
-        find_tooltip.remove();
+        remove_about_fcl_tooltip(about_fcl_tooltip_dynamic_id);
         return;
     }
 

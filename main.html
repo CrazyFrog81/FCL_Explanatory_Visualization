@@ -45,6 +45,8 @@
 
     var ul_height = 73;
 
+    document.body.style.overflow = "hidden";
+
     function newInput() {
         if (this.id) {
             var holder = this.parentNode.id;
@@ -332,7 +334,8 @@
                 <a href="#" id="fcl_projectsBtn"><img src="img/grey_out.png" id="fcl_projectsBtn_img">FCL Projects</a>
                 <a href="#" id="global_networkBtn"> <img src="img/grey_out.png" id="global_networkBtn_img">Global
                     Network</a>
-                <a href="#" id="academic_staffBtn"><img src="img/grey_out.png" id="academic_staffBtn_img">Academic Staff</a>
+                <a href="#" id="academic_staffBtn"><img src="img/grey_out.png" id="academic_staffBtn_img">Staff
+                    Nationality</a>
             </div>
         </div>
     </nav>
@@ -391,36 +394,42 @@
                 <!--</h5>-->
 
                 <span class="fcl-button">
-             <a href="http://www.fcl.ethz.ch/" target="_blank" target="_blank">
+             <!--<a href="http://www.fcl.ethz.ch/" target="_blank" target="_blank">-->
+             <a>
                  <img src="img/icon_fcl.png" alt="fcl"/>
              </a>
             </span>
 
                 <span class="round-button">
-             <a href="https://www.zotero.org/groups/future_cities_laboratory" target="_blank">
+             <!--<a href="https://www.zotero.org/groups/future_cities_laboratory" target="_blank">-->
+                    <a>
                  <img src="img/icon_zotero.png" alt="zotero"/>
              </a>
         </span>
 
                 <span class="round-button">
-             <a href="https://vimeo.com/futurecitieslaboratory" target="_blank">
+             <!--<a href="https://vimeo.com/futurecitieslaboratory" target="_blank">-->
+                    <a>
                  <img src="img/icon_vimeo.png" alt="vimeo"/>
              </a>
         </span>
                 <span class="round-button">
-             <a href="https://www.flickr.com/photos/futurecitieslaboratory/" target="_blank">
+             <!--<a href="https://www.flickr.com/photos/futurecitieslaboratory/" target="_blank">-->
+                 <a>
                  <img src="img/icon_flickr.png" alt="fliker"/>
              </a>
         </span>
 
                 <span class="round-button">
-             <a href="https://twitter.com/_FCL" target="_blank">
+             <!--<a href="https://twitter.com/_FCL" target="_blank">-->
+                    <a>
                  <img src="img/icon_twitter.png" alt="Twitter"/>
              </a>
         </span>
 
                 <span class="round-button">
-             <a href="https://www.facebook.com/futurecitieslaboratory" target="_blank">
+             <!--<a href="https://www.facebook.com/futurecitieslaboratory" target="_blank">-->
+                    <a>
                  <img src="img/icon_facebook.png" alt="Facabook"/>
              </a>
         </span>
@@ -431,7 +440,7 @@
     <button class="reset_Btn" onclick="reset()">RESET</button>
 
 
-    <div id="map_container">
+    <div id="map_container" class="map_container">
         <!--<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7830112895026!2d103.78620331459703!3d1.3052853620809883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da1a431841d5f1%3A0x160f705c61acdff3!2ssixty40!5e0!3m2!1sen!2ssg!4v1466989919758" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>-->
     </div>
 
@@ -466,7 +475,7 @@
     navigator.msPointerEnabled = true;
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBU5cWlAqYt_SPwMSEi1NZjbjB2JDD1PIA&callback=initMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBU5cWlAqYt_SPwMSEi1NZjbjB2JDD1PIA&callback=initGoogleMap"></script>
 
 <script>
     //reset to the beginning

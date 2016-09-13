@@ -99,6 +99,7 @@ function init() {
 
     svg = d3.select("#map_container").append("svg")
         .attr("id", "svg1")
+        .attr("class", "svg1")
         .attr("width", map_width)
         .attr("height", map_height)
         .call(zoom)
@@ -144,41 +145,7 @@ function move(t, s) {
         t = d3.event.translate;
     }
 
-    var tier1_scale = 2;
-    var tier2_scale = 2.5;
-    var tier3_scale = 3;
-    var tier4_scale = 3.5;
-    var tier_range = 100;
-    var scale = 2;
-
-    if (s >= tier4_scale) {
-        tier_range = 3;
-        scale = tier4_scale;
-        svg.selectAll(".items").remove();
-    } else if (s >= tier3_scale) {
-        tier_range = 5;
-        scale = tier3_scale;
-    } else if (s >= tier2_scale) {
-        tier_range = 25;
-        scale = tier2_scale;
-    } else if (s >= tier1_scale) {
-        tier_range = 50;
-        scale = tier1_scale;
-    } else {
-        tier_range = 100;
-        scale = 1;
-    }
-
     svg.selectAll(".items").remove();
-
-    if (project_layer)
-        SC.project_clusters = generate_clusters('project_layer', 'yellow', SC.projects);
-    if (network_layer)
-        SC.network_clusters = generate_clusters('network_layer', 'blue', SC.network);
-    if (staff_layer)
-        SC.staff_clusters = generate_clusters('staff_layer', 'pink', SC.staff);
-
-    var cur_scale = zoom.scale();
 
     var margin_x = map_width * 0.1;
     var margin_y = map_height * 0.3;
@@ -205,11 +172,12 @@ function move(t, s) {
     zoom.translate(t);
     zoom.scale(s);
 
-    d3.selectAll(".cluster")
-        .style("stroke-width", 0.5)
-        .attr("r", function (d) {
-            return Math.sqrt(area_unit * d["area"] / Math.PI) / zoom.scale();
-        });
+    if (project_layer)
+        SC.project_clusters = generate_clusters('project_layer', 'yellow', SC.projects);
+    if (network_layer)
+        SC.network_clusters = generate_clusters('network_layer', 'blue', SC.network);
+    if (staff_layer)
+        SC.staff_clusters = generate_clusters('staff_layer', 'pink', SC.staff);
 
     svg.selectAll(".zoomable").remove();
 
@@ -244,9 +212,10 @@ function move(t, s) {
                 var x = new_pos[0];
                 if (tip.id.includes("country")) {
                     x += (document.getElementById(tip.id.replace("_country", "_info")).offsetWidth + 8);
-
-                    $("#" + tip.id.replace("country", "") + "div").niceScroll().resize();
                 }
+
+                // TODO: reposition does not work well when zoom too fase
+                $("#" + check_tip_id + "div").niceScroll().resize();
 
                 d3.select(tip).style("left", x + "px").style("bottom", (window.innerHeight - new_pos[1] + 60) + "px");
             }

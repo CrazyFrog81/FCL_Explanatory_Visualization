@@ -23,6 +23,7 @@
     -ms-transition: opacity 4s ease-in-out;
     -o-transition: opacity 4s ease-in-out;
 }
+
 div.welcome_msg{
     position: absolute;
     height: 60px;
@@ -35,8 +36,11 @@ div.welcome_msg{
 
 }
 
-
 .content_holder {
+    overflow:hidden;
+}
+
+.svg1{
     overflow:hidden;
 }
 
@@ -280,7 +284,7 @@ legend {
     padding-top:4%;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
+    overflow: hidden; /* Enable scroll if needed */
     background-color:#1f2933;
     background-color: rgba(0, 0, 0, 0.51); /* Black w/ opacity */
 }
