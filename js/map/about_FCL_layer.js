@@ -178,10 +178,10 @@ function generate_clusters(layer_name, color, items) {
     return all_clusters;
 }
 
-var area_unit = 200;
+var area_unit = 250;
 
 function draw_cluster(color, layer_name, cluster) {
-    var gpoint = g.append("g").attr("class", "items " + layer_name);
+    var gpoint = g.append("g").attr("class", "items " + layer_name).attr("style", "z-index:20");
     var lng = cluster["longitude"];
     var lat = cluster["latitude"];
 
@@ -194,7 +194,7 @@ function draw_cluster(color, layer_name, cluster) {
         .enter()
         .append("svg:circle")
         .style("stroke", "#000")
-        .style("stroke-width", 0.5 / zoom.scale()+"px")
+        .style("stroke-width", 0.5 / zoom.scale() + "px")
         .attr("cx", point_x)
         .attr("cy", point_y)
         .attr("class", "point")
@@ -322,9 +322,9 @@ function showFCLInfoTooltip(layer_name, cluster) {
     document.getElementById(about_fcl_tooltip_dynamic_id + "line").style.height = (y_displacement + about_fcl_info_tooltip_height) + "px";
 
     var exist_tooltip_size = d3.selectAll(".about_fcl_tooltip_container")[0].length;
-    document.getElementById(about_fcl_tooltip_dynamic_id + "info").style.zIndex = 30+exist_tooltip_size;
-    document.getElementById(about_fcl_tooltip_dynamic_id + "country").style.zIndex = 30+exist_tooltip_size;
-    document.getElementById(about_fcl_tooltip_dynamic_id + "line").style.zIndex = 30+exist_tooltip_size;
+    document.getElementById(about_fcl_tooltip_dynamic_id + "info").style.zIndex = 30 + exist_tooltip_size;
+    document.getElementById(about_fcl_tooltip_dynamic_id + "country").style.zIndex = 30 + exist_tooltip_size;
+    document.getElementById(about_fcl_tooltip_dynamic_id + "line").style.zIndex = 30 + exist_tooltip_size;
 
     // change the style
     $("#" + about_fcl_tooltip_dynamic_id + "div").niceScroll({
@@ -337,6 +337,18 @@ function showFCLInfoTooltip(layer_name, cluster) {
         background: "#ccc",
         autohidemode: "auto"
     });
+}
+
+function remove_layer_about_fcl_tooltips(layer_name) {
+    d3.selectAll(".about_fcl_tooltip_container")[0].forEach(function (tip) {
+        if (tip.id == undefined || tip.id == "")
+            return;
+
+        console.log(layer_name + " " + tip.id);
+
+        if (tip.id.includes(layer_name))
+            remove_about_fcl_tooltip(tip.id);
+    })
 }
 
 function remove_about_fcl_tooltip(tooltip_id) {

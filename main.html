@@ -58,7 +58,6 @@
                 case 'pop_densityBtn':
                     if (res) {
                         SC.layer_count++;
-//                        SC.layer_stack[0] = SC.layer_count;
                         pop_layer = true;
 
                         document.getElementById("pop_densityBtn_img").src = "img/eye_white.png";
@@ -66,11 +65,12 @@
                         displayUrbanizationData("pop_layer");
                     } else {
                         SC.layer_count--;
-//                        SC.layer_stack[0] = 0;
                         pop_layer = false;
+
                         document.getElementById("pop_densityBtn_img").src = "img/eye_black.png";
                         the_ul.style("height", "0");
                         remove_layer('.pop_layer');
+
                         if (!(pop_layer | co2_layer | gdp_layer)) {
                             redraw_worldmap();
                         }
@@ -81,14 +81,12 @@
                 case 'co2_emissionBtn':
                     if (res) {
                         SC.layer_count++;
-//                        SC.layer_stack[1] = SC.layer_count;
                         co2_layer = true;
                         document.getElementById("co2_emissionBtn_img").src = "img/eye_white.png";
                         the_ul.style("height", ul_height + "px");
                         displayUrbanizationData("co2_layer");
                     } else {
                         SC.layer_count--;
-//                        SC.layer_stack[1] = 0;
                         co2_layer = false;
                         document.getElementById("co2_emissionBtn_img").src = "img/eye_black.png";
                         the_ul.style("height", "0");
@@ -103,14 +101,12 @@
                 case 'gdp_Btn':
                     if (res) {
                         SC.layer_count++;
-//                        SC.layer_stack[2] = SC.layer_count;
                         gdp_layer = true;
                         document.getElementById("gdp_Btn_img").src = "img/eye_white.png";
                         the_ul.style("height", ul_height + "px");
                         displayUrbanizationData("gdp_layer");
                     } else {
                         SC.layer_count--;
-//                        SC.layer_stack[2] = 0;
                         gdp_layer = false;
                         document.getElementById("gdp_Btn_img").src = "img/eye_black.png";
                         the_ul.style("height", "0");
@@ -133,7 +129,7 @@
                         project_layer = false;
                         document.getElementById("fcl_projectsBtn_img").src = "img/grey_out.png";
                         remove_layer('.project_layer');
-                        clear_allProject_Circles();
+                        remove_layer_about_fcl_tooltips("project_layer");
                         point_layer_count--;
                     }
                     break;
@@ -148,7 +144,7 @@
                         network_layer = false;
                         document.getElementById("global_networkBtn_img").src = "img/grey_out.png";
                         remove_layer('.network_layer');
-                        clear_allNetwork();
+                        remove_layer_about_fcl_tooltips("network_layer");
                         point_layer_count--;
                     }
                     break;
@@ -163,7 +159,7 @@
                         staff_layer = false;
                         document.getElementById("academic_staffBtn_img").src = "img/grey_out.png";
                         remove_layer('.staff_layer');
-                        clear_allStaff();
+                        remove_layer_about_fcl_tooltips("staff_layer");
                         point_layer_count--;
                     }
                     break;
@@ -172,7 +168,6 @@
                     break;
             }
 
-//            d3.select(this).classed("selectedBtn",true);
         } else {
             d3.select("#pop_densityBtn").classed("selectedBtn", true);
         }
