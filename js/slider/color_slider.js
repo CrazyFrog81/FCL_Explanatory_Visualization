@@ -9,7 +9,6 @@ var color_x1,color_y1;
 var ticks1;
 var label_color = "#cccccc";
 
-
 function draw_colorSlider_1(className){
     ticks1 = color_split1.length-1;
 
@@ -49,7 +48,6 @@ function draw_colorSlider_1(className){
     //.tickSize(15)
     //.tickPadding(20);
     var yAxis = d3.svg.axis().scale(color_y1).orient("left");
-
 
     color_brush1 = d3.svg.brush()
         .x(color_x1)
@@ -260,7 +258,6 @@ function drop_handler1(){
     }
 }
 
-
 var color_handleL2, color_handleR2;
 var color_brush2;
 var selection_bar2;
@@ -296,7 +293,6 @@ function draw_colorSlider_2(className){
         .ticks(ticks2);
 
     var yAxis = d3.svg.axis().scale(color_y2).orient("left");
-
 
     color_brush2 = d3.svg.brush()
         .x(color_x2)
@@ -510,7 +506,6 @@ var selection_bar3;
 var color_x3,color_y3;
 var ticks3;
 
-
 function draw_colorSlider_3(className){
     ticks3 = color_split3.length-1;
 
@@ -677,8 +672,6 @@ function draw_colorSlider_3(className){
     color_brushed3();
 }
 
-
-
 function color_brushed3(ext) {
     if(ext == undefined){
         ext = color_brush3.extent();
@@ -751,13 +744,5 @@ function drop_handler3(){
     if(color_handleR3 != undefined){
         color_handleR3.style("fill", "#cccccc");
     }
-}
-
-function drag_start(){
-    d3.select(this).style("border","1px solid yellow");
-}
-
-function drag_end(){
-    d3.select(this).style("border","0px solid gold");
 }
 

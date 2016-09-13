@@ -275,7 +275,6 @@ function showFCLInfoTooltip(layer_name, cluster) {
     }
     cluster_div += "</div>";
 
-
     var y_displacement = 60;
     //---number tooltip---//
     about_fcl_tooltip.append("div")
@@ -310,6 +309,23 @@ function showFCLInfoTooltip(layer_name, cluster) {
         .attr("data-lat", cluster["latitude"])
         .html(cluster_div);
 
+    // console.log("create nice scroll "+about_fcl_tooltip_dynamic_id+"div");
+
+    //---flagpole---//
+    about_fcl_tooltip.append("div")
+        .attr("id", about_fcl_tooltip_dynamic_id + "line")
+        .attr("class", "about_fcl_tooltip_line")
+        .attr("style", "left:" + (viewport_position[0] - 1) + "px;bottom:" + (window.innerHeight - viewport_position[1]) + "px;visibility: visible;")
+        .attr("data-lng", cluster["longitude"])
+        .attr("data-lat", cluster["latitude"]);
+
+    document.getElementById(about_fcl_tooltip_dynamic_id + "line").style.height = (y_displacement + about_fcl_info_tooltip_height) + "px";
+
+    var exist_tooltip_size = d3.selectAll(".about_fcl_tooltip_container")[0].length;
+    document.getElementById(about_fcl_tooltip_dynamic_id + "info").style.zIndex = 30+exist_tooltip_size;
+    document.getElementById(about_fcl_tooltip_dynamic_id + "country").style.zIndex = 30+exist_tooltip_size;
+    document.getElementById(about_fcl_tooltip_dynamic_id + "line").style.zIndex = 30+exist_tooltip_size;
+
     // change the style
     $("#" + about_fcl_tooltip_dynamic_id + "div").niceScroll({
         touchbehavior: false,
@@ -321,18 +337,6 @@ function showFCLInfoTooltip(layer_name, cluster) {
         background: "#ccc",
         autohidemode: "auto"
     });
-
-    // console.log("create nice scroll "+about_fcl_tooltip_dynamic_id+"div");
-
-    //---flagpole---//
-    about_fcl_tooltip.append("div")
-        .attr("id", about_fcl_tooltip_dynamic_id + "_line")
-        .attr("class", "about_fcl_tooltip_line")
-        .attr("style", "left:" + (viewport_position[0] - 1) + "px;bottom:" + (window.innerHeight - viewport_position[1]) + "px;visibility: visible;")
-        .attr("data-lng", cluster["longitude"])
-        .attr("data-lat", cluster["latitude"]);
-
-    document.getElementById(about_fcl_tooltip_dynamic_id + "_line").style.height = (y_displacement + about_fcl_info_tooltip_height) + "px";
 }
 
 function remove_about_fcl_tooltip(tooltip_id) {

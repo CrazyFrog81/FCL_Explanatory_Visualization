@@ -21,7 +21,6 @@ function setup_slider(start_y, end_y) {
 
     //d3.select("#time_slider").style("background-color", d3.hsl(214, .41, .78));
 
-
     var slider_margin = {top: 0, right: 7, bottom: 0, left: 9},
         slider_width = 180,//document.getElementById("map_container").offsetWidth *0.70 - slider_margin.right - slider_margin.left,
         slider_height = 30;
@@ -120,8 +119,6 @@ function setup_slider(start_y, end_y) {
         .style("height", "15px")
         .style("fill", label_color)
         .attr("transform", "translate(" + 3.5 + "," + 3 + ")");
-
-
 }
 
 
@@ -136,9 +133,11 @@ function enableInteraction() {
     status = 0;
 
     overlay
-        .on("mouseover", mouseover)
+        // .on("mouseover", mouseover)
         .on("mouseout", mouseout)
-        .on("mousemove", mousemove)
+        .on("click", mouseover)
+        // .on("mousemove", mousemove)
+        // .on("brush", brused)
         .on("touchmove", mousemove);
 
     function mouseover() {
@@ -161,7 +160,6 @@ function enableInteraction() {
     }
 }
 
-
 function stop_animateTime() {
     brushed();
 }
@@ -176,6 +174,7 @@ function update(value) {
 
     if (gdp_layer)
         display_urbanization_layer("#gdp_countries", cur_year, color_split3, colors3, country_gdp, country_pop, 1);
+
     label.text(cur_year);
 }
 
