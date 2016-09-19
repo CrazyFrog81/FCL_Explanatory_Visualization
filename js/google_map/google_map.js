@@ -254,11 +254,22 @@ function draw_project_description(fillcolor, info) {
     });
     bermudaTriangle.setMap(gmap);
 
+    // remove the hyperlink for exhibition
+    var proj_info = info.project.replace("\">", "\" target=\"_blank\">").replace("</a>", "").replace(/<a.*">/, '');
+
+    // remove all </a>
+    var contact_info = replaceAll(info.contact.replace("\">", "\" target=\"_blank\">"), "</a>", "");
+    // remove all occurances in-between "<a" and "">"
+    contact_info = contact_info.replace(new RegExp(/<a.*">/, 'g'), '');
+
+    console.log();
+    console.log(contact_info);
+
     //create text for click div
     var click_String = " <div class='project'><div class='project_text'>" +
         "<br><br> <b>Name:</b> <br>" + info.name +
-        "<br><br> <b>Project:</b> <br>" + info.project.replace("\">", "\" target=\"_blank\">") +
-        "<br><br> <b>Contact:</b> <br>" + info.contact.replace("\">", "\" target=\"_blank\">") +
+        "<br><br> <b>Project:</b> <br>" + proj_info +
+        "<br><br> <b>Contact:</b> <br>" + contact_info +
         "<br><br> <b>Description :</b> <br>" + info.description +
         "</div>";
 
@@ -326,6 +337,14 @@ function draw_project_description(fillcolor, info) {
     project_polygons.push(bermudaTriangle);
     project_markers.push(marker);
     project_infowindows.push(infowindow_click);
+}
+
+function escapeRegExp(str) {
+    return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+}
+
+function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
 }
 
 function load_google_map() {
