@@ -1,18 +1,41 @@
 function loadFCLData() {
-    d3.csv("data/fcl/1. Projects.csv", function (err, projects) {
-        projects.forEach(function (pointA) {
+    // d3.csv("data/fcl/1. Projects.csv", function (err, projects) {
+    //     projects.forEach(function (pointA) {
+    //         var projectObj = {};
+    //
+    //         projectObj["index"] = pointA.No - 1;
+    //         projectObj["name"] = pointA.Index + " " + pointA.Name;
+    //         projectObj["text"] = pointA.Country;
+    //         projectObj["latitude"] = pointA.Latitude;
+    //         projectObj["longitude"] = pointA.Longitude;
+    //         projectObj["city"] = pointA.City;
+    //         projectObj["country"] = pointA.Country;
+    //
+    //         SC.projects.push(projectObj);
+    //     });
+    // });
+
+    d3.json("data/fcl/ProjectInformation.json", function (error, info_json_in) {
+        info_json = info_json_in;//topojson.feature(info_json_in, );
+        //console.log(info_json[0].contact);
+        for (var i = 0; i < info_json.length; i++) {
             var projectObj = {};
 
-            projectObj["index"] = pointA.No - 1;
-            projectObj["name"] = pointA.Index + " " + pointA.Name;
-            projectObj["text"] = pointA.Country;
-            projectObj["latitude"] = pointA.Latitude;
-            projectObj["longitude"] = pointA.Longitude;
-            projectObj["city"] = pointA.City;
-            projectObj["country"] = pointA.Country;
+            projectObj["index"] = i;
+
+            var coords = getTriangleCoords(info_json[i].polyinfo);
+            var lat = 0, lng = 0;
+            coords.forEach(function(coord){
+               lat += (coord.lat / coords.length);
+               lng += (coord.lng / coords.length);
+            });
+
+            projectObj["latitude"] = lat;
+            projectObj["longitude"] = lng;
+            projectObj["country"] = info_json[i].country;
 
             SC.projects.push(projectObj);
-        });
+        }
     });
 
     d3.csv("data/fcl/2. Global Network.csv", function (err, items) {

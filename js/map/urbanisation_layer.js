@@ -92,6 +92,9 @@ function display_urbanization_layer(country_layer, cur_year, color_splits, color
                 range2 = [];
                 range2[0] = 0;
                 range2[1] = color_split2.length;
+
+                if(cur_year >= 2013)
+                    cur_year = 2013;
             }
 
             range = range2;
@@ -132,6 +135,9 @@ function display_urbanization_layer(country_layer, cur_year, color_splits, color
             if (country_info_1.length > 0 && country_info_2.length > 0) {
                 var year_property = country_info_1[0][cur_year];
                 var c_size = country_info_2[0][cur_year];
+
+                if(year_property == undefined)
+                    return "#FFFFFF";
 
                 if (c_size.length > 0 && year_property.length > 0) {
                     var density = year_property / c_size * multiplier;

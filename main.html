@@ -38,8 +38,8 @@
     var staff_layer = false;
 
     var map_width, map_height;
-    map_width = screen.width;
-    map_height = screen.height;
+    map_width = window.innerWidth;
+    map_height = window.innerHeight;
 
     var point_layer_count = 0;
 
@@ -289,6 +289,7 @@
                  onmouseup='mydragg.stopMoving("content_holder");'>
                 <img id="fcl_logo" src="img/Logo_FCLwhite.png" alt="fcl_logo" width="199.5px" height="48.87px">
             </div>
+            <p style="color:white;font-size: 10px;font-family:Serif;font-style: italic;text-align: right; margin-right: 15px; margin-bottom: 5px;">developed by CIVAL</p>
             <hr>
             <div class="menu-item navg_button" id="pop_densityHolder">
                 <h4 id="pop_densityBtn"><img id="pop_densityBtn_img" src="img/eye_white.png"><a>POPULATION DENSITY</a>
@@ -535,27 +536,27 @@
     }
 </script>
 
-<ul id="menu" class="mfb-component--bl mfb-zoomin" data-mfb-toggle="hover">
-    <li class="mfb-component__wrap">
-        <a href="#" class="mfb-component__button--main">
-            <i href="#" onclick="sendCommands('home')" class="mfb-component__main-icon--resting ion-plus-round">
-                HOME
-            </i>
-        </a>
-
-        <a href="#" class="mfb-component__button--main">
-            <i href="#" onclick="sendCommands('cival')" class="mfb-component__main-icon--resting ion-plus-round">
-                CIVAL
-            </i>
-        </a>
+<!--<ul id="menu" class="mfb-component&#45;&#45;bl mfb-zoomin" data-mfb-toggle="hover">-->
+    <!--<li class="mfb-component__wrap">-->
+        <!--<a href="#" class="mfb-component__button&#45;&#45;main">-->
+            <!--<i href="#" onclick="sendCommands('home')" class="mfb-component__main-icon&#45;&#45;resting ion-plus-round">-->
+                <!--HOME-->
+            <!--</i>-->
+        <!--</a>-->
 
         <!--<a href="#" class="mfb-component__button&#45;&#45;main">-->
-        <!--<i href="#" onclick="sendCommands('polis')" class="mfb-component__main-icon&#45;&#45;resting ion-plus-round">-->
-        <!--POLIS-->
-        <!--</i>-->
+            <!--<i href="#" onclick="sendCommands('cival')" class="mfb-component__main-icon&#45;&#45;resting ion-plus-round">-->
+                <!--CIVAL-->
+            <!--</i>-->
         <!--</a>-->
-    </li>
-</ul>
+
+        <!--&lt;!&ndash;<a href="#" class="mfb-component__button&#45;&#45;main">&ndash;&gt;-->
+        <!--&lt;!&ndash;<i href="#" onclick="sendCommands('polis')" class="mfb-component__main-icon&#45;&#45;resting ion-plus-round">&ndash;&gt;-->
+        <!--&lt;!&ndash;POLIS&ndash;&gt;-->
+        <!--&lt;!&ndash;</i>&ndash;&gt;-->
+        <!--&lt;!&ndash;</a>&ndash;&gt;-->
+    <!--</li>-->
+<!--</ul>-->
 
 <!-- build:js mfb.js -->
 <script src="js/floating_buttons/mfb.js"></script>
